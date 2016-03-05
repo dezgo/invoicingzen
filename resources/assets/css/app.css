@@ -1,0 +1,22 @@
+body {
+    background: url("/images/greener-grass-1180309-1920x1440.jpg");
+    background-repeat: no-repeat;
+    font-family: 'Merriweather', serif;
+    /*color: white;*/
+}
+
+h1, h2, h3 {
+    color: white;
+}
+
+.freetext {
+    color: white;
+}
+
+a {
+color: inherit;
+}
+
+a:hover {
+    color: inherit;
+}
