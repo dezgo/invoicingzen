@@ -18,7 +18,8 @@ class InvoiceItem extends Model
 		'description',
 		'quantity',
 		'price',
-		'invoice_id'
+		'invoice_id',
+		'url',
 	];
 
 	/**
@@ -63,4 +64,14 @@ class InvoiceItem extends Model
 		return is_null($item) ? 0 : $item->price;
 	}
 
+	/**
+	* Ensure all URLs start with http
+	*/
+	public function setUrlAttribute($value)
+	{
+		$this->attributes['url'] = strtolower($value);
+		if ($value != '' && substr($value, 0, 4) != 'http') {
+			$this->attributes['url'] = 'http://'.$value;
+		}
+	}
 }

@@ -25,6 +25,7 @@ class InvoiceItemRequest extends Request
 	public function rules()
 	{
 		return [
+			'url' 			=> 'active_url',
 			'category_id' 	=> 'required',
 			'price' 		=> 'required|numeric',
 			'quantity' 		=> 'required|numeric',

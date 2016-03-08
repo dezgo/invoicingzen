@@ -20,6 +20,12 @@
     </div>
 
     <div class="form-group">
+        {{ Form::label('url_label', 'URL:', ['class' => 'control-label']) }}
+        <a id='anchorURL' target='_blank' href='{{ $invoice_item->url }}'>Visit</a>
+        {{ Form::text('url', null, $options) }}
+    </div>
+
+    <div class="form-group">
         {{ Form::label('quantity', 'Quantity:', ['class' => 'control-label']) }}
         {{ Form::text('quantity', null, $options) }}
     </div>

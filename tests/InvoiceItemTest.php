@@ -73,7 +73,7 @@ class InvoiceItemTest extends TestCase
             ->visit('/invoice_item/'.$this->invoice->invoice_items->first()->id.'/edit')
             ->type('', 'quantity')
             ->press('Update')
-            ->see('quantity field is required');
+            ->see(trans('validation.required', ['attribute' => 'quantity']));
     }
 
     public function testEdit_save()
@@ -116,5 +116,17 @@ class InvoiceItemTest extends TestCase
 // and 'see' is looking at HTML sent back by browser only. at least we can
 // test clicking hte buttons to ensure nothing bad happens!
             // ->see(round($invoice_item->price * (1+\Setting::get('markup')/100), 2));
+    }
+
+    public function testURL()
+    {
+        $ii = $this->invoice->invoice_items->first();
+        $ii->url = 'www.google.com.au';
+        $ii->save();
+        $this->actingAs($this->user)
+            ->visit('/invoice_item/'.$ii->id.'/edit')
+            ->see('anchorURL')
+            ->click('anchorURL')
+            ->seePageIs($ii->url);
     }
 }

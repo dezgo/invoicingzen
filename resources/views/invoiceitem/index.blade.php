@@ -7,6 +7,7 @@
                     <td><h4>Qty</h4></td>
                     <td><h4>Description</h4></td>
                     <td><h4>Price</h4></td>
+                    <td><h4>URL</h4></td>
                 </tr>
 
             @foreach($invoice->invoice_items as $invoice_item)
@@ -22,6 +23,9 @@
                         @endif
                     </td>
                     <td>{{ $invoice_item->price }}</td>
+                    <td>
+                        <a id='anchorURL' target='_blank' href='{{ $invoice_item->url }}'>View URL</a>
+                    </td>
                 </tr>
             @endforeach
             </tbody>
