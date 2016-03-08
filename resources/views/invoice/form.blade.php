@@ -3,7 +3,7 @@
 {!! Form::hidden('id', null, $options) !!}
 
 <div class="form-group">
-    {!! Form::label('customer', 'Customer:', ['class' => 'control-abel freetext']) !!}
+    {!! Form::label('customer', 'Customer:', ['class' => 'control-label']) !!}
 
     <?php $options['id'] = 'customer_list' ?>
     {{ Form::select('customer_id', ['' => ''] + $customer_list->toArray(), null, $options) }}
@@ -11,23 +11,23 @@
 </div>
 
 <div class="form-group">
-    {!! Form::label('invoice_number', 'Invoice Number:', ['class' => 'control-label freetext']) !!}
+    {!! Form::label('invoice_number', 'Invoice Number:', ['class' => 'control-label']) !!}
     {{ Form::text('invoice_number', null, $options) }}
 </div>
 
 <div class="form-group">
-    {!! Form::label('is_quote', 'Is Quote:', ['class' => 'control-abel freetext']) !!}
+    {!! Form::label('is_quote', 'Is Quote:', ['class' => 'control-label']) !!}
     {!! Form::hidden('is_quote', '', $options) !!}
     {{ Form::checkbox('is_quote', 'on', null, $options) }}
 </div>
 
 <div class="form-group">
-    {!! Form::label('paid', 'Amount Paid:', ['class' => 'control-abel freetext']) !!}
+    {!! Form::label('paid', 'Amount Paid:', ['class' => 'control-label']) !!}
     {{ Form::text('paid', null, $options) }}
 </div>
 
 <div class="form-group">
-    {!! Form::label('invoice_date', 'Invoice Date:', ['class' => 'control-abel freetext']) !!}
+    {!! Form::label('invoice_date', 'Invoice Date:', ['class' => 'control-label']) !!}
 
     <?php $options['id'] = 'invoice_date' ?>
     {{ Form::text('invoice_date', null, $options) }}
@@ -35,7 +35,7 @@
 </div>
 
 <div class="form-group">
-    {!! Form::label('due_date', 'Due Date:', ['class' => 'control-abel freetext']) !!}
+    {!! Form::label('due_date', 'Due Date:', ['class' => 'control-label']) !!}
 
     <?php $options['id'] = 'due_date' ?>
     {{ Form::text('due_date', null, $options) }}

@@ -3,7 +3,6 @@
 @section('content')
     <h1>Show Invoices</h1>
 
-    <div class="panel panel-default">
         <table class="table-condensed" id="invoiceTable">
             <thead>
                 <tr>
@@ -32,7 +31,6 @@
     </table>
 
     <hr />
-        </div>
 
     @if(Gate::check('admin'))
     <a href="{{ url('/invoice/create') }}" class="btn btn-success">Create</a>

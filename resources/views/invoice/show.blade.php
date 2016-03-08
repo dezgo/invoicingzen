@@ -27,11 +27,13 @@
 @section('footer')
     @include('includes.flash_message_footer')
 
-    <script language="javascript">
+<script language="javascript">
 
-    $('#invoiceItemTable').on('mouseover', 'tbody tr', function(event) {
-        $(this).addClass('bg-info').siblings().removeClass('bg-info');
-    });
+$('#invoiceItemTable').on('mouseover', 'tbody tr', function(event) {
+    if ($(this).parent()[0].tagName == 'TBODY') {
+        $(this).addClass('bg-primary').siblings().removeClass('bg-primary');
+    }
+});
 
-    </script>
+</script>
 @stop

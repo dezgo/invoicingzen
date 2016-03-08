@@ -12,3 +12,15 @@
     @include('/invoiceitem/index')
 
 @stop
+
+@section('footer')
+<script language="javascript">
+
+$('#invoiceItemTable').on('mouseover', 'tbody tr', function(event) {
+    if ($(this).parent()[0].tagName == 'TBODY') {
+        $(this).addClass('bg-primary').siblings().removeClass('bg-primary');
+    }
+});
+
+</script>
+@stop

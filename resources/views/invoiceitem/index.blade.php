@@ -2,14 +2,16 @@
     @if ($invoice->invoice_items->count() > 0)
     <div class="container">
         <table class="table-condensed" id="invoiceItemTable">
-            <tbody>
+            <thead>
                 <tr>
                     <td><h4>Qty</h4></td>
                     <td><h4>Description</h4></td>
                     <td><h4>Price</h4></td>
                     <td><h4>URL</h4></td>
                 </tr>
+            </thead>
 
+            <tbody>
             @foreach($invoice->invoice_items as $invoice_item)
                 <tr>
                     <td>{{ $invoice_item->quantity }}</a></td>

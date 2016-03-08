@@ -10,13 +10,18 @@
     @yield('head')
 </head>
 
+
+@if(Gate::check('authenticated'))
 <body id="app-layout">
+@else
+<body id="app-layout" class="introimage">
+@endif
     @if(Gate::check('authenticated'))
         @include('topbar')
     @endif
     <div class="container">
         @if(!Gate::check('authenticated'))
-            <h1>Invoicing Zen</h1>
+            <h1 class='freetext'>Invoicing Zen</h1>
         @endif
         @yield('content')
 
