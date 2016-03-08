@@ -8846,6 +8846,27 @@ button.close {
   content: "\f295";
 }
 
+.introimage {
+    background: url("/images/greener-grass-1180309-1920x1440.jpg");
+    background-repeat: no-repeat;
+}
+
+.freetext {
+    color: white;
+}
+
+h1, h2, h3 {
+    color: #BD1522;
+}
+
+a {
+    color: inherit;
+}
+
+a:hover {
+    color: inherit;
+}
+
 .select2-container {
   box-sizing: border-box;
   display: inline-block;
@@ -10553,31 +10574,6 @@ body .ui-tooltip {
 	opacity: .2;
 	filter: Alpha(Opacity=20); /* support: IE8 */
 	border-radius: 5px;
-}
-
-body {
-    font-family: 'Merriweather', serif;
-}
-
-.introimage {
-    background: url("/images/greener-grass-1180309-1920x1440.jpg");
-    background-repeat: no-repeat;
-}
-
-.freetext {
-    color: white;
-}
-
-h1, h2, h3 {
-    color: #337ab7;
-}
-
-a {
-    color: inherit;
-}
-
-a:hover {
-    color: inherit;
 }
 
 /*# sourceMappingURL=all.css.map */
