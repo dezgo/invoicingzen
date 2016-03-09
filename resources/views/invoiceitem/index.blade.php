@@ -4,6 +4,7 @@
         <table class="table-condensed" id="invoiceItemTable">
             <thead>
                 <tr>
+                    <td><h4>Ready</h4></td>
                     <td><h4>Qty</h4></td>
                     <td><h4>Description</h4></td>
                     <td><h4>Price</h4></td>
@@ -14,12 +15,15 @@
             <tbody>
             @foreach($invoice->invoice_items as $invoice_item)
                 <tr>
-                    <td>{{ $invoice_item->quantity }}</a></td>
+                    <td>
+                        <input type="checkbox" name="chkReady" iiid="{{ $invoice_item->id
+                            }}"{{ $invoice_item->ready ? ' checked' : '' }}>
+                    </td>
+                    <td>{{ $invoice_item->quantity }}</td>
                     <td>
                         @if(Gate::check('admin'))
-                        <a href='{{ action('InvoiceItemController@show', $invoice_item->id) }}'>
-                            {{ $invoice_item->description }}
-                        </a>
+                        <a href='{{ action('InvoiceItemController@show', $invoice_item->id) }}'>{{
+                            $invoice_item->description }}</a>
                         @else
                             {{ $invoice_item->description }}
                         @endif
@@ -49,4 +53,14 @@
     <a name='btnCreateItem' href="{{ action('InvoiceItemController@create1', [$invoice->id]) }}">
         <button id='btnAddInvoiceItem' class="btn btn-primary">Add Invoice Item</button>
     </a>
+
+    <script type="text/javascript">
+        $(document).ready( function() {
+            $('input[type=checkbox]').click(function() {
+                var id = $(this).attr('iiid');
+                $.post('/invoice_item/'+id+'/ready', 'json');
+            });
+        });
+    </script>
+
     @endif

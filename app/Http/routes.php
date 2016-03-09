@@ -53,6 +53,7 @@ Route::group(['middleware' => ['web', 'admin']], function() {
     Route::get('invoice_item/{invoice_item}/create', 'InvoiceItemController@create')->name('invoice_item.create');
     Route::post('invoice_item/{invoice_item}/store', 'InvoiceItemController@store')->name('invoice_item.store');
     Route::get('invoice_item/{invoice_item}/delete', 'InvoiceItemController@delete');
+    Route::post('invoice_item/{invoice_item}/ready', 'InvoiceItemController@ready');
 
     // Invoice item category
     Route::resource('invoice_item_category', 'InvoiceItemCategoryController');

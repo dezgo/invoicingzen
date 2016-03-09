@@ -23,10 +23,10 @@ elixir(function(mix) {
     ]);
 
     mix.scripts([
-        'image_manipulation.js',
         'libs/jquery.js',
         'libs/jquery-ui.js',
         'libs/select2.js',
-        'libs/bootstrap.js'
+        'libs/bootstrap.js',
+        'general.js'
     ])
 });

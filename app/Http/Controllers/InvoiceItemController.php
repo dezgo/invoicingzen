@@ -168,4 +168,16 @@ class InvoiceItemController extends Controller
     {
         return view('invoiceitem.delete', compact('invoice_item'));
     }
+
+    /**
+     * Toggle the invoiceitem ready flag (called via ajax)
+     */
+    public function ready(InvoiceItem $invoice_item)
+    {
+        if (env('APP_ENV') == 'local') {
+            \Log::info('Invoice item '.$invoice_item->id.' ready status updated');
+        }
+        $invoice_item->ready = !$invoice_item->ready;
+        $invoice_item->save();
+    }
 }
