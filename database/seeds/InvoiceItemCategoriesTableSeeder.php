@@ -1,9 +1,17 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\InvoiceItemCategory;
 
 class InvoiceItemCategoriesTableSeeder extends Seeder
 {
+	private function insert_one($description)
+	{
+		$cat = new InvoiceItemCategory;
+		$cat->description = $description;
+		$cat->save();
+	}
+
 	/**
 	 * Run the database seeds.
 	 *
@@ -11,22 +19,22 @@ class InvoiceItemCategoriesTableSeeder extends Seeder
 	 */
 	public function run()
 	{
-		DB::table('invoice_item_categories')->insert(['description' => 'Cable']);
-		DB::table('invoice_item_categories')->insert(['description' => 'Case']);
-		DB::table('invoice_item_categories')->insert(['description' => 'CPU']);
-		DB::table('invoice_item_categories')->insert(['description' => 'Discount']);
-		DB::table('invoice_item_categories')->insert(['description' => 'Hard Drive']);
-		DB::table('invoice_item_categories')->insert(['description' => 'Input']);
-		DB::table('invoice_item_categories')->insert(['description' => 'Labour']);
-		DB::table('invoice_item_categories')->insert(['description' => 'Laptop']);
-		DB::table('invoice_item_categories')->insert(['description' => 'Motherboard']);
-		DB::table('invoice_item_categories')->insert(['description' => 'Monitor']);
-		DB::table('invoice_item_categories')->insert(['description' => 'Networking']);
-		DB::table('invoice_item_categories')->insert(['description' => 'Optical']);
-		DB::table('invoice_item_categories')->insert(['description' => 'Power Supply']);
-		DB::table('invoice_item_categories')->insert(['description' => 'RAM']);
-		DB::table('invoice_item_categories')->insert(['description' => 'Software']);
-		DB::table('invoice_item_categories')->insert(['description' => 'Solid State Drive']);
-		DB::table('invoice_item_categories')->insert(['description' => 'Graphics Card']);
+		$this->insert_one('Cable');
+		$this->insert_one('Case');
+		$this->insert_one('CPU');
+		$this->insert_one('Discount');
+		$this->insert_one('Hard Drive');
+		$this->insert_one('Input');
+		$this->insert_one('Labour');
+		$this->insert_one('Laptop');
+		$this->insert_one('Motherboard');
+		$this->insert_one('Monitor');
+		$this->insert_one('Networking');
+		$this->insert_one('Optical');
+		$this->insert_one('Power Supply');
+		$this->insert_one('RAM');
+		$this->insert_one('Software');
+		$this->insert_one('Solid State Drive');
+		$this->insert_one('Graphics Card');
 	}
 }

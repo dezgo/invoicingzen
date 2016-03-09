@@ -31,6 +31,19 @@ class InvoiceItemCategory extends Model
 	protected $fillable = ['description'];
 
 	/**
+	 * Constructor - set default values for new record
+	 *
+	 * @return null
+	 */
+	public function __construct(array $attributes = array())
+	{
+		$this->setRawAttributes(array(
+			'company_id' => Company::my_id(),
+		), true);
+		parent::__construct($attributes);
+	}
+
+	/**
 	 * Get the invoice items in this category
 	 */
 	public function category()

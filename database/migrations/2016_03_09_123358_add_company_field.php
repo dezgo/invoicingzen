@@ -24,7 +24,7 @@ class AddCompanyField extends Migration
         // existing data needs some company anyway
         $company = new App\Company;
         $company->domain_suffix = 'cw';
-        $company->domain_suffix = 'Computer Whiz - Canberra';
+        $company->company_name = 'Computer Whiz - Canberra';
         $company->save();
 
         // add column to users table
@@ -64,6 +64,14 @@ class AddCompanyField extends Migration
         Schema::table('settings', function ($table) {
             $table->foreign('company_id')->references('id')->on('companies');
         });
+
+        Schema::table('invoice_item_categories', function ($table) {
+            $table->integer('company_id')->after('id')->unsigned();
+        });
+        DB::table('invoice_item_categories')->update(['company_id' => 1]);
+        Schema::table('invoice_item_categories', function ($table) {
+            $table->foreign('company_id')->references('id')->on('companies');
+        });
     }
 
     /**
@@ -90,6 +98,11 @@ class AddCompanyField extends Migration
 
         Schema::table('settings', function ($table) {
             $table->dropForeign('settings_company_id_foreign');
+            $table->dropColumn('company_id');
+        });
+
+        Schema::table('invoice_item_categories', function ($table) {
+            $table->dropForeign('invoice_item_categories_company_id_foreign');
             $table->dropColumn('company_id');
         });
 

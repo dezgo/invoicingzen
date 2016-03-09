@@ -3,12 +3,18 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\CompanyBoundary;
 
 class Company extends Model
 {
-    use CompanyBoundary;
-    
     protected $table = 'companies';
 
+    public static function my_id()
+    {
+        if (\Auth::check()) {
+            return \Auth::user()->company_id;
+        }
+        else {
+            return 1;
+        }
+    }
 }

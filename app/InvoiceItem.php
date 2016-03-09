@@ -23,6 +23,19 @@ class InvoiceItem extends Model
 	];
 
 	/**
+	 * Constructor - set default values for new record
+	 *
+	 * @return null
+	 */
+	public function __construct(array $attributes = array())
+	{
+		$this->setRawAttributes(array(
+			'company_id' => Auth::user()->company_id,
+		), true);
+		parent::__construct($attributes);
+	}
+
+	/**
 	* Get the category for this invoice item
 	*/
 	public function category()

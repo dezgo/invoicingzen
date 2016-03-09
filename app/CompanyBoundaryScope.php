@@ -2,6 +2,10 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Scope;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+
 class CompanyBoundaryScope implements Scope
 {
     /**
@@ -10,12 +14,10 @@ class CompanyBoundaryScope implements Scope
      * @param  \Illuminate\Database\Eloquent\Builder  $builder
      * @return void
      */
-    public function apply(Builder $builder)
+    public function apply(Builder $builder, Model $model)
     {
         $model = $builder->getModel();
-
-        $company_id = Auth::user()->company_id;
-        $builder->where($model->getQualifiedCompanyIDColumn(), '=', $company_id);
+        $builder->where($model->getQualifiedCompanyIDColumn(), '=', App\Company::my_id());
     }
 
     /**

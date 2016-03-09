@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 use DB;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\CompanyBoundary;
 
 class Invoice extends Model
 {
 	use SoftDeletes;
+	use CompanyBoundary;
 
 	protected $table = 'invoices';
 	protected $dateFormat = 'd-m-Y';
@@ -30,7 +32,7 @@ class Invoice extends Model
 	];
 
 	/**
-	 * Constructor - set default invoice date, due date and invoice number
+	 * Constructor - set default values for new record
 	 *
 	 * @return null
 	 */
@@ -40,6 +42,7 @@ class Invoice extends Model
 			'invoice_date' => $this->getDefaultInvoiceDate(),
 			'due_date' => $this->getDefaultDueDate(),
 			'invoice_number' => $this->getNextInvoiceNumber(),
+			'company_id' => Company::my_id(),
 		), true);
 		parent::__construct($attributes);
 	}
