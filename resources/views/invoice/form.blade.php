@@ -46,7 +46,6 @@
 {!! Form::submit($submitButtonText, ['class' => 'btn btn-primary', 'id' => 'btnSubmit']) !!}
 @endif
 
-@section('footer1')
     <script type="text/javascript">
         $('#invoice_date').datepicker({
             dateFormat: 'dd-mm-yy'
@@ -62,4 +61,3 @@
             theme: "classic"
         });
     </script>
-@stop
