@@ -1,8 +1,9 @@
-@extends('master')
+@extends('errors.errors')
 
-@section('content')
-    <h1 align="left">Forbidden</h1>
-    <p>
-        Sorry, but you don't have access to the requested resource.
-    </p>
+@section('title')
+    Forbidden
+@stop
+
+@section('message')
+    Sorry, but you don't have access to the requested resource.
 @stop
