@@ -30,12 +30,12 @@ class AppServiceProvider extends ServiceProvider
 
         view()->composer('invoice.form', function($view)
         {
-            $view->with('customer_list', User::all()->lists('description', 'id'));
+            $view->with('customer_list', User::userSelectList());
         });
 
         view()->composer('user.select', function($view)
         {
-            $view->with('customer_list', User::all()->lists('description', 'id'));
+            $view->with('customer_list', User::userSelectList());
         });
 
         Invoice::created(function ($invoice) {
