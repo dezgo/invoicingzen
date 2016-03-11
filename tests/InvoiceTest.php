@@ -250,4 +250,20 @@ class InvoiceTest extends TestCase
              ->press('btnSubmit')
              ->seeInDatabase('invoices', ['id' => $this->invoice->id, 'is_quote' => 1]);
     }
+
+    // is the customer select box a select2 js control?
+    public function testCheckSelect2OK()
+    {
+        $this->actingAs($this->userAdmin)
+             ->visit('/invoice/'.$this->invoice->id)
+             ->see("$('#customer_list').select2({");
+
+         $this->actingAs($this->userAdmin)
+              ->visit('/user/select')
+              ->see("$('#customer_list').select2({");
+
+          $this->actingAs($this->userAdmin)
+               ->visit('/invoice/create')
+               ->see("$('#customer_list').select2({");
+    }
 }
