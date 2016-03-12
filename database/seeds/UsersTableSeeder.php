@@ -12,6 +12,7 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         DB::table('users')->insert([
+            'company_id' => 1,
             'first_name' => 'Derek',
             'last_name' => 'Gillett',
             'email' => 'mail@computerwhiz.com.au',
@@ -19,6 +20,7 @@ class UsersTableSeeder extends Seeder
         ]);
 
         DB::table('users')->insert([
+            'company_id' => 1,
             'first_name' => 'Joe',
             'last_name' => 'Admin',
             'email' => 'joeadmin@computerwhiz.com.au',
@@ -26,6 +28,7 @@ class UsersTableSeeder extends Seeder
         ]);
 
         DB::table('users')->insert([
+            'company_id' => 1,
             'first_name' => 'Joe',
             'last_name' => 'Customer',
             'email' => 'joecustomer@computerwhiz.com.au',
@@ -33,6 +36,7 @@ class UsersTableSeeder extends Seeder
         ]);
 
         DB::table('users')->insert([
+            'company_id' => 1,
             'first_name' => 'Joe',
             'last_name' => 'User',
             'email' => 'joeuser@computerwhiz.com.au',

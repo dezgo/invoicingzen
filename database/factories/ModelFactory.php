@@ -15,6 +15,7 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
     $array = ['ACT', 'NSW', 'SA', 'NT', 'WA', 'TAS', 'QLD', 'VIC'];
     $state = $faker->randomElement($array);
     return [
+        'company_id' => 1,
         'first_name' => $faker->firstname,
         'last_name' => $faker->lastname,
         'email' => $faker->email,
@@ -44,5 +45,12 @@ $factory->define(App\InvoiceItem::class, function (Faker\Generator $faker) {
         'quantity' => $faker->numberBetween(1,10),
         'price' => $faker->randomFloat(2,1,500),
         'category_id' => App\InvoiceItemCategory::orderByRaw("RAND()")->first()->id,
+    ];
+});
+
+$factory->define(App\Company::class, function (Faker\Generator $faker) {
+    return [
+        'domain_suffix' => $faker->word,
+        'company_name' => $faker->company,
     ];
 });
