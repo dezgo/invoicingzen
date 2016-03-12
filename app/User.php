@@ -45,11 +45,11 @@ class User extends Model implements AuthenticatableContract,
 
     public function getDescriptionAttribute()
     {
-        if ($this->business_name == '') {
-            return $this->full_name;
+        if ($this->business_name != '') {
+            return $this->business_name;
         }
         else {
-            return $this->business_name;
+            return $this->full_name;
         }
     }
 
@@ -143,5 +143,13 @@ class User extends Model implements AuthenticatableContract,
                 $this->roles()->attach(3);
                 break;
         }
+    }
+
+    /**
+     * Return ordered list of users for use in select elements
+     */
+    public static function userSelectList()
+    {
+        return User::all()->sortBy('description')->lists('description', 'id');
     }
 }
