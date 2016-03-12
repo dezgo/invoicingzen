@@ -6,6 +6,7 @@ use App\Invoice;
 use App\InvoiceItem;
 use App\InvoiceItemCategory;
 use App\User;
+use App\Company;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -40,9 +41,22 @@ class AppServiceProvider extends ServiceProvider
 
         Invoice::created(function ($invoice) {
             \Setting::set('next_invoice_number',$invoice->invoice_number+1);
+            \Setting::setExtraColumns(['company_id' => Company::my_id()]);
             \Setting::save();
         });
 
+        User::saving(function ($user) {
+            $user->company_id = Company::my_id();
+        });
+        Invoice::saving(function ($invoice) {
+            $invoice->company_id = Company::my_id();
+        });
+        InvoiceItem::saving(function ($invoice_item) {
+            $invoice_item->company_id = Company::my_id();
+        });
+        InvoiceItemCategory::saving(function ($invoice_item_categories) {
+            $invoice_item_categories->company_id = Company::my_id();
+        });
     }
 
     /**

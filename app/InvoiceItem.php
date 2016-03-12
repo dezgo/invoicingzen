@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Company;
 
 class InvoiceItem extends Model
 {
@@ -21,19 +22,6 @@ class InvoiceItem extends Model
 		'invoice_id',
 		'url',
 	];
-
-	/**
-	 * Constructor - set default values for new record
-	 *
-	 * @return null
-	 */
-	public function __construct(array $attributes = array())
-	{
-		$this->setRawAttributes(array(
-			'company_id' => Auth::user()->company_id,
-		), true);
-		parent::__construct($attributes);
-	}
 
 	/**
 	* Get the category for this invoice item

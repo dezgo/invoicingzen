@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Company;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -29,6 +29,7 @@ class AdminController extends Controller
 
 		\Setting::set('next_invoice_number', $request->next_invoice_number);
 		\Setting::set('markup', $request->markup);
+		\Setting::setExtraColumns(['company_id' => Company::my_id()]);
         \Setting::save();
         $request->session()->flash('status', trans('settings.update_success'));
         return redirect(url('/settings'));

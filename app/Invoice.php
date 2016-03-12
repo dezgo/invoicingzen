@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use DB;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\CompanyBoundary;
+use App\Scopes\CompanyBoundary;
 
 class Invoice extends Model
 {
@@ -15,7 +15,7 @@ class Invoice extends Model
 
 	protected $table = 'invoices';
 	protected $dateFormat = 'd-m-Y';
-	protected $dates = ['invoice_date', 'due_date', 'deleted_at'];
+	protected $dates = ['invoice_date', 'due_date', 'created_at', 'updated_at', 'deleted_at'];
 
 	/**
 	 * The attributes that are mass assignable.
@@ -42,7 +42,6 @@ class Invoice extends Model
 			'invoice_date' => $this->getDefaultInvoiceDate(),
 			'due_date' => $this->getDefaultDueDate(),
 			'invoice_number' => $this->getNextInvoiceNumber(),
-			'company_id' => Company::my_id(),
 		), true);
 		parent::__construct($attributes);
 	}

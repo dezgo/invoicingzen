@@ -47,3 +47,10 @@ $factory->define(App\InvoiceItem::class, function (Faker\Generator $faker) {
         'category_id' => App\InvoiceItemCategory::orderByRaw("RAND()")->first()->id,
     ];
 });
+
+$factory->define(App\Company::class, function (Faker\Generator $faker) {
+    return [
+        'domain_suffix' => $faker->word,
+        'company_name' => $faker->company,
+    ];
+});
