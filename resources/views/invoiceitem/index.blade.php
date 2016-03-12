@@ -8,7 +8,9 @@
                     <td><h4>Qty</h4></td>
                     <td><h4>Description</h4></td>
                     <td><h4>Price</h4></td>
+                    @if(Gate::check('admin'))
                     <td><h4>URL</h4></td>
+                    @endif
                 </tr>
             </thead>
 
@@ -29,9 +31,11 @@
                         @endif
                     </td>
                     <td>{{ $invoice_item->price }}</td>
+                    @if(Gate::check('admin'))
                     <td>
                         <a id='anchorURL' target='_blank' href='{{ $invoice_item->url }}'>View URL</a>
                     </td>
+                    @endif
                 </tr>
             @endforeach
             </tbody>
@@ -42,9 +46,7 @@
     @elseif(Gate::check('admin'))
     <h4>
         <div class="panel panel-default">
-        Great, you have your invoice, now let's add
-        some items to it. Click the 'Add Invoice Item' button
-        below to get started.
+        {{ trans('invoice.add-invoice-items') }}
         </div>
     </h4>
     @endif

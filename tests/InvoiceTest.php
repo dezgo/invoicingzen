@@ -252,7 +252,7 @@ class InvoiceTest extends TestCase
     }
 
     // is the customer select box a select2 js control?
-    public function testCheckSelect2OK()
+    public function testCheckSelect2()
     {
         $this->actingAs($this->userAdmin)
              ->visit('/invoice/'.$this->invoice->id)
@@ -265,5 +265,40 @@ class InvoiceTest extends TestCase
           $this->actingAs($this->userAdmin)
                ->visit('/invoice/create')
                ->see("$('#customer_list').select2({");
+    }
+
+    // ensure user sees correct message on blank invoices page
+    public function testBlankInvoicePageUser()
+    {
+        $user = factory(App\User::class)->create();
+        $this->actingAs($user)
+             ->visit('/invoice')
+             ->see(trans('invoice.welcome-user'));
+    }
+
+    // ensure user sees correct message on non-blank invoices page
+    public function testNonBlankInvoicePageUser()
+    {
+        $this->actingAs($this->invoice->user)
+             ->visit('/invoice')
+             ->dontSee(trans('invoice.welcome-user'));
+    }
+
+    // ensure admin sees correct message on blank invoices page
+    public function testBlankInvoicePageAdmin()
+    {
+        $this->userAdmin->company_id = 2;
+        $this->actingAs($this->userAdmin)
+             ->visit('/invoice')
+             ->see(trans('invoice.welcome-admin'));
+    }
+
+    // ensure admin sees correct message on blank invoices page
+    public function testNonBlankInvoicePageAdmin()
+    {
+        $this->userAdmin->company_id = 1;
+        $this->actingAs($this->userAdmin)
+             ->visit('/invoice')
+             ->dontSee(trans('invoice.welcome-admin'));
     }
 }
