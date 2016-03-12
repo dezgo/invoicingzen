@@ -11,8 +11,13 @@
                     <td><h4>Date</h4></td>
                     <td><h4>Total</h4></td>
                     @else
-                    <td colspan="3">Welcome to the invoicing area! Click the
-                        'Create' button below to create your first invoice.</td>
+                    <td colspan="3">
+                        @if(Gate::check('admin'))
+                        {{ trans('invoice.welcome-admin') }}
+                        @else
+                        {{ trans('invoice.welcome-user') }}
+                        @endif
+                    </td>
                     @endif
                 </tr>
             </thead>

@@ -129,4 +129,19 @@ class InvoiceItemTest extends TestCase
             ->click('anchorURL')
             ->seePageIs($ii->url);
     }
+
+    // ensure URL is only accessible to admins, not to users
+    public function testURLAccess()
+    {
+        $admin = factory(App\User::class)->create();
+        $admin->roles()->attach(2);
+
+        $this->actingAs($this->invoice->user)
+            ->visit('/invoice/'.$this->invoice->id)
+            ->dontSee('anchorURL');
+
+        $this->actingAs($admin)
+            ->visit('/invoice/'.$this->invoice->id)
+            ->see('anchorURL');
+    }
 }
