@@ -13,7 +13,7 @@
 
     @include('/invoiceitem/index')
 <br><br>
-    <a class="btn btn-info" href="{{ url('/invoice/'.$invoice->id.'/print') }}">
+    <a id='btnViewInvoice' class="btn btn-info" href="{{ url('/invoice/'.$invoice->id.'/print') }}">
         View
     </a>
     @if(Gate::check('admin'))
