@@ -64,29 +64,58 @@ class SettingsTest extends TestCase
     }
 
     /**
-     * See settings and change them - check validation
+     * See settings and change them - check OK
+     * AND, ensure settings do actually show up on invoice
      *
      * @return void
      */
     public function testUpdateSettings()
     {
+
+        $next_invoice_number = 98;
+        $bsb = '123483';
+        $bank_account_number = '123456789';
+        $abn = '12 321 312 567';
+        $payment_terms = '7 Days again';
+        $mailing_address_line_1 = 'The Shack from the Outback';
+        $mailing_address_line_2 = '12 Stopp Place';
+        $mailing_address_line_3 = 'Birmingham NSW 1235';
+        $enquiries_phone = '(02) 6123 3443';
+        $enquiries_email = 'anewtwo@computerwhiz.com.au';
+        $enquiries_web = 'http://testagain.computerwhiz.com.au';
+
         $this->actingAs($this->user)
              ->visit('/settings')
-             ->type('34', 'next_invoice_number')
+             ->type($next_invoice_number, 'next_invoice_number')
              ->type('20', 'markup')
-             ->type('123123', 'bsb')
-             ->type('123456789', 'bank_account_number')
-             ->type('12 123 123 123', 'abn')
-             ->type('7 Days', 'payment_terms')
-             ->type('The Shack', 'mailing_address_line_1')
-             ->type('12 Stop Place', 'mailing_address_line_2')
-             ->type('Birmingham NSW 1234', 'mailing_address_line_3')
-             ->type('(02) 6123 3434', 'enquiries_phone')
-             ->type('mail@computerwhiz.com.au', 'enquiries_email')
-             ->type('http://computerwhiz.com.au', 'enquiries_web')
-             ->attach(public_path().'images/logo.jpg', 'logo')
+             ->type($bsb, 'bsb')
+             ->type($bank_account_number, 'bank_account_number')
+             ->type($abn, 'abn')
+             ->type($payment_terms, 'payment_terms')
+             ->type($mailing_address_line_1, 'mailing_address_line_1')
+             ->type($mailing_address_line_2, 'mailing_address_line_2')
+             ->type($mailing_address_line_3, 'mailing_address_line_3')
+             ->type($enquiries_phone, 'enquiries_phone')
+             ->type($enquiries_email, 'enquiries_email')
+             ->type($enquiries_web, 'enquiries_web')
              ->press('btnSubmit')
              ->see(trans('settings.update_success'));
+
+         $invoice = factory(App\Invoice::class)->create();
+         factory(App\InvoiceItem::class, 5)->create(['invoice_id' => $invoice->id]);
+         $this->actingAs($this->user)
+              ->visit('/invoice/'.$invoice->id.'/print')
+              ->see($next_invoice_number)
+              ->see($bsb)
+              ->see($bank_account_number)
+              ->see($abn)
+              ->see($payment_terms)
+              ->see($mailing_address_line_1)
+              ->see($mailing_address_line_2)
+              ->see($mailing_address_line_3)
+              ->see($enquiries_phone)
+              ->see($enquiries_email)
+              ->see($enquiries_web);
     }
 
 }
