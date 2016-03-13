@@ -4,6 +4,15 @@
 <div class="panel">
     <h1>Invoicing Zen Release Notes</h1>
 
+    <h3>v1.1.4</h3>
+    <h4>13 Mar 2016</h4>
+    <ul>
+        <li>
+            Bugfix: footer overlapped text. Added breaks to master template to
+            ensure footer only overlaps empty text.
+        </li>
+    </ul>
+
     <h3>v1.1.3</h3>
     <h4>13 Mar 2016</h4>
     <ul>
@@ -100,6 +109,5 @@
             comprehensive test scripts which ensures robustness of application
         </li>
     </ul>
-<br /><Br /><Br /><Br />
 </div>
 @stop
