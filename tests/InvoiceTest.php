@@ -134,7 +134,7 @@ class InvoiceTest extends TestCase
     {
         $this->actingAs($this->user)
             ->visit('/invoice/'.$this->invoice->id)
-            ->click('Print')
+            ->click('btnViewInvoice')
             ->see('Customer Details')
             ->see('How to Pay')
             ->see('Enquiries');
@@ -144,7 +144,7 @@ class InvoiceTest extends TestCase
     {
         $this->actingAs($this->userAdmin)
             ->visit('/invoice/'.$this->invoice->id)
-            ->click('Print')
+            ->click('btnViewInvoice')
             ->see('Customer Details')
             ->see('How to Pay')
             ->see('Enquiries');

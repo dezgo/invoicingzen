@@ -96,6 +96,24 @@ return [
         'postcode' => [
             'regex' => 'Postcode must be 4 numbers.',
         ],
+        'bsb' => [
+            'regex' => trans('settings.bsb').' must be 6 numbers.',
+        ],
+        'bank_account_number' => [
+            'regex' => trans('settings.bank_account_number').' must be between 6 and 10 numbers.',
+        ],
+        'abn' => [
+            'regex' => trans('settings.abn').' must be in the format nn nnn nnn nnn.',
+        ],
+        'enquiries_phone' => [
+            'regex' => trans('settings.enquiries_phone').' must be between 6 and 14 characters and can only contains numbers, round brackets, spaces, or dashes',
+        ],
+        'enquiries_web' => [
+            'url' => trans('settings.enquiries_web').' doesn\'t appear to be a valid URL.',
+        ],
+        'enquiries_email' => [
+            'email' => trans('settings.enquiries_web').' doesn\'t appear to be a valid email address.',
+        ],
     ],
 
     /*
