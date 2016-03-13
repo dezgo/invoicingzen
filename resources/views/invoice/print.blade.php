@@ -26,7 +26,7 @@
             </h2>
             <br>
             <br>
-            ABN:&nbsp;26&nbsp;537&nbsp;857&nbsp;341<br />
+            {{ trans('settings.abn').': '.Setting::get('abn') }}<br />
             <br />
         </td>
     </tr>
@@ -61,10 +61,10 @@
       </td>
       @if ($invoice->owing > 0)
       <td colspan="2" valign="top">
-        <div class="cred">Payment&nbsp;Terms:</div>
+        <div class="cred">{{ trans('settings.payment_terms') }}:</div>
       </td>
       <td colspan="3" valign="top" align="right">
-        7 Days
+        {{ Setting::get('payment_terms') }}
       </td>
       @endif
     </tr>
@@ -88,25 +88,25 @@
   <tr><td><br /></td></tr>
 <tr>
   <td colspan="7">&nbsp;</td>
-  <td colspan="3"><b>Grand-total:</b></td>
+  <td colspan="3"><b>{{ trans('invoice.grand-total') }}:</b></td>
   <td colspan="2" align="right">{{ number_format($invoice->total, 2) }}</td>
 </tr>
 @if ($invoice->is_quote == '')
     <tr>
       <td colspan="7">&nbsp;</td>
-      <td colspan="3"><b>Amount&nbsp;paid:</b></td>
+      <td colspan="3"><b>{{ trans('invoice.amount-paid') }}:</b></td>
       <td colspan="2" align="right">{{ number_format($invoice->paid, 2) }}</td>
     </tr>
     <tr>
       <td colspan="7">&nbsp;</td>
-      <td colspan="3"><b>Balance&nbsp;owing:</b></td>
+      <td colspan="3"><b>{{ trans('invoice.balance-due') }}:</b></td>
       <td colspan="2" align="right">{{ number_format($invoice->owing, 2) }}</td>
     </tr>
 @endif
 <tr><td><br /></td></tr>
 <tr>
   <td colspan="7">&nbsp;</td>
-  <td colspan="5">No GST has been included</td>
+  <td colspan="5">{{ trans('invoice.no-gst') }}</td>
 </tr>
 <tr><td><br /><hr /></td></tr>
 <tr>
@@ -116,26 +116,26 @@
   @endif
 </tr>
 <tr>
-  <td colspan="4">Phone: (02) 6112 8025</td>
+  <td colspan="4">{{ trans('settings.enquiries_phone') }}: {{ Setting::get('enquiries_phone') }}</td>
   @if ($invoice->is_quote == '')
   <td colspan="4">Payment by EFT</td>
   <td colspan="4">Payment by Cheque</td>
   @endif
 </tr>
 <tr>
-  <td colspan="4">E mail@computerwhiz.com.au</td>
+  <td colspan="4">{{ trans('settings.enquiries_email') }}: {{ Setting::get('enquiries_email') }}</td>
   @if ($invoice->is_quote == '')
-  <td colspan="1">BSB:</td>
-  <td colspan="3">082-902</td>
+  <td colspan="1">{{ trans('settings.bsb') }}:</td>
+  <td colspan="3">{{ Setting::get('bsb') }}</td>
   <td colspan="4">Mail Cheques to</td>
   @endif
 </tr>
 <tr>
-  <td colspan="4">W www.computerwhiz.com.au</td>
+  <td colspan="4">{{ trans('settings.enquiries_web') }}: {{ Setting::get('enquiries_web') }}</td>
   @if ($invoice->is_quote == '')
   <td colspan="1">Account:</td>
-  <td colspan="3">115287822</td>
-  <td colspan="4">238 La Perouse St</td>
+  <td colspan="3">{{ Setting::get('bank_account_number') }}</td>
+  <td colspan="4">{{ Setting::get('mailing_address_line_1') }}</td>
   @endif
 </tr>
 @if ($invoice->is_quote == '')
@@ -143,7 +143,11 @@
   <td colspan="4">&nbsp;</td>
   <td colspan="1">Reference:</td>
   <td colspan="3">Inv{{ $invoice->invoice_number}}</td>
-  <td colspan="4">Red Hill ACT 2603</td>
+  <td colspan="4">{{ Setting::get('mailing_address_line_2') }}</td>
+</tr>
+<tr>
+  <td colspan="8">&nbsp;</td>
+  <td colspan="4">{{ Setting::get('mailing_address_line_3') }}</td>
 </tr>
 @endif
 </table>

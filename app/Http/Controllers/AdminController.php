@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Company;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Validator;
 
 class AdminController extends Controller
 {
@@ -20,15 +21,67 @@ class AdminController extends Controller
 		return view('admin.settings', compact('settings'));
 	}
 
+	/**
+	 * Ensure the logo is uploaded in the correct mimetype
+	 *
+	 * @param  int  $id
+	 * @return boolean
+	 */
+	private function checkLogoMimeType($file)
+	{
+		return $file->getClientMimeType() == 'image/jpeg';
+
+	}
+
     public function update(Request $request)
     {
-		$this->validate($request, [
+		$validator = Validator::make($request->all(), [
 			'next_invoice_number' => 'numeric',
 			'markup' => 'numeric',
+			'bsb' => 'regex:/^\d{6}$/',
+			'bank_account_number' => 'regex:/^\d{6,10}$/',
+			'abn' => 'regex:/^\d{2} \d{3} \d{3} \d{3}$/',
+			'payment_terms' => 'string',
+			'mailing_address_line_1' => 'string',
+			'mailing_address_line_2' => 'string',
+			'mailing_address_line_3' => 'string',
+			'enquiries_phone' => 'regex:/^[\d ()-]{6,14}$/',
+			'enquiries_email' => 'email',
+			'enquiries_web' => 'url',
 			]);
+
+		if ($request->hasFile('logo')) {
+			$validator->after(function($validator) {
+			    if (!$this->checkLogoMimeType($validator->getFiles()['logo'])) {
+			        $validator->errors()->add('logo', 'Expecting logo to be in JPEG format');
+			    }
+			});
+		}
+
+		if ($validator->fails()) {
+			return redirect('settings')
+					->withErrors($validator)
+					->withInput();
+		}
 
 		\Setting::set('next_invoice_number', $request->next_invoice_number);
 		\Setting::set('markup', $request->markup);
+		\Setting::set('abn', $request->abn);
+		\Setting::set('payment_terms', $request->payment_terms);
+		\Setting::set('bsb', $request->bsb);
+		\Setting::set('bank_account_number', $request->bank_account_number);
+		\Setting::set('mailing_address_line_1', $request->mailing_address_line_1);
+		\Setting::set('mailing_address_line_2', $request->mailing_address_line_2);
+		\Setting::set('mailing_address_line_3', $request->mailing_address_line_3);
+		\Setting::set('enquiries_phone', $request->enquiries_phone);
+		\Setting::set('enquiries_email', $request->enquiries_email);
+		\Setting::set('enquiries_web', $request->enquiries_web);
+		if ($request->hasFile('logo')) {
+			dd($request->file('logo'));
+			\Setting::set('logo', $request->file('logo'));
+			$destinationPath = public_path().'/images';
+			$request->file('logo')->move($destinationPath, 'logo.jpg');
+		}
 		\Setting::setExtraColumns(['company_id' => Company::my_id()]);
         \Setting::save();
         $request->session()->flash('status', trans('settings.update_success'));
