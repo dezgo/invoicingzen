@@ -25,6 +25,7 @@
             <h1 class='freetext'>Invoicing Zen</h1>
         @endif
         @yield('content')
+        <br /><Br /><Br /><Br />
         <nav class="navbar navbar-default navbar-fixed-bottom">
             @yield('footer')
             <div class="collapse navbar-collapse">
