@@ -25,14 +25,19 @@
             <h1 class='freetext'>Invoicing Zen</h1>
         @endif
         @yield('content')
-
-        <div id="footer">
+        <nav class="navbar navbar-default navbar-fixed-bottom">
             @yield('footer')
-            <!-- <br />
-            <span class="glyphicon glyphicon-copyright-mark" aria-hidden="true"></span>
-            <small>Invoicing Zen</small> -->
-        </div>
-
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="#"><span class="glyphicon glyphicon-copyright-mark" aria-hidden="true"></span><small>Invoicing Zen</small></a>
+                    </li>
+                    <li>
+                        <a href="/release-notes">Release Notes</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
     </div>
 </body>
 </html>

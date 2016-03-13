@@ -22,6 +22,10 @@ Route::group(['middleware' => 'web'], function () {
        return view('content.index');
     });
 
+    Route::get('/release-notes', function () {
+       return view('content.release-notes');
+    });
+
 });
 
 Route::group(['middleware' => ['web', 'superadmin']], function() {
