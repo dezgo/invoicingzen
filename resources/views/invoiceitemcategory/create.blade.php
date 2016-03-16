@@ -1,4 +1,4 @@
-@extends('master')
+@extends('web')
 
 @section('content')
     <h1 align="left">Create Invoice Item Category</h1>

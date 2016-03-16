@@ -1,4 +1,4 @@
-@extends('master')
+@extends('web')
 
 @section('content')
     @include('includes.flash_message_content')

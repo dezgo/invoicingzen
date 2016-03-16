@@ -1,4 +1,4 @@
-@extends('master')
+@extends('email')
 @section('content')
 <h1>This is a test email</h1>
 <p>

@@ -1,4 +1,4 @@
-@extends('master')
+@extends('web')
 
 @section('content')
 {!! Form::model($email, ['route' => 'email.send']) !!}
