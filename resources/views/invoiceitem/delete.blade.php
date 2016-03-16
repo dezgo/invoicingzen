@@ -1,4 +1,4 @@
-@extends('master')
+@extends('web')
 
 @section('content')
     <h1 align="left">Delete Invoice Item</h1>

@@ -1,15 +1,19 @@
-@extends('master')
+@extends('web')
 
 @section('content')
 <div class="panel">
     <h1>Invoicing Zen Release Notes</h1>
 
     <h3>v1.1.4</h3>
-    <h4>13 Mar 2016</h4>
+    <h4>16 Mar 2016</h4>
     <ul>
         <li>
             Bugfix: footer overlapped text. Added breaks to master template to
             ensure footer only overlaps empty text.
+        </li>
+        <li>
+            Create print, web, and email templates to cater for differences when
+            displayed views in each of these mediums
         </li>
     </ul>
 

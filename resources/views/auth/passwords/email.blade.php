@@ -1,4 +1,4 @@
-@extends('master')
+@extends('web')
 
 <!-- Main Content -->
 @section('content')

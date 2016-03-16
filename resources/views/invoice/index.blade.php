@@ -1,4 +1,4 @@
-@extends('master')
+@extends('web')
 
 @section('content')
     <h1>Show Invoices</h1>

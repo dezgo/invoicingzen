@@ -1,4 +1,4 @@
-@extends('master')
+@extends('web')
 
 @section('content')
     <h1 align="left">Edit Invoice Item for invoice {{ $invoice_item->invoice->description }}</h1>

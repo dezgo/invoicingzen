@@ -11,34 +11,15 @@
     @yield('head')
 </head>
 
-
-@if(Gate::check('authenticated'))
-<body id="app-layout">
-@else
-<body id="app-layout" class="introimage">
-@endif
-    @if(Gate::check('authenticated'))
-        @include('topbar')
-    @endif
+@yield('bodytag')
+    @yield('topbar')
     <div class="container">
         @if(!Gate::check('authenticated'))
             <h1 class='freetext'>Invoicing Zen</h1>
         @endif
         @yield('content')
-        <br /><Br /><Br /><Br />
-        <nav class="navbar navbar-default navbar-fixed-bottom">
-            @yield('footer')
-            <div class="collapse navbar-collapse">
-                <ul class="nav navbar-nav">
-                    <li>
-                        <a href="#"><span class="glyphicon glyphicon-copyright-mark" aria-hidden="true"></span><small>Invoicing Zen</small></a>
-                    </li>
-                    <li>
-                        <a href="/release-notes">Release Notes</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+        @yield('footer')
+        @yield('footer-web')
     </div>
 </body>
 </html>
