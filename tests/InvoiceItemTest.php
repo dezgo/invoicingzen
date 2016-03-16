@@ -104,8 +104,18 @@ class InvoiceItemTest extends TestCase
             ->seePageIs('/invoice/'.$this->invoice->id);
     }
 
+    public function testMarkupNotSet()
+    {
+        Setting::set('markup', '');
+        $invoice_item = $this->invoice->invoice_items->first();
+        $this->actingAs($this->user)
+            ->visit('/invoice_item/'.$invoice_item->id.'/edit')
+            ->see(trans('invoice_item.warning-markup-blank'));
+    }
+
     public function testMarkup()
     {
+        Setting::set('markup', '15');
         $invoice_item = $this->invoice->invoice_items->first();
         $this->actingAs($this->user)
             ->visit('/invoice_item/'.$invoice_item->id.'/edit')
