@@ -4,6 +4,17 @@
 <div class="panel">
     <h1>Invoicing Zen Release Notes</h1>
 
+    <h3>v1.1.5</h3>
+    <h4>16 Mar 2016</h4>
+    <ul>
+        <li>
+            Bugfix: Javascript block for Markup / markdown buttons not appearing
+        </li>
+        <li>
+            Add text on invoice items edit page to alert user when markup is blank
+        </li>
+    </ul>
+
     <h3>v1.1.4</h3>
     <h4>13 Mar 2016</h4>
     <ul>
