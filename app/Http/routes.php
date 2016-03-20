@@ -71,6 +71,7 @@ Route::group(['middleware' => ['web', 'auth']], function() {
     // Invoice
     Route::resource('invoice', 'InvoiceController');
     Route::get('invoice/{invoice}/print', 'InvoiceController@prnt');
+    Route::post('invoice/{invoice}/pay', 'InvoiceController@pay')->name('invoice.pay');
 });
 
 Route::group(['middleware' => ['web', 'admin']], function() {

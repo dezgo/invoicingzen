@@ -161,6 +161,7 @@ return [
         Barryvdh\Snappy\ServiceProvider::class,
         anlutro\LaravelSettings\ServiceProvider::class,
         Unisharp\Ckeditor\ServiceProvider::class,
+        Laravel\Cashier\CashierServiceProvider::class,
     ],
 
     /*

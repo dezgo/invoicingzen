@@ -12,7 +12,8 @@
         "h4cc/wkhtmltopdf-amd64": "0.12.x",
         "h4cc/wkhtmltoimage-amd64": "0.12.x",
         "anlutro/l4-settings": "^0.4.7",
-        "unisharp/laravel-ckeditor": "^4.5"
+        "unisharp/laravel-ckeditor": "^4.5",
+        "laravel/cashier": "~6.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

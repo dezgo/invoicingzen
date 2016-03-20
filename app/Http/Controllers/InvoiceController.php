@@ -219,4 +219,34 @@ class InvoiceController extends Controller
 			\Session()->flash('status-warning', 'Customer does not have an email address!');
 		}
 	}
+
+	/**
+	 * Pay invoice
+	 */
+	public function pay(Invoice $invoice, Request $request)
+	{
+		$token = $request->stripeToken;
+		$amount = $invoice->owing;
+
+		try {
+			$response = Auth::user()->charge($amount * 100, [
+				'currency' => 'aud',
+				'source' => $token,
+				'description' => $invoice->description,
+			]);
+		} catch (Exception $e) {
+			\Session()->flash('status-warning', 'There was a problem with your payment. '.
+				'Please check the details and try again ('.$e->description.')');
+				return redirect('/invoice/'.$invoice->id);
+		}
+
+		// update the invoice to show amount now paid
+		$invoice->paid = $invoice->paid + $amount;
+		$invoice->save();
+
+		\Session()->flash('status-success', trans('invoice.payment-success', [
+			'amount' => money_format('%i', $amount),
+			'invoice_number' => $invoice->invoice_number]));
+		return redirect('/invoice/'.$invoice->id);
+	}
 }

@@ -21,4 +21,6 @@ return [
     'balance-due' => 'Balance owing',
     'no-gst' => 'No GST has been included',
 
+    // stripe payments
+    'payment-success' => 'Thank you. Your payment of :amount for invoice :invoice_number was succesfully processed.',
 ];

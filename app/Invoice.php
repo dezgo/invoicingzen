@@ -84,7 +84,7 @@ class Invoice extends Model
 
 	public function getDescriptionAttribute()
 	{
-		return $this->invoice_number.': '.$this->user->full_name;
+		return 'Invoice '.$this->invoice_number.': '.$this->user->full_name.' ('.$this->owing.')';
 	}
 
 	/**
