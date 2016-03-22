@@ -10,8 +10,9 @@
                     <td><h4>Inv Num / Client</h4></td>
                     <td><h4>Date</h4></td>
                     <td><h4>Total</h4></td>
+                    <td><h4>Owing</h4></td>
                     @else
-                    <td colspan="4">
+                    <td colspan="5">
                         @if(Gate::check('admin'))
                         {{ trans('invoice.welcome-admin') }}
                         @else
@@ -29,7 +30,8 @@
             <a href='{{ action('InvoiceController@show', $invoice->id) }}'>{{ $invoice->description }}</a>
         </td>
         <td>{{ $invoice->invoice_date }}</td>
-        <td>${{ money_format('%i', $invoice->total) }}</td>
+        <td class="text-right">${{ money_format('%i', $invoice->total) }}</td>
+        <td class="text-right">${{ money_format('%i', $invoice->owing) }}</td>
     </tr>
     @endforeach
     </tbody>

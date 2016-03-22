@@ -4,6 +4,20 @@
 <div class="panel">
     <h1>Invoicing Zen Release Notes</h1>
 
+    <h3>v1.1.6</h3>
+    <h4>22 Mar 2016</h4>
+    <ul>
+        <li>
+            Add total, paid, and owing on show-invoice (single invoice) page
+        </li>
+        <li>
+            Add Client name and amount owing on show-invoices (list of all invoices) page
+        </li>
+        <li>
+            Remove how-to-pay section when invoice already paid
+        </li>
+    </ul>
+
     <h3>v1.1.5</h3>
     <h4>16 Mar 2016</h4>
     <ul>
