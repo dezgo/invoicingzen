@@ -7,11 +7,11 @@
             <thead>
                 <tr>
                     @if ($invoices->count() > 0)
-                    <td><h4>Num</h4></td>
+                    <td><h4>Inv Num / Client</h4></td>
                     <td><h4>Date</h4></td>
                     <td><h4>Total</h4></td>
                     @else
-                    <td colspan="3">
+                    <td colspan="4">
                         @if(Gate::check('admin'))
                         {{ trans('invoice.welcome-admin') }}
                         @else
@@ -26,10 +26,10 @@
     @foreach($invoices as $invoice)
     <tr>
         <td>
-            <a href='{{ action('InvoiceController@show', $invoice->id) }}'>{{ $invoice->invoice_number }}</a>
+            <a href='{{ action('InvoiceController@show', $invoice->id) }}'>{{ $invoice->description }}</a>
         </td>
         <td>{{ $invoice->invoice_date }}</td>
-        <td>{{ $invoice->total }}</td>
+        <td>${{ money_format('%i', $invoice->total) }}</td>
     </tr>
     @endforeach
     </tbody>
