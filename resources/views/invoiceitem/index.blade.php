@@ -5,8 +5,7 @@
             <thead>
                 <tr>
                     <td><h4>Ready</h4></td>
-                    <td><h4>Qty</h4></td>
-                    <td><h4>Description</h4></td>
+                    <td><h4>Item</h4></td>
                     <td><h4>Price</h4></td>
                     @if(Gate::check('admin'))
                     <td><h4>URL</h4></td>
@@ -21,8 +20,8 @@
                         <input type="checkbox" name="chkReady" iiid="{{ $invoice_item->id
                             }}"{{ $invoice_item->ready ? ' checked' : '' }}>
                     </td>
-                    <td>{{ $invoice_item->quantity }}</td>
                     <td>
+                        {{ $invoice_item->quantity }}&nbsp;x&nbsp;
                         @if(Gate::check('admin'))
                         <a href='{{ action('InvoiceItemController@show', $invoice_item->id) }}'>{{
                             $invoice_item->description }}</a>
@@ -30,14 +29,33 @@
                             {{ $invoice_item->description }}
                         @endif
                     </td>
-                    <td>{{ $invoice_item->price }}</td>
+                    <td class="text-right">{{ $invoice_item->price }}</td>
                     @if(Gate::check('admin'))
                     <td>
+                        @if ($invoice_item->url == '')
+                        -
+                        @else
                         <a id='anchorURL' target='_blank' href='{{ $invoice_item->url }}'>View URL</a>
+                        @endif
                     </td>
                     @endif
                 </tr>
             @endforeach
+            <tr>
+                <td>&nbsp;</td>
+                <td><b>Total:</b></td>
+                <td class="text-right">{{ money_format('%i', $invoice->total) }}</td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td><b>Paid:</b></td>
+                <td class="text-right">{{ money_format('%i', $invoice->paid) }}</td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td><b>Owing:</b></td>
+                <td class="text-right">{{ money_format('%i', $invoice->owing) }}</td>
+            </tr>
             </tbody>
         </table>
 

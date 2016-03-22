@@ -1,4 +1,4 @@
-@extends('master')
+@extends('email')
 @section('content')
 {!! $email->body !!}
 @stop

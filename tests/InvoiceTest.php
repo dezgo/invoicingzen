@@ -137,7 +137,8 @@ class InvoiceTest extends TestCase
             ->click('btnViewInvoice')
             ->see('Customer Details')
             ->see('How to Pay')
-            ->see('Enquiries');
+            ->see('Enquiries')
+            ->dontSee('<nav class="navbar navbar-default">');
     }
 
     public function testPrintAsAdmin()

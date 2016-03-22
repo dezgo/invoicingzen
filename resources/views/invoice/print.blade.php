@@ -59,7 +59,7 @@
       <td colspan="7">
         {!! $invoice->user->address_multi !!}
       </td>
-      @if ($invoice->owing > 0)
+      @if ($invoice->is_quote == '' and $invoice->owing > 0)
       <td colspan="2" valign="top">
         <div class="cred">{{ trans('settings.payment_terms') }}:</div>
       </td>
@@ -91,7 +91,7 @@
   <td colspan="3"><b>{{ trans('invoice.grand-total') }}:</b></td>
   <td colspan="2" align="right">{{ number_format($invoice->total, 2) }}</td>
 </tr>
-@if ($invoice->is_quote == '')
+@if ($invoice->is_quote == '' and $invoice->owing > 0)
     <tr>
       <td colspan="7">&nbsp;</td>
       <td colspan="3"><b>{{ trans('invoice.amount-paid') }}:</b></td>
@@ -111,20 +111,20 @@
 <tr><td><br /><hr /></td></tr>
 <tr>
   <td colspan="4"><h4 class="cred">Enquiries</h4></td>
-  @if ($invoice->is_quote == '')
+  @if ($invoice->is_quote == '' and $invoice->owing > 0)
   <td colspan="8"><h4 class="cred">How to Pay</h4></td>
   @endif
 </tr>
 <tr>
   <td colspan="4">{{ trans('settings.enquiries_phone') }}: {{ Setting::get('enquiries_phone') }}</td>
-  @if ($invoice->is_quote == '')
+  @if ($invoice->is_quote == '' and $invoice->owing > 0)
   <td colspan="4">Payment by EFT</td>
   <td colspan="4">Payment by Cheque</td>
   @endif
 </tr>
 <tr>
   <td colspan="4">{{ trans('settings.enquiries_email') }}: {{ Setting::get('enquiries_email') }}</td>
-  @if ($invoice->is_quote == '')
+  @if ($invoice->is_quote == '' and $invoice->owing > 0)
   <td colspan="1">{{ trans('settings.bsb') }}:</td>
   <td colspan="3">{{ Setting::get('bsb') }}</td>
   <td colspan="4">Mail Cheques to</td>
@@ -132,13 +132,13 @@
 </tr>
 <tr>
   <td colspan="4">{{ trans('settings.enquiries_web') }}: {{ Setting::get('enquiries_web') }}</td>
-  @if ($invoice->is_quote == '')
+  @if ($invoice->is_quote == '' and $invoice->owing > 0)
   <td colspan="1">Account:</td>
   <td colspan="3">{{ Setting::get('bank_account_number') }}</td>
   <td colspan="4">{{ Setting::get('mailing_address_line_1') }}</td>
   @endif
 </tr>
-@if ($invoice->is_quote == '')
+@if ($invoice->is_quote == '' and $invoice->owing > 0)
 <tr>
   <td colspan="4">&nbsp;</td>
   <td colspan="1">Reference:</td>
