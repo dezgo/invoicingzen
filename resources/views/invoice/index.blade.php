@@ -11,8 +11,9 @@
                     <td><h4>Date</h4></td>
                     <td><h4>Total</h4></td>
                     <td><h4>Owing</h4></td>
+                    <td><h4>Type</h4></td>
                     @else
-                    <td colspan="5">
+                    <td colspan="6">
                         @if(Gate::check('admin'))
                         {{ trans('invoice.welcome-admin') }}
                         @else
@@ -32,6 +33,7 @@
         <td>{{ $invoice->invoice_date }}</td>
         <td class="text-right">${{ money_format('%i', $invoice->total) }}</td>
         <td class="text-right">${{ money_format('%i', $invoice->owing) }}</td>
+        <td>{{ $invoice->type }}</td>
     </tr>
     @endforeach
     </tbody>
