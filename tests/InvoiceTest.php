@@ -302,4 +302,16 @@ class InvoiceTest extends TestCase
              ->visit('/invoice')
              ->dontSee(trans('invoice.welcome-admin'));
     }
+
+    // check that only admins can toggle ready tick on invoice item
+    public function testReadyTickAccess()
+    {
+        $this->actingAs($this->userAdmin)
+             ->visit('/invoice/'.$this->invoice->id)
+             ->see('<input type="checkbox" name="chkReady" iiid="');
+
+        $this->actingAs($this->user)
+             ->visit('/invoice/'.$this->invoice->id)
+             ->dontSee('<input type="checkbox" name="chkReady" iiid="');
+    }
 }
