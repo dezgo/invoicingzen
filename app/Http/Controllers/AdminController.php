@@ -77,7 +77,6 @@ class AdminController extends Controller
 		\Setting::set('enquiries_email', $request->enquiries_email);
 		\Setting::set('enquiries_web', $request->enquiries_web);
 		if ($request->hasFile('logo')) {
-			dd($request->file('logo'));
 			\Setting::set('logo', $request->file('logo'));
 			$destinationPath = public_path().'/images';
 			$request->file('logo')->move($destinationPath, 'logo.jpg');

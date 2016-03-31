@@ -91,18 +91,16 @@
   <td colspan="3"><b>{{ trans('invoice.grand-total') }}:</b></td>
   <td colspan="2" align="right">{{ number_format($invoice->total, 2) }}</td>
 </tr>
-@if ($invoice->is_quote == '' and $invoice->owing > 0)
-    <tr>
-      <td colspan="7">&nbsp;</td>
-      <td colspan="3"><b>{{ trans('invoice.amount-paid') }}:</b></td>
-      <td colspan="2" align="right">{{ number_format($invoice->paid, 2) }}</td>
-    </tr>
-    <tr>
-      <td colspan="7">&nbsp;</td>
-      <td colspan="3"><b>{{ trans('invoice.balance-due') }}:</b></td>
-      <td colspan="2" align="right">{{ number_format($invoice->owing, 2) }}</td>
-    </tr>
-@endif
+<tr>
+  <td colspan="7">&nbsp;</td>
+  <td colspan="3"><b>{{ trans('invoice.amount-paid') }}:</b></td>
+  <td colspan="2" align="right">{{ number_format($invoice->paid, 2) }}</td>
+</tr>
+<tr>
+  <td colspan="7">&nbsp;</td>
+  <td colspan="3"><b>{{ trans('invoice.balance-due') }}:</b></td>
+  <td colspan="2" align="right">{{ number_format($invoice->owing, 2) }}</td>
+</tr>
 <tr><td><br /></td></tr>
 <tr>
   <td colspan="7">&nbsp;</td>
