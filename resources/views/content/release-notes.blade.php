@@ -8,13 +8,13 @@
     <h4>31 Mar 2016</h4>
     <ul>
         <li>
-            Update email footer with new text re login options
+            Update email footer with new text re login options (cf538ef0)
         </li>
         <li>
-            Add invoice type column to invoice list
+            Add invoice type column to invoice list (5f3c7a6)
         </li>
         <li>
-            When viewing invoice, make ready tickbox read-only for non-admins
+            When viewing invoice, make ready tickbox read-only for non-admins (520a452)
         </li>
     </ul>
 
