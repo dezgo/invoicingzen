@@ -7,6 +7,7 @@ use App\Company;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Validator;
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
@@ -29,8 +30,23 @@ class AdminController extends Controller
 	 */
 	private function checkLogoMimeType($file)
 	{
-		return $file->getClientMimeType() == 'image/jpeg';
+		if ($file->getClientMimeType() == 'image/jpeg' ||
+			$file->getClientMimeType() == 'image/png' ||
+			$file->getClientMimeType() == 'image/gif'
+			) {
+				return true;
+		}
 
+		if ($file->getClientMimeType() == "application/octet-stream") {
+			if (strtolower($file->getExtension() == 'jpg' ||
+				strtolower($file->getExtension()) == 'jpeg' ||
+				strtolower($file->getExtension()) == 'png' ||
+				strtolower($file->getExtension()) == 'gif'
+				)) {
+					return true;
+			}
+		}
+		return false;
 	}
 
     public function update(Request $request)
@@ -53,7 +69,7 @@ class AdminController extends Controller
 		if ($request->hasFile('logo')) {
 			$validator->after(function($validator) {
 			    if (!$this->checkLogoMimeType($validator->getFiles()['logo'])) {
-			        $validator->errors()->add('logo', 'Expecting logo to be in JPEG format');
+			        $validator->errors()->add('logo', trans('settings.logo_format_validation'));
 			    }
 			});
 		}
@@ -79,9 +95,9 @@ class AdminController extends Controller
 		if ($request->hasFile('logo')) {
 			\Setting::set('logo', $request->file('logo'));
 			$destinationPath = public_path().'/images';
-			$request->file('logo')->move($destinationPath, 'logo.jpg');
+			$request->file('logo')->move($destinationPath, Auth::user()->logo_filename);
 		}
-		\Setting::setExtraColumns(['company_id' => Company::my_id()]);
+		\Setting::setExtraColumns(['company_id' => Auth::user()->company_id]);
         \Setting::save();
         $request->session()->flash('status', trans('settings.update_success'));
         return redirect(url('/settings'));
