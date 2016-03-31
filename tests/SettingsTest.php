@@ -50,7 +50,7 @@ class SettingsTest extends TestCase
              ->type('a', 'enquiries_phone')
              ->type('a', 'enquiries_web')
              ->type('a', 'enquiries_email')
-             ->attach(public_path().'/images/ui-bg_diagonals-thick_18_b81900_40x40.png', 'logo')
+             ->attach(public_path().'/css/all.css', 'logo')
              ->press('btnSubmit')
              ->see(trans('validation.numeric', ['attribute' => trans('settings.next_invoice_number')]))
              ->see(trans('validation.custom.markup.numeric'))
@@ -60,7 +60,7 @@ class SettingsTest extends TestCase
              ->see(trans('validation.custom.enquiries_phone.regex'))
              ->see(trans('validation.custom.enquiries_web.url'))
              ->see(trans('validation.custom.enquiries_email.email'))
-             ->see('Expecting logo to be in JPEG format');
+             ->see(trans('settings.logo_format_validation'));
     }
 
     /**
@@ -118,4 +118,13 @@ class SettingsTest extends TestCase
               ->see($enquiries_web);
     }
 
+    public function testNewLogo()
+    {
+        $path = public_path().'/images/logo.png';
+        $this->actingAs($this->user)
+             ->visit('/settings')
+             ->attach($path, 'logo')
+             ->press('btnSubmit')
+             ->see(trans('settings.update_success'));
+    }
 }

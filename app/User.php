@@ -152,4 +152,10 @@ class User extends Model implements AuthenticatableContract,
     {
         return User::all()->sortBy('description')->lists('description', 'id');
     }
+
+    // return name of logo image
+    public function getLogoFilenameAttribute()
+    {
+        return 'logo'.$this->company_id.'.img';
+    }
 }
