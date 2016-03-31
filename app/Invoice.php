@@ -110,9 +110,17 @@ class Invoice extends Model
 		return $this->invoice_items->sum('total');
 	}
 
+	/*
+	 * Get amount owing on invoice (or zero if a quote)
+	 */
 	public function getOwingAttribute()
 	{
-		return $this->total - $this->paid;
+		if ($this->is_quote == '') {
+			return $this->total - $this->paid;
+		}
+		else {
+			return 0;
+		}
 	}
 
 	/*
@@ -134,7 +142,7 @@ class Invoice extends Model
 	}
 
 	/*
-	 * Always return invoice date in set format
+	 * Get type of invoice
 	 *
 	 */
 	public function getTypeAttribute($value)
@@ -151,13 +159,9 @@ class Invoice extends Model
 	}
 
 	/**
-	 * Convert value returned by checkbox html control to boolean
-	 * suitable for storing in db
-	 */
-	/**
-	 * Convert due date into an instance of Carbon
-
-	 * @param $value
+	 * Holding is_quote attribute as either 'on' or blank in app, but stored
+	 * as boolean in database. This converts it from string to boolean to before
+	 * storing in db
 	 */
 	public function setIsQuoteAttribute($value)
 	{
@@ -165,13 +169,9 @@ class Invoice extends Model
 	}
 
 	/**
-	 * Convert value returned by checkbox html control to boolean
-	 * suitable for storing in db
-	 */
-	/**
-	 * Convert due date into an instance of Carbon
-
-	 * @param $value
+	 * Holding is_quote attribute as either 'on' or blank in app, but stored
+	 * as boolean in database. This converts it from boolean to string on
+	 * retrieval from db
 	 */
 	public function getIsQuoteAttribute($value)
 	{

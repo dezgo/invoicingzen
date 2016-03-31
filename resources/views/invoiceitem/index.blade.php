@@ -17,8 +17,14 @@
             @foreach($invoice->invoice_items as $invoice_item)
                 <tr>
                     <td>
+                        @if(Gate::check('admin'))
                         <input type="checkbox" name="chkReady" iiid="{{ $invoice_item->id
                             }}"{{ $invoice_item->ready ? ' checked' : '' }}>
+                        @elseif ($invoice_item->ready)
+                        <span class="fa fa-check"></span>
+                        @else
+                        <span class="fa fa-times"></span>
+                        @endif
                     </td>
                     <td>
                         {{ $invoice_item->quantity }}&nbsp;x&nbsp;

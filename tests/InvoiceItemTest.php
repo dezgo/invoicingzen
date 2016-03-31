@@ -124,7 +124,7 @@ class InvoiceItemTest extends TestCase
 
 // would be nice to test for new value, but not possible as it's in javascript
 // and 'see' is looking at HTML sent back by browser only. at least we can
-// test clicking hte buttons to ensure nothing bad happens!
+// test clicking the buttons to ensure nothing bad happens!
             // ->see(round($invoice_item->price * (1+\Setting::get('markup')/100), 2));
     }
 
@@ -143,6 +143,10 @@ class InvoiceItemTest extends TestCase
     // ensure URL is only accessible to admins, not to users
     public function testURLAccess()
     {
+        $ii = $this->invoice->invoice_items->first();
+        $ii->url = 'www.google.com.au';
+        $ii->save();
+
         $admin = factory(App\User::class)->create();
         $admin->roles()->attach(2);
 
