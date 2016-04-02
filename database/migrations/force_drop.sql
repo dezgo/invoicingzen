@@ -1,5 +1,6 @@
 -- mysql -u root -p homestead < database/migrations/force_drop.sql
 use homestead;
+drop table if exists subscriptions;
 drop table if exists emails;
 drop table if exists invoice_items;
 drop table if exists invoices;

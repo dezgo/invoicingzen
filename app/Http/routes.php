@@ -13,7 +13,6 @@
 
 // routes accessible to anyone whether authenticated or not
 Route::group(['middleware' => 'web'], function () {
-
     Route::auth();
     // Route::match(['put', 'patch'], 'profile/update', 'Auth\AuthController@update');
     // Route::post('profile/edit', 'Auth\AuthController@update');
@@ -73,6 +72,7 @@ Route::group(['middleware' => ['web', 'auth']], function() {
     Route::get('invoice/{invoice}/print', 'InvoiceController@prnt');
 });
 
+// routes only accessible to administrators
 Route::group(['middleware' => ['web', 'admin']], function() {
     Route::get('invoice/{customer}/create', 'InvoiceController@create'); // create invoice for given customer
     Route::get('invoice/{invoice}/delete', 'InvoiceController@delete');

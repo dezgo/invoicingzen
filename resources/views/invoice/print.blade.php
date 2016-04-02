@@ -71,16 +71,14 @@
     <tr><td colspan="12"><br /><br /></td></tr>
 
     <tr>
-      <td colspan="1"><b>Qty</b></td>
-      <td colspan="7"><b>Description</b></td>
+      <td colspan="8"><b>Item</b></td>
       <td colspan="2" align="right"><b>Unit&nbsp;Price</b></td>
       <td colspan="2" align="right"><b>Total</b></td>
   </tr>
 
   @foreach($invoice->invoice_items as $invoice_item)
     <tr>
-      <td colspan="1">{{ (int) $invoice_item->quantity }}</td>
-      <td colspan="7">{{ $invoice_item->description }}</td>
+      <td colspan="8">{{ (int) $invoice_item->quantity }} x {{ $invoice_item->description }}</td>
       <td colspan="2" align="right">{{ $invoice_item->price }}</td>
       <td colspan="2" align="right">{{ number_format($invoice_item->total, 2) }}</td>
     </tr>
@@ -116,14 +114,14 @@
   @endif
 </tr>
 <tr>
-  <td colspan="4">{{ trans('settings.enquiries_phone') }}: {{ Setting::get('enquiries_phone') }}</td>
+  <td colspan="4">{{ trans('settings.enquiries_phone') }}:&nbsp;{{ Setting::get('enquiries_phone') }}</td>
   @if ($invoice->is_quote == '' and $invoice->owing > 0)
   <td colspan="4">Payment by EFT</td>
   <td colspan="4">Payment by Cheque</td>
   @endif
 </tr>
 <tr>
-  <td colspan="4">{{ trans('settings.enquiries_email') }}: {{ Setting::get('enquiries_email') }}</td>
+  <td colspan="4">{{ trans('settings.enquiries_email') }}:&nbsp;{{ Setting::get('enquiries_email') }}</td>
   @if ($invoice->is_quote == '' and $invoice->owing > 0)
   <td colspan="1">{{ trans('settings.bsb') }}:</td>
   <td colspan="3">{{ Setting::get('bsb') }}</td>
@@ -131,7 +129,7 @@
   @endif
 </tr>
 <tr>
-  <td colspan="4">{{ trans('settings.enquiries_web') }}: {{ Setting::get('enquiries_web') }}</td>
+  <td colspan="4">{{ trans('settings.enquiries_web') }}:&nbsp;{{ Setting::get('enquiries_web') }}</td>
   @if ($invoice->is_quote == '' and $invoice->owing > 0)
   <td colspan="1">Account:</td>
   <td colspan="3">{{ Setting::get('bank_account_number') }}</td>
