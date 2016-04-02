@@ -13,6 +13,9 @@
         <li>
             Remove references to customer as a security access level (7f0f1f2)
         </li>
+        <li>
+            Add description to home page, add beta stamp (e9f1322)
+        </li>
     </ul>
 
     <h3>v1.1.6</h3>
@@ -28,7 +31,8 @@
             When viewing invoice, make ready tickbox read-only for non-admins (520a452)
         </li>
         <li>
-            Add description to home page, add beta stamp (e9f1322)
+            Allow logo to be uploaded in PNG, JPG, or GIF formats and ensure
+            filename is unique for each company (42016a2)
         </li>
     </ul>
 
