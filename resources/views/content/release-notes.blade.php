@@ -17,8 +17,7 @@
             When viewing invoice, make ready tickbox read-only for non-admins (520a452)
         </li>
         <li>
-            Allow logo to be uploaded in PNG, JPG, or GIF formats and ensure
-            filename is unique for each company (42016a2)
+            Add description to home page, add beta stamp (e9f1322)
         </li>
     </ul>
 
