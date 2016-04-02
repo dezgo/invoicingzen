@@ -4,6 +4,17 @@
 <div class="panel">
     <h1>Invoicing Zen Release Notes</h1>
 
+    <h3>v1.1.7</h3>
+    <h4>2 Apr 2016</h4>
+    <ul>
+        <li>
+            Add invoice seeder, combine quantity and description on invoice print (e2c89ff)
+        </li>
+        <li>
+            Remove references to customer as a security access level (7f0f1f2)
+        </li>
+    </ul>
+
     <h3>v1.1.6</h3>
     <h4>31 Mar 2016</h4>
     <ul>
