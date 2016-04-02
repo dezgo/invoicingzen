@@ -4,7 +4,31 @@
 
   @if(!Gate::check('authenticated'))
   <div class="row">
-      <div class="col-md-5 col-md-offset-7">
+      <div class="col-md-5">
+          <div class="panel panel-default">
+              <div class="panel-heading">Need an invoicing system?</div>
+              <div class="panel-body">
+                  Firstly, if you're a customer looking for access to your invoice,
+                  head to the Login page as you will already have an account. If
+                  this is your first time logging in, use the "Don't know your password"
+                  link to get an email so you can create one.<br />
+                  <br />
+                  For the business owners out there, read on!<br />
+                  <br />
+                  Invoicing Zen is an Australian-based service designed for businesses
+                  needing a quick and simple invoicing system.<br />
+                  <br />
+                  It's currently in Beta while we continue to tweak it, so feel free to sign
+                  up and give it a go. We welcome any feedback you may have, and
+                  best of all, while it's in Beta you can use it for free.<br />
+                  <br />
+                  If you're interested in the progress we've made so far, check out the
+                  release notes section at the bottom of this page.
+              </div>
+          </div>
+      </div>
+
+      <div class="col-md-5 col-md-offset-2">
           <div class="panel panel-default">
               <div class="panel-heading">Sign Up. It's free!</div>
               <div class="panel-body">
