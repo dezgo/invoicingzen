@@ -41,7 +41,7 @@ $factory->define(App\InvoiceItem::class, function (Faker\Generator $faker) {
     // note the following will persist an invoice to the database, so will
     // need to clear the database now to get rid of this record
     return [
-        'description' => $faker->word,
+        'description' => $faker->sentence,
         'quantity' => $faker->numberBetween(1,10),
         'price' => $faker->randomFloat(2,1,500),
         'category_id' => App\InvoiceItemCategory::orderByRaw("RAND()")->first()->id,
