@@ -15,17 +15,18 @@ class AddCompanyField extends Migration
         // create companies table
         Schema::create('companies', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('domain_suffix');
+            $table->string('subdomain');
             $table->string('company_name');
             $table->timestamps();
         });
 
         // have to create a dummy company to avoid referential integrity errors
         // existing data needs some company anyway
-        $company = new App\Company;
-        $company->domain_suffix = 'cw';
-        $company->company_name = 'Computer Whiz - Canberra';
-        $company->save();
+        Artisan::call('db:seed', array('--class' => 'CompanyTableSeeder'));
+        // $company = new App\Company;
+        // $company->subdomain = 'cw';
+        // $company->company_name = 'Computer Whiz - Canberra';
+        // $company->save();
 
         // add column to users table
         Schema::table('users', function ($table) {

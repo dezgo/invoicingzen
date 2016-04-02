@@ -4,7 +4,6 @@ namespace App\Providers;
 
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-use App\Customer;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -33,9 +32,6 @@ class AuthServiceProvider extends ServiceProvider
         $gate->define('admin', function ($user) {
             return $user->isAdmin();
         });
-        $gate->define('customer', function ($user) {
-            return $user->isCustomer();
-        });
 
         $gate->define('create-invoice', function ($user) {
             return $user->isAdmin();
@@ -46,15 +42,10 @@ class AuthServiceProvider extends ServiceProvider
             {
                 return true;
             }
-
-            if ($user->isCustomer())
-            {
-                return $user->hasCustomer($invoice->customer);
-            }
         });
 
         $gate->define('view-invoice', function ($user) {
-            if ($user->isAdmin() || $user->isCustomer())
+            if ($user->isAdmin())
             {
                 return true;
             }

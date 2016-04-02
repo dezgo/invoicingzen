@@ -92,14 +92,9 @@ class User extends Model implements AuthenticatableContract,
         return $this->hasRole('admin') || $this->isSuperAdmin();
     }
 
-    public function isCustomer()
-    {
-        return $this->hasRole('customer') || $this->isAdmin();
-    }
-
     public function isUser()
     {
-        return !$this->isCustomer();
+        return !$this->isAdmin();
     }
 
     private function hasRole($roleDescription)
@@ -123,7 +118,6 @@ class User extends Model implements AuthenticatableContract,
     {
         if ($this->isSuperAdmin()) { return 'super_admin'; }
         if ($this->isAdmin()) { return 'admin'; }
-        if ($this->isCustomer()) { return 'customer'; }
         if ($this->isUser()) { return 'user'; }
     }
 
@@ -138,9 +132,6 @@ class User extends Model implements AuthenticatableContract,
                 break;
             case 'admin':
                 $this->roles()->attach(2);
-                break;
-            case 'customer':
-                $this->roles()->attach(3);
                 break;
         }
     }
@@ -158,4 +149,14 @@ class User extends Model implements AuthenticatableContract,
     {
         return 'logo'.$this->company_id.'.img';
     }
+
+    /**
+	 * Setup the relationship to company
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 */
+	public function company()
+	{
+		return $this->belongsTo('App\Company', 'company_id');
+	}
 }

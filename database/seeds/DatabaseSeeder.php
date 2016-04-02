@@ -16,5 +16,8 @@ class DatabaseSeeder extends Seeder
         $this->call(InvoiceItemCategoriesTableSeeder::class);
         $this->call(RolesTableSeeder::class);
         $this->call(RoleUserTableSeeder::class);
+
+        // don't call this one as it's already called during the migration
+        // $this->call(CompanyTableSeeder::class);
     }
 }

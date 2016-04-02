@@ -50,7 +50,7 @@ $factory->define(App\InvoiceItem::class, function (Faker\Generator $faker) {
 
 $factory->define(App\Company::class, function (Faker\Generator $faker) {
     return [
-        'domain_suffix' => $faker->word,
+        'subdomain' => $faker->word,
         'company_name' => $faker->company,
     ];
 });

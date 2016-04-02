@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 use Illuminate\Http\Request;
+use Log;
 
 class AuthController extends Controller
 {
@@ -25,6 +26,16 @@ class AuthController extends Controller
 
     use AuthenticatesAndRegistersUsers, ThrottlesLogins;
 
+    // private function getRootURL(Request $request, User $user)
+    // {
+    //     $host = $request->server('HTTP_HOST');
+    //     $host_names = explode(".", $host);
+    //     $subdomain = $user->company->subdomain;
+    //     if ($host_names[0] != $subdomain) {
+    //         return 'http://'.$subdomain.'.'.$host;
+    //     }
+    // }
+
     /**
      * Where to redirect users after login / registration.
      *
@@ -37,10 +48,15 @@ class AuthController extends Controller
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Request $request)
     {
         $this->middleware('guest', ['except' => ['logout', 'edit', 'update']]);
     }
+
+    // protected function authenticated(Request $request, User $user)
+    // {
+    //     return redirect($this->getRootURL($request, $user));
+    // }
 
     /**
      * Get a validator for an incoming registration request.
