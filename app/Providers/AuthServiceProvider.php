@@ -37,15 +37,8 @@ class AuthServiceProvider extends ServiceProvider
             return $user->isAdmin();
         });
 
-        $gate->define('view-invoice-x', function ($user, $invoice) {
-            if ($user->isAdmin())
-            {
-                return true;
-            }
-        });
-
-        $gate->define('view-invoice', function ($user) {
-            if ($user->isAdmin())
+        $gate->define('view-invoice', function ($user, $invoice) {
+            if ($user->isAdmin() || $invoice->user->id == $user->id)
             {
                 return true;
             }

@@ -314,4 +314,10 @@ class InvoiceTest extends TestCase
              ->visit('/invoice/'.$this->invoice->id)
              ->dontSee('<input type="checkbox" name="chkReady" iiid="');
     }
+
+    // test sendbyemail method
+    public function testSendByEmail()
+    {
+        
+    }
 }

@@ -38,11 +38,12 @@ class Invoice extends Model
 	 */
 	public function __construct(array $attributes = array())
 	{
-		$this->setRawAttributes(array(
+		$defaults = [
 			'invoice_date' => $this->getDefaultInvoiceDate(),
 			'due_date' => $this->getDefaultDueDate(),
 			'invoice_number' => $this->getNextInvoiceNumber(),
-		), true);
+			];
+		$this->setRawAttributes($defaults, true);
 		parent::__construct($attributes);
 	}
 
@@ -196,5 +197,19 @@ class Invoice extends Model
 	public function setInvoiceDateAttribute($value)
 	{
 		$this->attributes['invoice_date'] = Carbon::createFromFormat($this->dateFormat, $value);
+	}
+
+	public function sendByEmail(Email $email)
+	{
+		$email->to = $this->user->email;
+		$email->receiver_id = $this->user->id;
+		$email->invoice_id = $this->id;
+		$email->subject = $email->subject($this->invoice_number);
+		$email->invoice = $this;
+		$email->body = $email->body(
+			$this->user->first_name,
+			$this->invoice_number,
+			$this->total);
+		return $email;
 	}
 }

@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Email extends Model
 {
@@ -17,6 +18,15 @@ class Email extends Model
         'subject',
         'body',
     ];
+
+    public function __construct(array $attributes = array())
+    {
+        $defaults = [
+			'from' => Auth::user()->email,
+			];
+		$this->setRawAttributes($defaults, true);
+		parent::__construct($attributes);
+    }
 
     /**
      * Setup the relationship to users - the sender
@@ -48,10 +58,31 @@ class Email extends Model
         return $this->belongsTo('App\Invoice');
     }
 
+    // the default subject for invoice emails
+    public function subject($invoice_number)
+    {
+        return 'Invoice '.$this->invoice_number;
+    }
+
+    // the default body text for invoice emails
+    public function body($first_name, $invoice_number, $total)
+    {
+        return
+			'Hi '.$first_name.',<br />'.
+			'<br />'.
+			'Please find attached invoice '.$invoice_number.' for $'.
+			number_format($total, 2).'<br />'.
+			'<br />'.
+			'Thanks,<br />'.
+			Auth::user()->name.'<br />'.
+			Auth::user()->business_name.
+			$this->footer_text;
+    }
+
     /**
      * Standard footer text in emails
      */
-    public function getFooterTextAttribute()
+    protected function getFooterTextAttribute()
     {
         return
             "<br />".
