@@ -27,5 +27,6 @@ return [
     'enquiries_web'          => 'Web',
     'logo'                   => 'Company Logo',
     'logo_format_validation' => 'Expecting logo to be in jpg, png, or gif format.',
+    'email_signature'        => 'Email signature',
 
 ];

@@ -13,6 +13,12 @@
         <li>
             Add invoice merge functionality (70579fd)
         </li>
+        <li>
+            Allow whole row to be clickable when opening invoice (67d43af)
+        </li>
+        <li>
+            Add email signature setting
+        </li>
     </ul>
 
     <h3>v1.1.7</h3>

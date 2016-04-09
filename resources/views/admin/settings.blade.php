@@ -80,6 +80,11 @@
         {{ Form::file('logo') }}
     </div>
 
+    <div class="form-group">
+        {!! Form::label('email_signature', trans('settings.email_signature'), ['class' => 'control-label']) !!}
+        {{ Form::textarea('email_signature', Setting::get('email_signature'), ['class' => 'form-control']) }}
+    </div>
+
         {!! Form::submit('Update', ['class' => 'btn btn-primary', 'id' => 'btnSubmit']) !!}
 
     {!! Form::close() !!}
@@ -95,4 +100,9 @@ $(document).ready (function(){
     });
 });
 </script>
+
+<script src="/vendor/unisharp/laravel-ckeditor/ckeditor.js"></script>
+    <script>
+        CKEDITOR.replace( 'email_signature' );
+    </script>
 @stop
