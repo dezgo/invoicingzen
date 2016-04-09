@@ -20,6 +20,9 @@
     <a class="btn btn-info" href="{{ url('/invoice/'.$invoice->id.'/email') }}">
         Email
     </a>
+    <a name='btnMerge' class="btn btn-info" href="{{ url('/invoice/'.$invoice->id.'/merge') }}">
+        Merge
+    </a>
     @endif
 
 @stop

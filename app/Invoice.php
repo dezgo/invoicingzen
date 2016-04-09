@@ -220,6 +220,9 @@ class Invoice extends Model
 			$invoice_item->save();
 		}
 
+		$invoice->delete();
+		$this->delete();
+		
 		return $new_invoice;
 	}
 }

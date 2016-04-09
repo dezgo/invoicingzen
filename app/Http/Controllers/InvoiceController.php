@@ -192,4 +192,18 @@ class InvoiceController extends Controller
 			return view('invoice.email', compact('email'));
 		}
 	}
+
+	public function selectmerge(Invoice $invoice)
+	{
+		return view('invoice.selectmerge', compact('invoice'));
+	}
+
+	public function domerge(Request $request)
+	{
+		$invoice1 = Invoice::find($request->merge_invoice_1);
+		$invoice2 = Invoice::find($request->merge_invoice_2);
+
+		$new_invoice = $invoice1->merge($invoice2);
+		return redirect('/invoice');
+	}
 }
