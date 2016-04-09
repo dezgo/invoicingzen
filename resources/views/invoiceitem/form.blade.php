@@ -40,7 +40,10 @@
 
     {!! Form::submit($submitButtonText, ['class' => 'btn btn-success']) !!}
 
-    @if (!array_key_exists("disabled",$options))
+    @if (array_key_exists("disabled",$options))
+    <a class="btn btn-danger" id='btnDelete' href='/invoice_item/{{ $invoice_item->id }}/delete'>
+        Delete</a>
+    @else
         @if (Setting::get('markup') == '')
         <br /><br />
         <div class="alert alert-warning" role="alert">
