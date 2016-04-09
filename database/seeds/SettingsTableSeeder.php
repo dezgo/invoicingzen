@@ -23,7 +23,7 @@ class SettingsTableSeeder extends Seeder
         \Setting::set('mailing_address_line_3', '');
         \Setting::set('enquiries_phone', '02 6123 4567');
         \Setting::set('enquiries_email', 'mail@widgetscorp.com');
-        \Setting::set('enquiries_web', 'www.widgetscorp.com');
+        \Setting::set('enquiries_web', 'http://www.widgetscorp.com');
         \Setting::setExtraColumns(['company_id' => 1]);
         \Setting::save();
     }

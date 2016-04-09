@@ -257,15 +257,15 @@ class InvoiceTest extends TestCase
     {
         $this->actingAs($this->userAdmin)
              ->visit('/invoice/'.$this->invoice->id)
-             ->see("$('#customer_list').select2({");
+             ->see("$('#customer_list').select2(");
 
          $this->actingAs($this->userAdmin)
               ->visit('/user/select')
-              ->see("$('#customer_list').select2({");
+              ->see("$('#customer_list').select2(");
 
           $this->actingAs($this->userAdmin)
                ->visit('/invoice/create')
-               ->see("$('#customer_list').select2({");
+               ->see("$('#customer_list').select2(");
     }
 
     // ensure user sees correct message on blank invoices page

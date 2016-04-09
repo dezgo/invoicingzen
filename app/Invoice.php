@@ -14,8 +14,7 @@ class Invoice extends Model
 	use CompanyBoundary;
 
 	protected $table = 'invoices';
-	protected $dateFormat = 'd-m-Y';
-	protected $dates = ['invoice_date', 'due_date', 'created_at', 'updated_at', 'deleted_at'];
+	protected $dates = ['invoice_date', 'due_date', 'deleted_at'];
 
 	/**
 	 * The attributes that are mass assignable.
@@ -38,11 +37,12 @@ class Invoice extends Model
 	 */
 	public function __construct(array $attributes = array())
 	{
-		$this->setRawAttributes(array(
+		$defaults = [
 			'invoice_date' => $this->getDefaultInvoiceDate(),
 			'due_date' => $this->getDefaultDueDate(),
 			'invoice_number' => $this->getNextInvoiceNumber(),
-		), true);
+			];
+		$this->setRawAttributes($defaults, true);
 		parent::__construct($attributes);
 	}
 
@@ -124,24 +124,6 @@ class Invoice extends Model
 	}
 
 	/*
-	 * Always return due date in set format
-	 *
-	 */
-	public function getDueDateAttribute($value)
-	{
-		return date($this->dateFormat, strtotime($value));
-	}
-
-	/*
-	 * Always return invoice date in set format
-	 *
-	 */
-	public function getInvoiceDateAttribute($value)
-	{
-		return date($this->dateFormat, strtotime($value));
-	}
-
-	/*
 	 * Get type of invoice
 	 *
 	 */
@@ -160,7 +142,7 @@ class Invoice extends Model
 
 	/**
 	 * Holding is_quote attribute as either 'on' or blank in app, but stored
-	 * as boolean in database. This converts it from string to boolean to before
+	 * as boolean in database. This converts it from string to boolean before
 	 * storing in db
 	 */
 	public function setIsQuoteAttribute($value)
@@ -179,22 +161,68 @@ class Invoice extends Model
 	}
 
 	/**
- 	 * Convert due date into an instance of Carbon
+	* Convert due date into an instance of Carbon
 
-	 * @param $value
-	 */
+	* @param $value
+	*/
 	public function setDueDateAttribute($value)
 	{
-		$this->attributes['due_date'] = Carbon::createFromFormat($this->dateFormat, $value);
+	       $this->attributes['due_date'] = Carbon::createFromFormat('d-m-Y', $value);
 	}
 
 	/**
-	 * Convert invoice date into an instance of Carbon
-	 *
-	 * @param $value
-	 */
+	* Convert invoice date into an instance of Carbon
+	*
+	* @param $value
+	*/
 	public function setInvoiceDateAttribute($value)
 	{
-		$this->attributes['invoice_date'] = Carbon::createFromFormat($this->dateFormat, $value);
+	       $this->attributes['invoice_date'] = Carbon::createFromFormat('d-m-Y', $value);
+	}
+
+	public function sendByEmail(Email $email)
+	{
+		$email->to = $this->user->email;
+		$email->receiver_id = $this->user->id;
+		$email->invoice_id = $this->id;
+		$email->subject = $email->subject($this->invoice_number);
+		$email->invoice = $this;
+		$email->body = $email->body(
+			$this->user->first_name,
+			$this->invoice_number,
+			$this->total);
+		return $email;
+	}
+
+	public function merge(Invoice $invoice)
+	{
+		$new_invoice = new Invoice;
+		$new_invoice->customer_id = $this->customer_id;
+		if ($this->invoice_date->gt($invoice->invoice_date)) {
+			$new_invoice->invoice_date = $this->invoice_date;
+			$new_invoice->due_date = $this->due_date;
+		}
+		else {
+			$new_invoice->invoice_date = $invoice->invoice_date;
+			$new_invoice->due_date = $invoice->due_date;
+		}
+		$new_invoice->paid = $this->paid + $invoice->paid;
+
+		$new_invoice->save();
+
+		// move invoice items from previous invoices to new merged invoice
+		foreach($this->invoice_items as $invoice_item) {
+			$invoice_item->invoice_id = $new_invoice->id;
+			$invoice_item->save();
+		}
+		foreach($invoice->invoice_items as $invoice_item) {
+			$invoice_item->invoice_id = $new_invoice->id;
+			$invoice_item->save();
+		}
+
+		$invoice->delete();
+		$this->delete();
+		
+		return $new_invoice;
 	}
 }

@@ -16,9 +16,9 @@ class CreateInvoicesTable extends Migration
 			$table->increments('id');
 			$table->integer('customer_id')->unsigned();
 			$table->foreign('customer_id')->references('id')->on('users');
-			$table->date('invoice_date');
+			$table->datetime('invoice_date');
 			$table->integer('invoice_number')->unsigned();
-			$table->date('due_date');
+			$table->datetime('due_date');
 			$table->decimal('paid',8,2);
 			$table->softDeletes();
 			$table->timestamps();

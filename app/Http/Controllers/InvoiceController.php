@@ -12,23 +12,11 @@ use App\User;
 use App\Email;
 use App\Http\Requests\InvoiceRequest;
 use Illuminate\Support\Facades\Auth;
+use Gate;
 
 class InvoiceController extends Controller
 {
-	/**
-	 * Check that the current user is allowed to see the specified invoice
-	 *
-	 * @return boolean
-	 */
-	private function checkOKToAccess(Invoice $invoice)
-	{
-		if (Auth::user()->isAdmin()) {
-			return true;
-		}
-		else {
-			return Auth::user()->id == $invoice->user->id;
-		}
-	}
+
 
 	/**
 	 * Display a listing of the resource.
@@ -64,17 +52,17 @@ class InvoiceController extends Controller
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function create(User $customer = null)
+	public function create(User $customer = null, Invoice $invoice)
 	{
 		if (!Auth::user()->isAdmin()) {
 			abort(403);
 		}
 
-		$invoice = new Invoice();
 		if (!is_null($customer)) {
 			$invoice->customer_id = $customer->id;
 		}
 		$invoice_items = InvoiceItem::invoiceItemList();
+		\Carbon\Carbon::setToStringFormat('d-m-Y');
 		return view('invoice.create',compact('invoice','invoice_items'));
 	}
 
@@ -101,10 +89,11 @@ class InvoiceController extends Controller
 	 */
 	public function show(Invoice $invoice)
 	{
-		if (!$this->checkOKToAccess($invoice)) {
+		if (Gate::denies('view-invoice', $invoice)) {
 			abort(403);
 		}
 
+		\Carbon\Carbon::setToStringFormat('d-m-Y');
 		return view('invoice.show', compact('invoice'));
 	}
 
@@ -120,6 +109,7 @@ class InvoiceController extends Controller
 			abort(403);
 		}
 
+		\Carbon\Carbon::setToStringFormat('d-m-Y');
 		$invoice_items = InvoiceItem::all()->where('invoice_id', $invoice->id);
 		return view('invoice.edit', compact('invoice','invoice_items'));
 	}
@@ -178,7 +168,7 @@ class InvoiceController extends Controller
 	 */
 	public function prnt(Invoice $invoice)
 	{
-		if (!$this->checkOKToAccess($invoice)) {
+		if (Gate::denies('view-invoice', $invoice)) {
 			abort(403);
 		}
 
@@ -188,35 +178,32 @@ class InvoiceController extends Controller
 	/**
 	 * Email the invoice to the Customer
 	 */
-	public function email(Invoice $invoice)
+	public function email(Invoice $invoice, Email $email)
 	{
 		if (!Auth::user()->isAdmin()) {
 			abort(403);
 		}
 
-		if ($invoice->user->email != '') {
-			$email = new Email;
-			$email->from = Auth::user()->email;
-			$email->to = $invoice->user->email;
-			$email->receiver_id = $invoice->user->id;
-			$email->invoice_id = $invoice->id;
-			$email->subject = 'Invoice '.$invoice->invoice_number;
-			$email->invoice = $invoice;
-			$email->body =
-				'Hi '.$invoice->user->first_name.',<br />'.
-				'<br />'.
-				'Please find attached invoice '.$invoice->invoice_number.' for $'.
-				number_format($invoice->total, 2).'<br />'.
-				'<br />'.
-				'Thanks,<br />'.
-				Auth::user()->name.'<br />'.
-				Auth::user()->business_name.
-				$email->footer_text;
-
-			return view('invoice.email', compact('email'));
-		}
-		else {
+		if ($invoice->user->email == '') {
 			\Session()->flash('status-warning', 'Customer does not have an email address!');
 		}
+		else {
+			$email = $invoice->sendByEmail($email);
+			return view('invoice.email', compact('email'));
+		}
+	}
+
+	public function selectmerge(Invoice $invoice)
+	{
+		return view('invoice.selectmerge', compact('invoice'));
+	}
+
+	public function domerge(Request $request)
+	{
+		$invoice1 = Invoice::find($request->merge_invoice_1);
+		$invoice2 = Invoice::find($request->merge_invoice_2);
+
+		$new_invoice = $invoice1->merge($invoice2);
+		return redirect('/invoice');
 	}
 }
