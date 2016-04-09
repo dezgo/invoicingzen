@@ -4,6 +4,17 @@
 <div class="panel">
     <h1>Invoicing Zen Release Notes</h1>
 
+    <h3>v1.1.8</h3>
+    <h4>9 Apr 2016</h4>
+    <ul>
+        <li>
+            Add ability to delete invoice line items (74be6e0)
+        </li>
+        <li>
+            Add invoice merge functionality (70579fd)
+        </li>
+    </ul>
+
     <h3>v1.1.7</h3>
     <h4>2 Apr 2016</h4>
     <ul>
