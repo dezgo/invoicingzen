@@ -96,14 +96,6 @@ class InvoiceItemTest extends TestCase
             ->see('Edit Invoice Item for invoice '.$this->invoice->invoice_number);
     }
 
-    public function testDelete()
-    {
-        $this->actingAs($this->user)
-            ->visit('/invoice_item/'.$this->invoice->invoice_items->first()->id.'/delete')
-            ->press('Delete')
-            ->seePageIs('/invoice/'.$this->invoice->id);
-    }
-
     public function testMarkupNotSet()
     {
         Setting::set('markup', '');

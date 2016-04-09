@@ -3,9 +3,17 @@
 @section('content')
     <h1 align="left">Delete Invoice Item</h1>
 
-    {!! Form::model($invoice_item, ['method' => 'DELETE', 'url' => 'invoice_item/'.$invoice_item->id]) !!}
+    WARNING: The following Invoice Item will be permanently deleted.<br />
+    <br />
+    <b>Category:</b> {{ $invoice_item->category->description }}<br />
+    <b>Description:</b> {{ $invoice_item->description }}<br />
+    <b>Quantity:</b> {{ $invoice_item->quantity }}<br />
+    <b>Price:</b> {{ $invoice_item->price }}<br />
+    <br />
+    <form method="POST" action='/invoice_item/{{ $invoice_item->id }}'>
+        {{ csrf_field() }}
+        <input name="_method" type="hidden" value="DELETE" />
+        <input type="submit" name="btnConfirmDelete" value="CONFIRM DELETE" class="btn btn-danger" />
+    </form>
 
-    <?php $options['disabled'] = 'true'; ?>
-    @include('invoiceitem.form', ['submitButtonText' => 'Delete', 'invoice_id' => $invoice_item->invoice->id])
-    {!! Form::close() !!}
 @stop
