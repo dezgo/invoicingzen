@@ -71,4 +71,21 @@ class InvoiceMergeTest extends TestCase
             ->see('name="merge_invoice_1" value="'.$invoice[1]->id.'"')
             ->dontSee('name="merge_invoice_1" value="'.$invoice[0]->id.'"');
     }
+
+    public function testMerge()
+    {
+        $userAdmin = App\User::find(2);
+        for ($i = 0; $i <=1; $i++) {
+            $invoice[$i] = factory(App\Invoice::class)->create();
+            factory(App\InvoiceItem::class, 5)->create(['invoice_id' => $invoice[$i]->id]);
+            $invoice[$i]->customer_id = $userAdmin->id;
+            $invoice[$i]->save();
+        }
+
+        $this->actingAs($userAdmin)
+            ->visit('/invoice/'.$invoice[0]->id.'/merge')
+            ->press('btnSubmit')
+            ->see('Show Invoices');
+
+    }
 }

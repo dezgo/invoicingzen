@@ -50,10 +50,6 @@
         @if ($invoice->id != $customer_invoice->id)
         <tr>
             <td>
-                <form method="POST" action="/invoice/merge">
-                    {{ csrf_field() }}
-                <input type='hidden' name='merge_invoice_1' value='{{ $customer_invoice->id }}' />
-                <input type='hidden' name='merge_invoice_2' value='{{ $invoice->id }}' />
                 {{ $customer_invoice->description }}
             </td>
             <td>{{ $customer_invoice->invoice_date->format('d-m-Y') }}</td>
@@ -61,6 +57,10 @@
             <td class="text-right">${{ money_format('%i', $customer_invoice->owing) }}</td>
             <td>{{ $customer_invoice->invoice_items->count() }}</td>
             <td>
+                <form method="POST" action="/invoice/merge">
+                {{ csrf_field() }}
+                <input type='hidden' name='merge_invoice_1' value='{{ $customer_invoice->id }}' />
+                <input type='hidden' name='merge_invoice_2' value='{{ $invoice->id }}' />
                 <input type='submit' name='btnSubmit' value='Merge' class='btn btn-info' />
                 </form>
             </td>

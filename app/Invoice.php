@@ -167,7 +167,9 @@ class Invoice extends Model
 	*/
 	public function setDueDateAttribute($value)
 	{
-	       $this->attributes['due_date'] = Carbon::createFromFormat('d-m-Y', $value);
+		if(gettype($value) == 'string') {
+			$this->attributes['due_date'] = Carbon::createFromFormat('d-m-Y', $value);
+		}
 	}
 
 	/**
@@ -177,7 +179,9 @@ class Invoice extends Model
 	*/
 	public function setInvoiceDateAttribute($value)
 	{
-	       $this->attributes['invoice_date'] = Carbon::createFromFormat('d-m-Y', $value);
+		if(gettype($value) == 'string') {
+			$this->attributes['invoice_date'] = Carbon::createFromFormat('d-m-Y', $value);
+   		}
 	}
 
 	public function sendByEmail(Email $email)
@@ -222,7 +226,7 @@ class Invoice extends Model
 
 		$invoice->delete();
 		$this->delete();
-		
+
 		return $new_invoice;
 	}
 }
