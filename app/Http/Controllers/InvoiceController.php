@@ -62,6 +62,7 @@ class InvoiceController extends Controller
 			$invoice->customer_id = $customer->id;
 		}
 		$invoice_items = InvoiceItem::invoiceItemList();
+		\Carbon\Carbon::setToStringFormat('d-m-Y');
 		return view('invoice.create',compact('invoice','invoice_items'));
 	}
 
@@ -92,6 +93,7 @@ class InvoiceController extends Controller
 			abort(403);
 		}
 
+		\Carbon\Carbon::setToStringFormat('d-m-Y');
 		return view('invoice.show', compact('invoice'));
 	}
 
@@ -107,6 +109,7 @@ class InvoiceController extends Controller
 			abort(403);
 		}
 
+		\Carbon\Carbon::setToStringFormat('d-m-Y');
 		$invoice_items = InvoiceItem::all()->where('invoice_id', $invoice->id);
 		return view('invoice.edit', compact('invoice','invoice_items'));
 	}
