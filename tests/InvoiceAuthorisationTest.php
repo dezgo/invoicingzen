@@ -33,16 +33,16 @@ class InvoiceAuthorisationTest extends TestCase
     {
         $this->actingAs($this->invoice1->user)
             ->visit('/invoice')
-            ->see('/invoice/'.$this->invoice1->id)
-            ->dontSee('/invoice/'.$this->invoice2->id);
+            ->see($this->invoice1->description)
+            ->dontSee($this->invoice2->description);
     }
 
     public function testUser2IndexPage()
     {
         $this->actingAs($this->invoice2->user)
             ->visit('/invoice')
-            ->see('/invoice/'.$this->invoice2->id)
-            ->dontSee('/invoice/'.$this->invoice1->id);
+            ->see($this->invoice2->description)
+            ->dontSee($this->invoice1->description);
     }
 
     public function testUser1SeeInvoice1()
