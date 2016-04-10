@@ -12,7 +12,7 @@
             gets admin rights (8833cec)
         </li>
         <li>
-            Settings now correctly works independently for users in different companies (ac85525)
+            Settings now correctly works independently for users in different companies (363d4e4)
         </li>
     </ul>
 
