@@ -104,6 +104,11 @@ class AdminController extends Controller
 			$email_signature = $request->email_signature;
 		}
 		\Setting::set('email_signature', $email_signature);
+		\Setting::set('email_host', $request->email_host);
+		\Setting::set('email_port', $request->email_port);
+		\Setting::set('email_username', $request->email_username);
+		\Setting::set('email_password', $request->email_password);
+		\Setting::set('email_encryption', $request->email_encryption);
 		\Setting::setExtraColumns(['company_id' => Auth::user()->company_id]);
         \Setting::save();
         $request->session()->flash('status', trans('settings.update_success'));

@@ -17,7 +17,7 @@
             Allow whole row to be clickable when opening invoice (67d43af)
         </li>
         <li>
-            Add email signature setting
+            Add email signature setting (808ce02)
         </li>
     </ul>
 

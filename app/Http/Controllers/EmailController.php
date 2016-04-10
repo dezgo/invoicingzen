@@ -11,6 +11,7 @@ use App\User;
 use App\Jobs\SendInvoiceEmail;
 use Mail;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Contracts\Config\Repository as Config;
 
 class EmailController extends Controller
 {
@@ -60,12 +61,21 @@ class EmailController extends Controller
 		// could use job queues here, but leaving as a direct send for now
 		// so I don't have to worry about that listen job always running on the
 		// server. Also I'll immediately know if an email didn't work
+		$this->setEnvVars();
 		Mail::send('emails.invoice', ['email' => $email], function ($m) use ($email, $filename) {
 			$m->from($email->from, $email->sender->business_name)
 			  ->to($email->to, $email->receiver->full_name)
 			  ->subject($email->subject)
 			  ->attach($filename);
 		});
+	}
 
+	private function setEnvVars()
+	{
+		app()->config['mail.host'] = \Setting::get('email_host');
+		app()->config['mail.port'] = \Setting::get('email_port');
+		app()->config['mail.username'] = \Setting::get('email_username');
+		app()->config['mail.password'] = \Setting::get('email_password');
+		app()->config['mail.encryption'] = \Setting::get('email_encryption');
 	}
 }
