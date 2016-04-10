@@ -10,6 +10,8 @@
 </div>
 @endif
 
+    {{ Setting::setExtraColumns(['company_id' => Auth::user()->company_id]) }}
+
     <h1 align="left">{{ trans('settings.title') }}</h1>
 
     {!! Form::open(['route' => 'settings.update', 'files' => true]) !!}

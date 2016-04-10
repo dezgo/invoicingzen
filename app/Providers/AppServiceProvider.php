@@ -52,13 +52,13 @@ class AppServiceProvider extends ServiceProvider
             }
         });
         Invoice::saving(function ($invoice) {
-            $invoice->company_id = Auth::user()->company_id;
+            $invoice->company_id = Company::my_id();
         });
         InvoiceItem::saving(function ($invoice_item) {
-            $invoice_item->company_id = Auth::user()->company_id;
+            $invoice_item->company_id = Company::my_id();
         });
         InvoiceItemCategory::saving(function ($invoice_item_categories) {
-            $invoice_item_categories->company_id = Auth::user()->company_id;
+            $invoice_item_categories->company_id = Company::my_id();
         });
     }
 
