@@ -56,7 +56,7 @@ $mail_arr = [
     |
     */
 
-    'from' => ['address' => 'mail@computerwhiz.com.au', 'name' => 'Computer Whiz - Canberra'],
+    'from' => ['address' => null, 'name' => null],
 
     /*
     |--------------------------------------------------------------------------

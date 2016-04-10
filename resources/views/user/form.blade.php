@@ -80,7 +80,7 @@
     {{ Form::label('user', 'User', ['class' => 'control-label']) }}
 </div>
 
-{!! Form::submit($submitButtonText, ['class' => 'btn btn-primary']) !!}
+{!! Form::submit($submitButtonText, ['id' => 'btnSubmit', 'class' => 'btn btn-primary']) !!}
 
 <div class="panel panel-default">
   <div class="panel-body">

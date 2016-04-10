@@ -40,8 +40,22 @@ class User extends Model implements AuthenticatableContract,
         'address2',
         'suburb',
         'state',
-        'postcode'
+        'postcode',
     ];
+
+    /**
+	 * Constructor - set default values for new record
+	 *
+	 * @return null
+	 */
+	public function __construct(array $attributes = array())
+	{
+		$defaults = [
+			'company_id' => 1,
+			];
+		$this->setRawAttributes($defaults, true);
+		parent::__construct($attributes);
+	}
 
     public function getDescriptionAttribute()
     {
