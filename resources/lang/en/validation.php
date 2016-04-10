@@ -114,6 +114,13 @@ return [
         'enquiries_email' => [
             'email' => trans('settings.enquiries_web').' doesn\'t appear to be a valid email address.',
         ],
+        'business_name' => [
+            'unique' =>  'A user has already registered with that business name. '.
+                         'If you are a client of that business looking for your invoice, '.
+                         'you will already have an account. You can easily retrieve you '.
+                         'password using the forgot password link on the '.
+                         'login screen.',
+        ],
     ],
 
     /*

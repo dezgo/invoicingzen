@@ -76,19 +76,6 @@ class Email extends Model
 			'Thanks,<br />'.
 			Auth::user()->name.'<br />'.
 			Auth::user()->business_name.
-			$this->footer_text;
-    }
-
-    /**
-     * Standard footer text in emails
-     */
-    protected function getFooterTextAttribute()
-    {
-        return
-            "<br />".
-            "<br />".
-            "PS. To view this invoice online, go to <a href='".url('/')."'>".
-            url('/')."</a>. For first-time users, go to <a href='".
-            url('/password/reset')."'>".url('/password/reset')."</a> to create a password.";
+			\Setting::get('email_signature');
     }
 }

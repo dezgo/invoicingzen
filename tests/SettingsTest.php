@@ -16,7 +16,7 @@ class SettingsTest extends TestCase
         parent::setUp();
 
         $this->user = factory(App\User::class)->create();
-        $this->user->roles()->attach(1);
+        $this->user->roles()->attach(2);
 
     }
 
@@ -126,5 +126,25 @@ class SettingsTest extends TestCase
              ->attach($path, 'logo')
              ->press('btnSubmit')
              ->see(trans('settings.update_success'));
+    }
+
+    public function testCompanySeparation()
+    {
+        $user2 = factory(App\User::class)->create();
+        $user2->roles()->attach(2);
+
+        $company = factory(App\Company::class)->create();
+        $user2->company_id = $company->id;
+        $user2->save();
+
+        $this->actingAs($user2)
+             ->visit('/settings')
+             ->type('Terms for user1', 'payment_terms')
+             ->press('btnSubmit')
+             ->seeInDatabase('settings', [
+                 'company_id' => $company->id,
+                 'key' => 'payment_terms',
+                 'value' => 'Terms for user1'
+             ]);
     }
 }

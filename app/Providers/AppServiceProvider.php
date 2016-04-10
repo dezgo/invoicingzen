@@ -8,6 +8,7 @@ use App\InvoiceItemCategory;
 use App\User;
 use App\Company;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Auth;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -46,7 +47,9 @@ class AppServiceProvider extends ServiceProvider
         });
 
         User::saving(function ($user) {
-            $user->company_id = Company::my_id();
+            if (Auth::check()) {
+                $user->company_id = Auth::user()->company_id;
+            }
         });
         Invoice::saving(function ($invoice) {
             $invoice->company_id = Company::my_id();

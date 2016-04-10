@@ -10,6 +10,7 @@ use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 use Illuminate\Http\Request;
 use Log;
+use App\Company;
 
 class AuthController extends Controller
 {
@@ -71,6 +72,7 @@ class AuthController extends Controller
             'last_name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|confirmed|min:6',
+            'business_name' => 'required|unique:users',
         ]);
     }
 
@@ -82,12 +84,22 @@ class AuthController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $company = Company::create([
+            'company_name' => $data['business_name'],
+        ]);
+
+        $user = User::create([
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
+            'business_name' => $data['business_name'],
         ]);
+        $user->roles()->attach(2);
+        $user->company_id = $company->id;
+        $user->save();
+
+        return $user;
     }
 
     /**
@@ -115,6 +127,7 @@ class AuthController extends Controller
             'first_name' => 'required|max:255',
             'last_name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users,email,'.Auth::user()->id,
+            'business_name' => 'required|unique:users,business_name,'.Auth::user()->id,
         ]);
 
         Auth::user()->name = $request->name;

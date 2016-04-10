@@ -26,10 +26,8 @@
             <tbody>
 
     @foreach($invoices as $invoice)
-    <tr>
-        <td>
-            <a href='{{ action('InvoiceController@show', $invoice->id) }}'>{{ $invoice->description }}</a>
-        </td>
+    <tr id='{{ $invoice->id }}'>
+        <td>{{ $invoice->description }}</td>
         <td>{{ $invoice->invoice_date }}</td>
         <td class="text-right">${{ money_format('%i', $invoice->total) }}</td>
         <td class="text-right">${{ money_format('%i', $invoice->owing) }}</td>
@@ -57,6 +55,13 @@ $(document).ready (function(){
             $(this).addClass('bg-primary').siblings().removeClass('bg-primary');
         }
     });
+
+    $('tr').click(function(event) {
+        console.log(event);
+        location.href= '/invoice/'+event.currentTarget.id;
+    });
+
+    $('tr').css('cursor', 'pointer');
 });
 
 </script>

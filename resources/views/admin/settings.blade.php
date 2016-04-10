@@ -80,7 +80,37 @@
         {{ Form::file('logo') }}
     </div>
 
-        {!! Form::submit('Update', ['class' => 'btn btn-primary', 'id' => 'btnSubmit']) !!}
+    <div class="form-group">
+        {!! Form::label('email_signature', trans('settings.email_signature'), ['class' => 'control-label']) !!}
+        {{ Form::textarea('email_signature', Setting::get('email_signature'), ['class' => 'form-control']) }}
+    </div>
+
+    <div class="form-group">
+        {!! Form::label('email_host', trans('settings.email_host'), ['class' => 'control-label']) !!}
+        {{ Form::text('email_host', Setting::get('email_host'), ['class' => 'form-control']) }}
+    </div>
+
+    <div class="form-group">
+        {!! Form::label('email_port', trans('settings.email_port'), ['class' => 'control-label']) !!}
+        {{ Form::text('email_port', Setting::get('email_port'), ['class' => 'form-control']) }}
+    </div>
+
+    <div class="form-group">
+        {!! Form::label('email_username', trans('settings.email_username'), ['class' => 'control-label']) !!}
+        {{ Form::text('email_username', Setting::get('email_username'), ['class' => 'form-control']) }}
+    </div>
+
+    <div class="form-group">
+        {!! Form::label('email_password', trans('settings.email_password'), ['class' => 'control-label']) !!}
+        <input type='password' id='email_password' name='email_password' value='{{ Setting::get('email_password') }}' class='form-control' />
+    </div>
+
+    <div class="form-group">
+        {!! Form::label('email_encryption', trans('settings.email_encryption'), ['class' => 'control-label']) !!}
+        {{ Form::text('email_encryption', Setting::get('email_encryption'), ['class' => 'form-control']) }}
+    </div>
+
+    {!! Form::submit('Update', ['class' => 'btn btn-primary', 'id' => 'btnSubmit']) !!}
 
     {!! Form::close() !!}
 
@@ -95,4 +125,9 @@ $(document).ready (function(){
     });
 });
 </script>
+
+<script src="/vendor/unisharp/laravel-ckeditor/ckeditor.js"></script>
+    <script>
+        CKEDITOR.replace( 'email_signature' );
+    </script>
 @stop

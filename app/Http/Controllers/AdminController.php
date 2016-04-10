@@ -97,9 +97,31 @@ class AdminController extends Controller
 			$destinationPath = public_path().'/images';
 			$request->file('logo')->move($destinationPath, Auth::user()->logo_filename);
 		}
+		if ($request->email_signature == '') {
+			$email_signature = $this->defaultEmailFooterText();
+		}
+		else {
+			$email_signature = $request->email_signature;
+		}
+		\Setting::set('email_signature', $email_signature);
+		\Setting::set('email_host', $request->email_host);
+		\Setting::set('email_port', $request->email_port);
+		\Setting::set('email_username', $request->email_username);
+		\Setting::set('email_password', $request->email_password);
+		\Setting::set('email_encryption', $request->email_encryption);
 		\Setting::setExtraColumns(['company_id' => Auth::user()->company_id]);
         \Setting::save();
         $request->session()->flash('status', trans('settings.update_success'));
         return redirect(url('/settings'));
     }
+
+	private function defaultEmailFooterText()
+	{
+		return
+			"<br />".
+			"<br />".
+			"PS. To view this invoice online, go to <a href='".url('/')."'>".
+			url('/')."</a>. For first-time users, go to <a href='".
+			url('/password/reset')."'>".url('/password/reset')."</a> to create a password.";
+	}
 }
