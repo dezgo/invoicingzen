@@ -4,6 +4,18 @@
 <div class="panel">
     <h1>Invoicing Zen Release Notes</h1>
 
+    <h3>v1.1.9</h3>
+    <h4>10 Apr 2016</h4>
+    <ul>
+        <li>
+            New user registration now creates new company and user automatically
+            gets admin rights (8833cec)
+        </li>
+        <li>
+            Settings now correctly works independently for users in different companies (53c226d)
+        </li>
+    </ul>
+
     <h3>v1.1.8</h3>
     <h4>9 Apr 2016</h4>
     <ul>

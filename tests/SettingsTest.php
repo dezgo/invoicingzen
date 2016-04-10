@@ -139,12 +139,11 @@ class SettingsTest extends TestCase
 
         $this->actingAs($user2)
              ->visit('/settings')
-             ->type('Terms for user1', 'payment_terms')
+             ->type('Terms for user2', 'payment_terms')
              ->press('btnSubmit')
              ->seeInDatabase('settings', [
-                 'company_id' => $company->id,
-                 'key' => 'payment_terms',
-                 'value' => 'Terms for user1'
-             ]);
+                    'key'           => 'payment_terms',
+                    'value'         => 'Terms for user2',
+                    'company_id'    => $company->id]);
     }
 }
