@@ -16,10 +16,10 @@ return [
     'add-invoice-items' => 'Great, you have your invoice, now let\'s add some items to it. Click the \'Add Invoice Item\' button below to get started.',
     'no-invoices-to-merge' => 'Sorry, but this customer only has the one invoice, so merging it isn\'t an option right now',
 
-    // texts on PDF'd invoice
+    // texts on invoice
     'grand-total' => 'Grand-total',
     'amount-paid' => 'Amount paid',
     'balance-due' => 'Balance owing',
-    'no-gst' => 'No GST has been included',
+    'no-gst' => 'No GST has been charged',
 
 ];
