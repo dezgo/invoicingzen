@@ -38,23 +38,25 @@ class Settings
 
     public static function set($key, $value)
     {
-        if (!Auth::check()) {
-            throw new RuntimeException('Settings can\'t be updated without a logged in user');
-        }
-
+        AnlutroSetting::setExtraColumns(['company_id' => Settings::getCompanyId()]);
         AnlutroSetting::set($key, $value);
-        AnlutroSetting::setExtraColumns(['company_id' => Auth::user()->company_id]);
         AnlutroSetting::save();
     }
 
     public static function get($key)
     {
-        if (!Auth::check()) {
-            throw new RuntimeException('Settings can\'t be retrieved without a logged in user');
-        }
-
-        AnlutroSetting::setExtraColumns(['company_id' => Auth::user()->company_id]);
+        AnlutroSetting::setExtraColumns(['company_id' => Settings::getCompanyId()]);
         return AnlutroSetting::get($key);
+    }
+
+    private static function getCompanyId()
+    {
+        if (Auth::check()) {
+            return Auth::user()->company_id;
+        }
+        else {
+            return 1;
+        }
     }
 
     public static function update(Request $request)

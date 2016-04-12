@@ -10,6 +10,7 @@ use App\Invoice;
 use App\InvoiceItem;
 use App\User;
 use App\Email;
+use App\Settings;
 use App\Http\Requests\InvoiceRequest;
 use Illuminate\Support\Facades\Auth;
 use Gate;
@@ -63,6 +64,7 @@ class InvoiceController extends Controller
 		}
 		$invoice_items = InvoiceItem::invoiceItemList();
 		\Carbon\Carbon::setToStringFormat('d-m-Y');
+		$invoice->invoice_number = Settings::get('next_invoice_number');
 		return view('invoice.create',compact('invoice','invoice_items'));
 	}
 
@@ -172,7 +174,7 @@ class InvoiceController extends Controller
 			abort(403);
 		}
 
-		return view('invoice.print', compact('invoice'));
+		return view('invoice.print', compact('invoice', 'settings'));
 	}
 
 	/**

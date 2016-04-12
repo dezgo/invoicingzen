@@ -65,7 +65,7 @@ class Invoice extends Model
 	 */
 	private function getNextInvoiceNumber()
 	{
-		$invoice_number = \Setting::get('next_invoice_number',1);
+		$invoice_number = Settings::get('next_invoice_number',1);
 		while (!$this->checkInvoiceNumber($invoice_number)) {
 			$invoice_number = $invoice_number + 1;
 		}
