@@ -46,7 +46,7 @@ class AuthenticationTest extends TestCase
              ->type('password1','password')
              ->type('password1','password_confirmation')
              ->press('btnSignUp')
-             ->see('The email must be a valid email address');
+             ->see(trans('validation.email', ['attribute' => 'email']));
     }
 
     public function testRegisterExistingBusinessName()
@@ -106,13 +106,13 @@ class AuthenticationTest extends TestCase
               ->type('password1','password_confirmation')
               ->type('Willy\'s Widgets','business_name')
               ->press('btnSignUp')
-              ->see('The email has already been taken');
+              ->see(trans('validation.unique', ['attribute' => 'email']));
 
         $this->visit('/login')
              ->type('holly@edwards.com','email')
              ->type('wrong password','password')
              ->press('btnLogin')
-             ->see('These credentials do not match our records');
+             ->see(trans('auth.failed'));
     }
 
     public function testSeeUpdateUserPage()
