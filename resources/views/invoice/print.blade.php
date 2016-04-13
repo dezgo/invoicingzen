@@ -10,7 +10,7 @@ body {
     <tr>
         <td>
 
-<table cellpadding="0" cellspacing="0" width="720" height="1018" border="0" align="center" style="background-color: white">
+<table class="table borderless" width="720" height="1018" align="center">
     <tr>
         <td width="60">&nbsp;</td>
         <td width="60">&nbsp;</td>
@@ -55,8 +55,9 @@ body {
     </tr>
 
     <tr>
-      <td colspan="7">
-          {{ $invoice->user->full_name }}
+      <td colspan="7" rowspan="2">
+          {{ $invoice->user->full_name }}<br />
+          {!! $invoice->user->address_multi !!}
       </td>
       <td colspan="2">
         <b>{{ $invoice->type }}&nbsp;Date:</b>
@@ -67,9 +68,6 @@ body {
     </tr>
 
     <tr>
-      <td colspan="7">
-        {!! $invoice->user->address_multi !!}
-      </td>
       @if ($invoice->is_quote == '' and $invoice->owing > 0)
       <td colspan="2" valign="top">
         <b>{{ trans('settings.payment_terms') }}:</b>
@@ -117,7 +115,7 @@ body {
   <td colspan="7">&nbsp;</td>
   <td colspan="5">{{ trans('invoice.no-gst') }}</td>
 </tr>
-<tr><td><br /><hr /></td></tr>
+<tr><td colspan="12"><hr /></td></tr>
 <tr>
   <td colspan="4"><h4>Enquiries</h4></td>
   @if ($invoice->is_quote == '' and $invoice->owing > 0)
