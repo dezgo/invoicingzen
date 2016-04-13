@@ -26,7 +26,7 @@
             </h2>
             <br>
             <br>
-            {{ trans('settings.abn').': '.Setting::get('abn') }}<br />
+            {{ trans('settings.abn').': '.$settings->get('abn') }}<br />
             <br />
         </td>
     </tr>
@@ -64,7 +64,7 @@
         <div class="cred">{{ trans('settings.payment_terms') }}:</div>
       </td>
       <td colspan="3" valign="top" align="right">
-        {{ Setting::get('payment_terms') }}
+        {{ $settings->get('payment_terms') }}
       </td>
       @endif
     </tr>
@@ -114,26 +114,26 @@
   @endif
 </tr>
 <tr>
-  <td colspan="4">{{ trans('settings.enquiries_phone') }}:&nbsp;{{ Setting::get('enquiries_phone') }}</td>
+  <td colspan="4">{{ trans('settings.enquiries_phone') }}:&nbsp;{{ $settings->get('enquiries_phone') }}</td>
   @if ($invoice->is_quote == '' and $invoice->owing > 0)
   <td colspan="4">Payment by EFT</td>
   <td colspan="4">Payment by Cheque</td>
   @endif
 </tr>
 <tr>
-  <td colspan="4">{{ trans('settings.enquiries_email') }}:&nbsp;{{ Setting::get('enquiries_email') }}</td>
+  <td colspan="4">{{ trans('settings.enquiries_email') }}:&nbsp;{{ $settings->get('enquiries_email') }}</td>
   @if ($invoice->is_quote == '' and $invoice->owing > 0)
   <td colspan="1">{{ trans('settings.bsb') }}:</td>
-  <td colspan="3">{{ Setting::get('bsb') }}</td>
+  <td colspan="3">{{ $settings->get('bsb') }}</td>
   <td colspan="4">Mail Cheques to</td>
   @endif
 </tr>
 <tr>
-  <td colspan="4">{{ trans('settings.enquiries_web') }}:&nbsp;{{ Setting::get('enquiries_web') }}</td>
+  <td colspan="4">{{ trans('settings.enquiries_web') }}:&nbsp;{{ $settings->get('enquiries_web') }}</td>
   @if ($invoice->is_quote == '' and $invoice->owing > 0)
   <td colspan="1">Account:</td>
-  <td colspan="3">{{ Setting::get('bank_account_number') }}</td>
-  <td colspan="4">{{ Setting::get('mailing_address_line_1') }}</td>
+  <td colspan="3">{{ $settings->get('bank_account_number') }}</td>
+  <td colspan="4">{{ $settings->get('mailing_address_line_1') }}</td>
   @endif
 </tr>
 @if ($invoice->is_quote == '' and $invoice->owing > 0)
@@ -141,11 +141,11 @@
   <td colspan="4">&nbsp;</td>
   <td colspan="1">Reference:</td>
   <td colspan="3">Inv{{ $invoice->invoice_number}}</td>
-  <td colspan="4">{{ Setting::get('mailing_address_line_2') }}</td>
+  <td colspan="4">{{ $settings->get('mailing_address_line_2') }}</td>
 </tr>
 <tr>
   <td colspan="8">&nbsp;</td>
-  <td colspan="4">{{ Setting::get('mailing_address_line_3') }}</td>
+  <td colspan="4">{{ $settings->get('mailing_address_line_3') }}</td>
 </tr>
 @endif
 </table>

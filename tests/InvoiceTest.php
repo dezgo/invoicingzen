@@ -225,7 +225,8 @@ class InvoiceTest extends TestCase
     // check next invoice number logic
     public function testNextInvoiceNumber()
     {
-        $next = \Setting::get('next_invoice_number');
+        $settings = \App::make('App\Contracts\Settings');
+        $next = $settings->get('next_invoice_number');
         $inv1 = new App\Invoice();
         $inv1->customer_id = $this->user->id;
         $inv1->save();
