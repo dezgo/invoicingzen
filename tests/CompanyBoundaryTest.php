@@ -45,11 +45,6 @@ class CompanyBoundaryTest extends TestCase
         $this->invoice2->save();
     }
 
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
     public function testCompanyBoundary()
     {
         $this->actingAs($this->user1);

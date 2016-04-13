@@ -8,7 +8,7 @@
 }
 
 h1, h2, h3 {
-    color: #BD1522;
+    color: #337ab7;
 }
 
 a {
@@ -17,4 +17,14 @@ a {
 
 a:hover {
     color: inherit;
+}
+
+.table > thead > tr > th,
+.table > tbody > tr > th,
+.table > tfoot > tr > th,
+.table > thead > tr > td,
+.table > tbody > tr > td,
+.table > tfoot > tr > td {
+    line-height: 1;
+    border-top: none;
 }

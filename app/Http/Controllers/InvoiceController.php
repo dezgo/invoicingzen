@@ -172,7 +172,8 @@ class InvoiceController extends Controller
 			abort(403);
 		}
 
-		return view('invoice.print', compact('invoice'));
+		$settings = \App::make('App\Contracts\Settings');
+		return view('invoice.print', compact('invoice', 'settings'));
 	}
 
 	/**

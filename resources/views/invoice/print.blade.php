@@ -1,42 +1,53 @@
 @extends('print')
 @section('content')
-<table cellpadding="0" cellspacing="0" width="100%" border="0">
+<style>
+body {
+    background-color: #EBEBEB;
+}
+</style>
+<br />
+<table cellpadding="30" cellspacing="0" width="780" border="1" align="center" style="background-color: white">
     <tr>
-        <td width="8.33%">&nbsp;</td>
-        <td width="8.33%">&nbsp;</td>
-        <td width="8.33%">&nbsp;</td>
-        <td width="8.33%">&nbsp;</td>
-        <td width="8.33%">&nbsp;</td>
-        <td width="8.33%">&nbsp;</td>
-        <td width="8.33%">&nbsp;</td>
-        <td width="8.33%">&nbsp;</td>
-        <td width="8.33%">&nbsp;</td>
-        <td width="8.33%">&nbsp;</td>
-        <td width="8.33%">&nbsp;</td>
-        <td width="8.33%">&nbsp;</td>
+        <td>
+
+<table class="table borderless" width="720" height="1018" align="center">
+    <tr>
+        <td width="60">&nbsp;</td>
+        <td width="60">&nbsp;</td>
+        <td width="60">&nbsp;</td>
+        <td width="60">&nbsp;</td>
+        <td width="60">&nbsp;</td>
+        <td width="60">&nbsp;</td>
+        <td width="60">&nbsp;</td>
+        <td width="60">&nbsp;</td>
+        <td width="60">&nbsp;</td>
+        <td width="60">&nbsp;</td>
+        <td width="60">&nbsp;</td>
+        <td width="60">&nbsp;</td>
     </tr>
     <tr>
         <td colspan="6" align="left" valign="top">
-            <img class="left-block" src="{{ url('/images/'.Auth::user()->logo_filename) }}" />
+            <a href="/"><img class="left-block" src="{{ url('/images/'.Auth::user()->logo_filename) }}" /></a>
         </td>
         <td colspan="6" align="right">
+            <h3>{{ Auth::user()->business_name }}</h3>
             <br><Br>
-            <h2 class="cred text-uppercase">
+            <h4 class="text-uppercase">
                 {{ strtoupper($invoice->type) }}
-            </h2>
+            </h4>
             <br>
             <br>
-            {{ trans('settings.abn').': '.Setting::get('abn') }}<br />
+            {{ trans('settings.abn').': '.$settings->get('abn') }}<br />
             <br />
         </td>
     </tr>
 
     <tr>
       <td colspan="7">
-        <div class="cred">Customer Details:</div>
+        <b>Customer Details:</b>
       </td>
       <td colspan="2">
-        <div class="cred">{{ $invoice->type }}&nbsp;Number:</div>
+        <b>{{ $invoice->type }}&nbsp;Number:</b>
       </td>
       <td colspan="3" align="right">
           {{ $invoice->invoice_number }}
@@ -44,27 +55,25 @@
     </tr>
 
     <tr>
-      <td colspan="7">
-          {{ $invoice->user->full_name }}
+      <td colspan="7" rowspan="2">
+          {{ $invoice->user->full_name }}<br />
+          {!! $invoice->user->address_multi !!}
       </td>
       <td colspan="2">
-        <div class="cred">{{ $invoice->type }}&nbsp;Date:</div>
+        <b>{{ $invoice->type }}&nbsp;Date:</b>
       </td>
       <td colspan="3" align="right">
-          {{ $invoice->invoice_date }}
+          {{ $invoice->invoice_date->format('d-m-Y') }}
       </td>
     </tr>
 
     <tr>
-      <td colspan="7">
-        {!! $invoice->user->address_multi !!}
-      </td>
       @if ($invoice->is_quote == '' and $invoice->owing > 0)
       <td colspan="2" valign="top">
-        <div class="cred">{{ trans('settings.payment_terms') }}:</div>
+        <b>{{ trans('settings.payment_terms') }}:</b>
       </td>
       <td colspan="3" valign="top" align="right">
-        {{ Setting::get('payment_terms') }}
+        {{ $settings->get('payment_terms') }}
       </td>
       @endif
     </tr>
@@ -106,34 +115,34 @@
   <td colspan="7">&nbsp;</td>
   <td colspan="5">{{ trans('invoice.no-gst') }}</td>
 </tr>
-<tr><td><br /><hr /></td></tr>
+<tr><td colspan="12"><hr /></td></tr>
 <tr>
-  <td colspan="4"><h4 class="cred">Enquiries</h4></td>
+  <td colspan="4"><h4>Enquiries</h4></td>
   @if ($invoice->is_quote == '' and $invoice->owing > 0)
-  <td colspan="8"><h4 class="cred">How to Pay</h4></td>
+  <td colspan="8"><h4>How to Pay</h4></td>
   @endif
 </tr>
 <tr>
-  <td colspan="4">{{ trans('settings.enquiries_phone') }}:&nbsp;{{ Setting::get('enquiries_phone') }}</td>
+  <td colspan="4">{{ trans('settings.enquiries_phone') }}:&nbsp;{{ $settings->get('enquiries_phone') }}</td>
   @if ($invoice->is_quote == '' and $invoice->owing > 0)
   <td colspan="4">Payment by EFT</td>
   <td colspan="4">Payment by Cheque</td>
   @endif
 </tr>
 <tr>
-  <td colspan="4">{{ trans('settings.enquiries_email') }}:&nbsp;{{ Setting::get('enquiries_email') }}</td>
+  <td colspan="4">{{ trans('settings.enquiries_email') }}:&nbsp;{{ $settings->get('enquiries_email') }}</td>
   @if ($invoice->is_quote == '' and $invoice->owing > 0)
   <td colspan="1">{{ trans('settings.bsb') }}:</td>
-  <td colspan="3">{{ Setting::get('bsb') }}</td>
+  <td colspan="3">{{ $settings->get('bsb') }}</td>
   <td colspan="4">Mail Cheques to</td>
   @endif
 </tr>
 <tr>
-  <td colspan="4">{{ trans('settings.enquiries_web') }}:&nbsp;{{ Setting::get('enquiries_web') }}</td>
+  <td colspan="4">{{ trans('settings.enquiries_web') }}:&nbsp;{{ $settings->get('enquiries_web') }}</td>
   @if ($invoice->is_quote == '' and $invoice->owing > 0)
   <td colspan="1">Account:</td>
-  <td colspan="3">{{ Setting::get('bank_account_number') }}</td>
-  <td colspan="4">{{ Setting::get('mailing_address_line_1') }}</td>
+  <td colspan="3">{{ $settings->get('bank_account_number') }}</td>
+  <td colspan="4">{{ $settings->get('mailing_address_line_1') }}</td>
   @endif
 </tr>
 @if ($invoice->is_quote == '' and $invoice->owing > 0)
@@ -141,13 +150,16 @@
   <td colspan="4">&nbsp;</td>
   <td colspan="1">Reference:</td>
   <td colspan="3">Inv{{ $invoice->invoice_number}}</td>
-  <td colspan="4">{{ Setting::get('mailing_address_line_2') }}</td>
+  <td colspan="4">{{ $settings->get('mailing_address_line_2') }}</td>
 </tr>
 <tr>
   <td colspan="8">&nbsp;</td>
-  <td colspan="4">{{ Setting::get('mailing_address_line_3') }}</td>
+  <td colspan="4">{{ $settings->get('mailing_address_line_3') }}</td>
 </tr>
 @endif
 </table>
-
+</td>
+</tr>
+</table>
+<Br />
 @stop

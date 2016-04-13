@@ -4,7 +4,27 @@
 <div class="panel">
     <h1>Invoicing Zen Release Notes</h1>
 
-    <h3>v1.1.8</h3>
+    <h3>v1.1.11</h3>
+    <h4>13 Apr 2016</h4>
+    <ul>
+        <li>
+            Update invoice layout (6e80784)
+        </li>
+    </ul>
+
+    <h3>v1.1.10</h3>
+    <h4>10 Apr 2016</h4>
+    <ul>
+        <li>
+            New user registration now creates new company and user automatically
+            gets admin rights (8833cec)
+        </li>
+        <li>
+            Settings now correctly works independently for users in different companies (53c226d)
+        </li>
+    </ul>
+
+    <h3>v1.1.9</h3>
     <h4>9 Apr 2016</h4>
     <ul>
         <li>
@@ -21,7 +41,7 @@
         </li>
     </ul>
 
-    <h3>v1.1.7</h3>
+    <h3>v1.1.8</h3>
     <h4>2 Apr 2016</h4>
     <ul>
         <li>
@@ -35,7 +55,7 @@
         </li>
     </ul>
 
-    <h3>v1.1.6</h3>
+    <h3>v1.1.7</h3>
     <h4>31 Mar 2016</h4>
     <ul>
         <li>
@@ -53,7 +73,7 @@
         </li>
     </ul>
 
-    <h3>v1.1.5</h3>
+    <h3>v1.1.6</h3>
     <h4>22 Mar 2016</h4>
     <ul>
         <li>
