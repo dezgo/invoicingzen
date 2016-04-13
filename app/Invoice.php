@@ -7,6 +7,7 @@ use DB;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Scopes\CompanyBoundary;
+use Illuminate\Support\Facades\Auth;
 
 class Invoice extends Model
 {
@@ -31,17 +32,17 @@ class Invoice extends Model
 	];
 
 	/**
-	 * Constructor - set default values for new record
-	 *
-	 * @return null
-	 */
+     * Constructor - set default values for new record
+     *
+     * @return null
+     */
 	public function __construct(array $attributes = array())
 	{
 		$defaults = [
-			'invoice_date' => $this->getDefaultInvoiceDate(),
-			'due_date' => $this->getDefaultDueDate(),
-			'invoice_number' => $this->getNextInvoiceNumber(),
-			];
+		       'invoice_date' => $this->getDefaultInvoiceDate(),
+		       'due_date' => $this->getDefaultDueDate(),
+		       'invoice_number' => $this->getNextInvoiceNumber(),
+		       ];
 		$this->setRawAttributes($defaults, true);
 		parent::__construct($attributes);
 	}
@@ -65,7 +66,8 @@ class Invoice extends Model
 	 */
 	private function getNextInvoiceNumber()
 	{
-		$invoice_number = Settings::get('next_invoice_number',1);
+		$settings = \App::make('App\Contracts\Settings');
+		$invoice_number = $settings->get('next_invoice_number',1);
 		while (!$this->checkInvoiceNumber($invoice_number)) {
 			$invoice_number = $invoice_number + 1;
 		}

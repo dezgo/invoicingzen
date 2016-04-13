@@ -7,7 +7,7 @@ use App\InvoiceItem;
 use App\InvoiceItemCategory;
 use App\User;
 use App\Company;
-use App\Settings;
+use App\Contracts\Settings;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Auth;
 
@@ -42,7 +42,8 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Invoice::created(function ($invoice) {
-            Settings::set('next_invoice_number',$invoice->invoice_number+1);
+            $settings = \App::make('App\Contracts\Settings');
+            $settings->set('next_invoice_number',$invoice->invoice_number+1);
         });
 
         User::saving(function ($user) {
@@ -68,6 +69,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind('App\Contracts\Settings', 'App\Services\AnlutroSettings');
     }
 }
