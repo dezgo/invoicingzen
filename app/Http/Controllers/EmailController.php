@@ -10,6 +10,7 @@ use App\Email;
 use App\User;
 use App\Jobs\SendInvoiceEmail;
 use Mail;
+use App\Invoice;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\Config\Repository as Config;
 
