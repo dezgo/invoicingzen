@@ -49,7 +49,5 @@ class CompanyBoundaryTest extends TestCase
     {
         $this->actingAs($this->user1);
         $invoices = Invoice::all();
-        // dd($invoices->toArray());
-        // dd($this->invoice2);
     }
 }
