@@ -10,7 +10,7 @@ body {
     <tr>
         <td>
 
-<table class="table borderless" width="720" height="1018" align="center">
+<table class="table-condensed" width="720" height="1018" align="center">
     <tr>
         <td width="60">&nbsp;</td>
         <td width="60">&nbsp;</td>
@@ -35,47 +35,34 @@ body {
             <h4 class="text-uppercase">
                 {{ strtoupper($invoice->type) }}
             </h4>
-            <br>
-            <br>
-            {{ trans('settings.abn').': '.$settings->get('abn') }}<br />
-            <br />
         </td>
     </tr>
 
     <tr>
-      <td colspan="7">
+      <td colspan="8">
         <b>Customer Details:</b>
       </td>
-      <td colspan="2">
-        <b>{{ $invoice->type }}&nbsp;Number:</b>
-      </td>
-      <td colspan="3" align="right">
-          {{ $invoice->invoice_number }}
+      <td colspan="4" align="right">
+          {{ trans('settings.abn').': '.$settings->get('abn') }}
       </td>
     </tr>
-
     <tr>
-      <td colspan="7" rowspan="2">
-          {{ $invoice->user->full_name }}<br />
-          {!! $invoice->user->address_multi !!}
-      </td>
+        <td colspan="7">
+            {{ $invoice->user->full_name }}<br />
+            {!! $invoice->user->address_multi !!}
+        </td>
       <td colspan="2">
-        <b>{{ $invoice->type }}&nbsp;Date:</b>
-      </td>
-      <td colspan="3" align="right">
-          {{ $invoice->invoice_date->format('d-m-Y') }}
-      </td>
-    </tr>
-
-    <tr>
-      @if ($invoice->is_quote == '' and $invoice->owing > 0)
-      <td colspan="2" valign="top">
+        <b>{{ $invoice->type }}&nbsp;Number:</b><br />
+        <b>{{ $invoice->type }}&nbsp;Date:</b><Br />
         <b>{{ trans('settings.payment_terms') }}:</b>
       </td>
-      <td colspan="3" valign="top" align="right">
-        {{ $settings->get('payment_terms') }}
+      <td colspan="3" align="right">
+          {{ $invoice->invoice_number }}<Br />
+          {{ $invoice->invoice_date->format('d-m-Y') }}
+          @if ($invoice->is_quote == '' and $invoice->owing > 0)
+            <br />{{ $settings->get('payment_terms') }}
+          @endif
       </td>
-      @endif
     </tr>
     <tr><td colspan="12"><br /><br /></td></tr>
 
@@ -110,11 +97,11 @@ body {
   <td colspan="2" align="right">{{ number_format($invoice->owing, 2) }}</td>
 </tr>
 @endif
-<tr><td><br /></td></tr>
 <tr>
   <td colspan="7">&nbsp;</td>
   <td colspan="5">{{ trans('invoice.no-gst') }}</td>
 </tr>
+<tr><td height="50%">&nbsp;</td></tr>
 <tr><td colspan="12"><hr /></td></tr>
 <tr>
   <td colspan="4"><h4>Enquiries</h4></td>
