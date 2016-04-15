@@ -6,16 +6,27 @@ use Illuminate\Database\Eloquent\Model;
 use DB;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Scopes\CompanyBoundary;
+use App\Scopes\CompanyBoundaryScope;
 use Illuminate\Support\Facades\Auth;
 
 class Invoice extends Model
 {
 	use SoftDeletes;
-	use CompanyBoundary;
 
 	protected $table = 'invoices';
 	protected $dates = ['invoice_date', 'due_date', 'deleted_at'];
+
+	/**
+     * The "booting" method of the model.
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope(new CompanyBoundaryScope);
+    }
 
 	/**
 	 * The attributes that are mass assignable.

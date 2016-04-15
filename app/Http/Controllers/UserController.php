@@ -29,7 +29,7 @@ class UserController extends Controller
     public function index()
     {
         if (Gate::check('admin')) {
-            $users = User::all();
+            $users = User::where('company_id','=',Auth::user()->company_id)->get();
             return view('user.index', compact('users'));
         }
         else {
@@ -75,7 +75,7 @@ class UserController extends Controller
             abort('403');
         }
         else {
-            $user = User::create($request->all());
+            $user = User::createWithCompany($request->all(), Auth::user()->company_id);
             if (session('inv_wizard') != '') {
                 session()->forget('inv_wizard');
 

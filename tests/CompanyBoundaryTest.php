@@ -45,9 +45,29 @@ class CompanyBoundaryTest extends TestCase
         $this->invoice2->save();
     }
 
-    public function testCompanyBoundary()
+    public function testOnlySeeUsersInvoices()
     {
-        $this->actingAs($this->user1);
-        $invoices = Invoice::all();
+        $this->actingAs($this->user1)
+             ->visit('invoice')
+             ->see($this->invoice1->description)
+             ->dontSee($this->invoice2->description);
+
+         $this->actingAs($this->user2)
+              ->visit('invoice')
+              ->see($this->invoice2->description)
+              ->dontSee($this->invoice1->description);
+    }
+
+    public function testOnlySeeCompanyUsers()
+    {
+        $this->actingAs($this->user1)
+             ->visit('user')
+             ->see($this->user1->full_name)
+             ->dontSee($this->user2->full_name);
+
+         $this->actingAs($this->user2)
+              ->visit('user')
+              ->see($this->user2->full_name)
+              ->dontSee($this->user1->full_name);
     }
 }
