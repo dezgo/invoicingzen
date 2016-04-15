@@ -50,7 +50,7 @@ class RoleUserTest extends TestCase
     {
         $this->actingAs($this->userAdmin)
              ->visit('/')
-             ->dontSee('userAnchor')
+             ->see('userAnchor')
              ->see('invoicesAnchor')
              ->see('invoiceItemCategoriesAnchor')
              ->see('settingsAnchor')

@@ -10,6 +10,7 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Scopes\CompanyBoundaryScope1;
 
 class User extends Model implements AuthenticatableContract,
                                     AuthorizableContract,
@@ -42,20 +43,6 @@ class User extends Model implements AuthenticatableContract,
         'state',
         'postcode',
     ];
-
-    /**
-	 * Constructor - set default values for new record
-	 *
-	 * @return null
-	 */
-	public function __construct(array $attributes = array())
-	{
-		$defaults = [
-			'company_id' => 1,
-			];
-		$this->setRawAttributes($defaults, true);
-		parent::__construct($attributes);
-	}
 
     public function getDescriptionAttribute()
     {
@@ -153,9 +140,9 @@ class User extends Model implements AuthenticatableContract,
     /**
      * Return ordered list of users for use in select elements
      */
-    public static function userSelectList()
+    public function userSelectList()
     {
-        return User::all()->sortBy('description')->lists('description', 'id');
+        return User::where('company_id', '=', $this->company_id)->get()->sortBy('description')->lists('description', 'id');
     }
 
     // return name of logo image
@@ -173,4 +160,10 @@ class User extends Model implements AuthenticatableContract,
 	{
 		return $this->belongsTo('App\Company', 'company_id');
 	}
+
+    public static function createWithCompany(array $attributes = [], $company_id)
+    {
+        $attributes['company_id'] = $company_id;
+        return parent::create($attributes);
+    }
 }

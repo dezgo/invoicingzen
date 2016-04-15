@@ -33,7 +33,7 @@
                             <li><a href="/settings" name='settingsAnchor'>Settings</a></li>
             @endif
 
-            @if(Gate::check('super-admin'))
+            @if(Gate::check('admin'))
                             <li><a href="/user" name='userAnchor'>Users</a></li>
             @endif
                 </ul>

@@ -13,6 +13,7 @@ use Mail;
 use App\Invoice;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\Config\Repository as Config;
+use App\Services\PDFFileInvoiceGenerator;
 
 class EmailController extends Controller
 {
@@ -74,6 +75,8 @@ class EmailController extends Controller
 		Mail::send('emails.invoice', ['email' => $email], function ($m) use ($email) {
 			$m->from($email->from, $email->sender->business_name)
 			  ->to($email->to, $email->receiver->full_name)
+			  ->cc($email->cc)
+			  ->bcc($email->bcc)
 			  ->subject($email->subject)
 			  ->attach($this->createPDF($email->invoice));
 		});
@@ -81,13 +84,8 @@ class EmailController extends Controller
 
 	private function createPDF(Invoice $invoice)
 	{
-		$settings = \App::make('App\Contracts\Settings');
-		$pdf = \PDF::loadView('invoice.print', compact('invoice', 'settings'));
-		$filename = '/tmp/invoice'.$invoice->invoice_number.'.pdf';
-
-		// and save it somewhere
-		\File::delete($filename);
-		$pdf->save($filename);
-		return $filename;
+		$pdf = new PDFFileInvoiceGenerator();
+		$pdf->create($invoice);
+		return $pdf->output();
 	}
 }

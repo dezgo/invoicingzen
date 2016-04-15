@@ -11,6 +11,7 @@ use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 use Illuminate\Http\Request;
 use Log;
 use App\Company;
+use Illuminate\Support\Facades\Session;
 
 class AuthController extends Controller
 {
@@ -88,16 +89,16 @@ class AuthController extends Controller
             'company_name' => $data['business_name'],
         ]);
 
-        $user = User::create([
-            'first_name' => $data['first_name'],
-            'last_name' => $data['last_name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
-            'business_name' => $data['business_name'],
-        ]);
-        $user->roles()->attach(2);
+        $user = new User();
+        $user->first_name = $data['first_name'];
+        $user->last_name = $data['last_name'];
+        $user->email = $data['email'];
+        $user->password = bcrypt($data['password']);
+        $user->business_name = $data['business_name'];
         $user->company_id = $company->id;
         $user->save();
+        $user->roles()->attach(2);
+        Session::put('company_id', $company->id);
 
         return $user;
     }

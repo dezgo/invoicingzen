@@ -29,6 +29,21 @@
             <li>
                 <a href="/release-notes">Release Notes</a>
             </li>
+            @if (env('APP_ENV') == 'local')
+            <li>
+                <a name="environment" style="color: red"><b>DEVELOPMENT</b></a>
+            </li>
+            @endif
+            @if (env('APP_ENV') == 'testing')
+            <li>
+                <a name="environment" style="color: red"><b>TESTING</b></a>
+            </li>
+            @endif
+            @if (env('APP_DEBUG') == 'true')
+            <li>
+                <a name="debug_mode" style="color: red"><b>DEBUG ON</b></a>
+            </li>
+            @endif
         </ul>
     </div>
 </nav>

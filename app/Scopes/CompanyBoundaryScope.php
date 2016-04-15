@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use App\Company;
+use Illuminate\Support\Facades\Session;
 
 class CompanyBoundaryScope implements Scope
 {
@@ -17,33 +18,6 @@ class CompanyBoundaryScope implements Scope
      */
     public function apply(Builder $builder, Model $model)
     {
-        $model = $builder->getModel();
-        $builder->where($model->getQualifiedCompanyIDColumn(), '=', Company::my_id());
-    }
-
-    /**
-     * Remove the scope from the given Eloquent query builder.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $builder
-     * @return void
-     */
-    public function remove(Builder $builder)
-    {
-        $column = $builder->getModel()->getQualifiedCompanyIDColumn();
-
-        $query = $builder->getQuery();
-
-        foreach ((array) $query->wheres as $key => $where)
-        {
-            // If the where clause is a soft delete date constraint, we will remove it from
-            // the query and reset the keys on the wheres. This allows this developer to
-            // include deleted model in a relationship result set that is lazy loaded.
-            if ($this->isCompanyIDConstraint($where, $column))
-            {
-                unset($query->wheres[$key]);
-
-                $query->wheres = array_values($query->wheres);
-            }
-        }
+        return $builder->where('company_id', '=', Session::get('company_id'));
     }
 }

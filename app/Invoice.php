@@ -6,13 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 use DB;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Scopes\CompanyBoundary;
 use Illuminate\Support\Facades\Auth;
 
 class Invoice extends Model
 {
 	use SoftDeletes;
-	use CompanyBoundary;
 
 	protected $table = 'invoices';
 	protected $dates = ['invoice_date', 'due_date', 'deleted_at'];
@@ -125,10 +123,6 @@ class Invoice extends Model
 		}
 	}
 
-	/*
-	 * Get type of invoice
-	 *
-	 */
 	public function getTypeAttribute($value)
 	{
 		if ($this->is_quote == 'on') {
@@ -230,5 +224,10 @@ class Invoice extends Model
 		$this->delete();
 
 		return $new_invoice;
+	}
+
+	public static function allInCompany($company_id)
+	{
+		return Invoice::where('company_id', '=', $company_id)->get();
 	}
 }

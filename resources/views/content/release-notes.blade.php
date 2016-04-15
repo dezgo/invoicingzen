@@ -4,6 +4,23 @@
 <div class="panel">
     <h1>Invoicing Zen Release Notes</h1>
 
+    <h3>v1.2.0</h3>
+    <h4>16 Apr 2016</h4>
+    <ul>
+        <li>
+            Ensure user can only view/modify records in own company. Remove Beta
+            stamp (7705627)
+        </li>
+    </ul>
+
+    <h3>v1.1.12</h3>
+    <h4>15 Apr 2016</h4>
+    <ul>
+        <li>
+            Add email testing. Update footer to show when in development (9e935e0)
+        </li>
+    </ul>
+
     <h3>v1.1.11</h3>
     <h4>13 Apr 2016</h4>
     <ul>
