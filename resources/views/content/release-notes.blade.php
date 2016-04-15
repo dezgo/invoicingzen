@@ -9,7 +9,7 @@
     <ul>
         <li>
             Ensure user can only view/modify records in own company. Remove Beta
-            stamp ()
+            stamp (7705627)
         </li>
     </ul>
 
