@@ -4,6 +4,15 @@
 <div class="panel">
     <h1>Invoicing Zen Release Notes</h1>
 
+    <h3>v1.2.0</h3>
+    <h4>16 Apr 2016</h4>
+    <ul>
+        <li>
+            Ensure user can only view/modify records in own company. Remove Beta
+            stamp ()
+        </li>
+    </ul>
+
     <h3>v1.1.12</h3>
     <h4>15 Apr 2016</h4>
     <ul>

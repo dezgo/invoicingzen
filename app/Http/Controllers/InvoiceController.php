@@ -26,7 +26,7 @@ class InvoiceController extends Controller
 	public function index()
 	{
 		if (Auth::user()->isAdmin()) {
-			$invoices = Invoice::all();
+			$invoices = Invoice::allInCompany(Auth::user()->company_id);
 		}
 		else {
 			$invoices = Invoice::where('customer_id', Auth::user()->id)->get();
@@ -54,7 +54,7 @@ class InvoiceController extends Controller
 	 */
 	public function create(User $customer = null, Invoice $invoice)
 	{
-		if (!Auth::user()->isAdmin()) {
+		if (Gate::denies('admin')) {
 			abort(403);
 		}
 
@@ -74,9 +74,6 @@ class InvoiceController extends Controller
 	 */
 	public function store(InvoiceRequest $request)
 	{
-		if (!Auth::user()->isAdmin()) {
-			abort(403);
-		}
 		$invoice = Invoice::create($request->all());
 		return redirect('/invoice/'.$invoice->id);
 	}
@@ -105,7 +102,7 @@ class InvoiceController extends Controller
 	 */
 	public function edit(Invoice $invoice)
 	{
-		if (!Auth::user()->isAdmin()) {
+		if (Gate::denies('edit-invoice', $invoice)) {
 			abort(403);
 		}
 
@@ -123,10 +120,6 @@ class InvoiceController extends Controller
 	 */
 	public function update(InvoiceRequest $request, Invoice $invoice)
 	{
-		if (!Auth::user()->isAdmin()) {
-			abort(403);
-		}
-
 		$invoice->update($request->all());
 		return redirect('/invoice/'.$invoice->id);
 	}
@@ -139,10 +132,6 @@ class InvoiceController extends Controller
 	 */
 	public function destroy(Invoice $invoice)
 	{
-		if (!Auth::user()->isAdmin()) {
-			abort(403);
-		}
-
 		$invoice->delete();
 		return redirect('/invoice');
 	}
@@ -155,7 +144,7 @@ class InvoiceController extends Controller
 	 */
 	public function delete(Invoice $invoice)
 	{
-		if (!Auth::user()->isAdmin()) {
+		if (Gate::denies('edit-invoice', $invoice)) {
 			abort(403);
 		}
 
@@ -181,7 +170,7 @@ class InvoiceController extends Controller
 	 */
 	public function email(Invoice $invoice, Email $email)
 	{
-		if (!Auth::user()->isAdmin()) {
+		if (Gate::denies('view-invoice', $invoice)) {
 			abort(403);
 		}
 
@@ -196,6 +185,10 @@ class InvoiceController extends Controller
 
 	public function selectmerge(Invoice $invoice)
 	{
+		if (Gate::denies('edit-invoice', $invoice)) {
+			abort(403);
+		}
+
 		return view('invoice.selectmerge', compact('invoice'));
 	}
 

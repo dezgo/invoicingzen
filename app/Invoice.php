@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use DB;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Scopes\CompanyBoundaryScope;
 use Illuminate\Support\Facades\Auth;
 
 class Invoice extends Model
@@ -15,18 +14,6 @@ class Invoice extends Model
 
 	protected $table = 'invoices';
 	protected $dates = ['invoice_date', 'due_date', 'deleted_at'];
-
-	/**
-     * The "booting" method of the model.
-     *
-     * @return void
-     */
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::addGlobalScope(new CompanyBoundaryScope);
-    }
 
 	/**
 	 * The attributes that are mass assignable.
@@ -136,10 +123,6 @@ class Invoice extends Model
 		}
 	}
 
-	/*
-	 * Get type of invoice
-	 *
-	 */
 	public function getTypeAttribute($value)
 	{
 		if ($this->is_quote == 'on') {
@@ -241,5 +224,10 @@ class Invoice extends Model
 		$this->delete();
 
 		return $new_invoice;
+	}
+
+	public static function allInCompany($company_id)
+	{
+		return Invoice::where('company_id', '=', $company_id)->get();
 	}
 }

@@ -289,7 +289,8 @@ class InvoiceTest extends TestCase
     // ensure admin sees correct message on blank invoices page
     public function testBlankInvoicePageAdmin()
     {
-        $this->userAdmin->company_id = 2;
+        $company = factory(App\Company::class)->create();
+        $this->userAdmin->company_id = $company->id;
         $this->actingAs($this->userAdmin)
              ->visit('/invoice')
              ->see(trans('invoice.welcome-admin'));

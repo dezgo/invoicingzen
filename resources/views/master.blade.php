@@ -21,9 +21,6 @@
                     <td>
                         <h1 class='freetext'>Invoicing Zen</h1>
                     </td>
-                    <td>
-                        <img src='/images/beta-stamp.png' width='80' height='62'/>
-                    </td>
                 </tr>
             </table>
             <br />

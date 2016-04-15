@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use App\Company;
+use Illuminate\Support\Facades\Session;
 
 class CompanyBoundaryScope implements Scope
 {
@@ -17,6 +18,6 @@ class CompanyBoundaryScope implements Scope
      */
     public function apply(Builder $builder, Model $model)
     {
-        return $builder->where('company_id', '=', Company::my_id());
+        return $builder->where('company_id', '=', Session::get('company_id'));
     }
 }

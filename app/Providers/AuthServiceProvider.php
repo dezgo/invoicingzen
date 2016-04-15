@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Auth;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -38,9 +39,19 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         $gate->define('view-invoice', function ($user, $invoice) {
-            if ($user->isAdmin() || $invoice->user->id == $user->id)
-            {
-                return true;
+            if (Auth::check()) {
+                if ($invoice->user->company_id == Auth::user()->company_id and
+                    ($user->isAdmin() || $invoice->user->id == $user->id)) {
+                    return true;
+                }
+            }
+        });
+
+        $gate->define('edit-invoice', function ($user, $invoice) {
+            if (Auth::check()) {
+                if ($invoice->user->company_id == Auth::user()->company_id and $user->isAdmin()) {
+                    return true;
+                }
             }
         });
 
