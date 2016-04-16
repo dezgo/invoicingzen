@@ -46,6 +46,14 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-        return parent::render($request, $e);
+        switch ($e) {
+            case ($e instanceof \Swift_TransportException):
+                $message = $e->getMessage();
+                return view('errors.535', compact('message'));
+                break;
+
+            default:
+                  return parent::render($request, $e);
+        }
     }
 }

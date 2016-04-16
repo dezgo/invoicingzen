@@ -13,7 +13,10 @@
         </li>
         <li>
             Remove next invoice number setting - easier just to calculate it
-            automatically ()
+            automatically (de9a93b)
+        </li>
+        <li>
+            More gracefully handle email errors ()
         </li>
     </ul>
 
