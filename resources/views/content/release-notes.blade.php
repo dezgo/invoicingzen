@@ -16,7 +16,7 @@
             automatically (de9a93b)
         </li>
         <li>
-            More gracefully handle email errors ()
+            More gracefully handle email errors (a816de4)
         </li>
     </ul>
 
