@@ -27,7 +27,9 @@ body {
     </tr>
     <tr>
         <td colspan="6" align="left" valign="top">
-            <a href="/"><img class="left-block" src="{{ url('/images/'.Auth::user()->logo_filename) }}" /></a>
+            @if (Auth::user()->logo_filename != '')
+                <a href="{{ url('') }}"><img class="left-block" src="{{ url('/images/'.Auth::user()->logo_filename) }}" /></a>
+            @endif
         </td>
         <td colspan="6" align="right">
             <h3>{{ Auth::user()->business_name }}</h3>

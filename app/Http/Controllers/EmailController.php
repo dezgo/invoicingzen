@@ -72,11 +72,12 @@ class EmailController extends Controller
 		// could use job queues here, but leaving as a direct send for now
 		// so I don't have to worry about that listen job always running on the
 		// server. Also I'll immediately know if an email didn't work
+		// dd($email);
 		Mail::send('emails.invoice', ['email' => $email], function ($m) use ($email) {
 			$m->from($email->from, $email->sender->business_name)
 			  ->to($email->to, $email->receiver->full_name)
-			  ->cc($email->cc)
-			  ->bcc($email->bcc)
+			//   ->cc($email->cc)
+			//   ->bcc($email->bcc)
 			  ->subject($email->subject)
 			  ->attach($this->createPDF($email->invoice));
 		});
