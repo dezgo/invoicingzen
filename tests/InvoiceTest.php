@@ -56,11 +56,16 @@ class InvoiceTest extends TestCase
             ->visit('/invoice/create')
             ->type('','invoice_number')
             ->press('Save')
-            ->see('The invoice number field is required');
+            ->see(trans('validation.required', ['attribute' => 'invoice number']))
+            ->see(trans('validation.required', ['attribute' => 'customer id']));
     }
 
     public function testCreate_save()
     {
+        $this->be($this->userAdmin);
+        $settings = \App::make('App\Contracts\Settings');
+        $invoice_number = \App\Services\SequentialInvoiceNumbers::getNextNumber($this->userAdmin->company_id);
+
         $customer = factory(App\User::class)->create();
         $this->actingAs($this->userAdmin)
             ->visit('/invoice/create')
@@ -68,7 +73,11 @@ class InvoiceTest extends TestCase
             ->press('Save')
             ->see('Show Invoice')
             ->see('Great, you have your invoice')
-            ->see('btnAddInvoiceItem');
+            ->see('btnAddInvoiceItem')
+            ->seeInDatabase('invoices', [
+                'invoice_number' => $invoice_number,
+                'company_id' => $this->userAdmin->company_id,
+            ]);
     }
 
     public function testEdit()
@@ -99,7 +108,7 @@ class InvoiceTest extends TestCase
         $this->actingAs($this->userAdmin)
             ->visit('/invoice/'.$this->invoice->id.'/edit')
             ->type('01-02-2015', 'invoice_date')
-            ->press('Update')
+            ->press('btnSubmit')
             ->seePageIs('/invoice/'.$this->invoice->id);
     }
 
@@ -222,28 +231,10 @@ class InvoiceTest extends TestCase
             ->see('Robert Wagner');
     }
 
-    // check next invoice number logic
-    public function testNextInvoiceNumber()
-    {
-        $settings = \App::make('App\Contracts\Settings');
-        $next = $settings->get('next_invoice_number');
-        $inv1 = new App\Invoice();
-        $inv1->customer_id = $this->user->id;
-        $inv1->save();
-        $inv2 = new App\Invoice();
-        $inv2->customer_id = $this->user->id;
-        $inv2->save();
-        $inv3 = new App\Invoice();
-        $inv3->customer_id = $this->user->id;
-        $inv3->save();
-        assert($inv1->invoice_number == ($next));
-        assert($inv2->invoice_number == ($next+1));
-        assert($inv3->invoice_number == ($next+2));
-    }
-
     // ensure there's an option to make a quote
     public function testFindIsQuoteCheckbox()
     {
+
         $this->actingAs($this->userAdmin)
              ->visit('/invoice/'.$this->invoice->id)
              ->see('is_quote')

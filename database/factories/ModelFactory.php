@@ -32,6 +32,7 @@ $factory->define(App\Invoice::class, function (Faker\Generator $faker) {
     // note the following will persist a customer to the database, so will
     // need to clear the database now to get rid of this record
     return [
+        'invoice_number' => App\Services\SequentialInvoiceNumbers::getNextNumber(1),
         'customer_id' => factory(App\User::class)->create()->id,
     ];
 });

@@ -15,11 +15,6 @@
     {!! Form::open(['route' => 'settings.update', 'files' => true]) !!}
 
     <div class="form-group">
-        {!! Form::label('next_invoice_number', trans('settings.next_invoice_number'), ['class' => 'control-label']) !!}
-        {{ Form::text('next_invoice_number', $settings->get('next_invoice_number'), ['class' => 'form-control']) }}
-    </div>
-
-    <div class="form-group">
         {!! Form::label('markup', trans('settings.markup'), ['class' => 'control-label']) !!}
         {{ Form::text('markup', $settings->get('markup'), ['class' => 'form-control']) }}
     </div>

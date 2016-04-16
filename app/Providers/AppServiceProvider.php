@@ -41,10 +41,10 @@ class AppServiceProvider extends ServiceProvider
             $view->with('customer_list', Auth::User()->userSelectList());
         });
 
-        Invoice::created(function ($invoice) {
-            $settings = \App::make('App\Contracts\Settings');
-            $settings->set('next_invoice_number',$invoice->invoice_number+1);
-        });
+        // Invoice::created(function ($invoice) {
+        //     $settings = \App::make('App\Contracts\Settings');
+        //     $settings->set('next_invoice_number',$invoice->invoice_number+1);
+        // });
 
         User::saving(function ($user) {
             if (Auth::check()) {
@@ -70,5 +70,6 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind('App\Contracts\Settings', 'App\Services\AnlutroSettings');
+        $this->app->bind('App\Contract\InvoiceNumberGenerator', 'App\Services\SequentialInvoiceNumbers');
     }
 }

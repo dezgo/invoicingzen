@@ -12,7 +12,6 @@ return [
     */
 
     'title'                  => 'Settings',
-    'next_invoice_number'    => 'Next Invoice Number',
     'markup'                 => 'Default Parts Markup (%)',
     'bsb'                    => 'BSB',
     'bank_account_number'    => 'Bank Account number',

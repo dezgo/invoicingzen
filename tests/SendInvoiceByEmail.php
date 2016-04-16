@@ -11,18 +11,48 @@ use App\Invoice;
 
 class SendInvoiceByEmail extends TestCase
 {
+    private $userAdmin;
+    private $invoice;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->userAdmin = Role::where('id', 2)->first()->users->first();
+        $this->invoice = $this->userAdmin->invoices->first();
+
+        // now put in mail settings as userAdmin
+        $this->be($this->userAdmin);
+        $settings = \App::make('App\Contracts\Settings');
+        $settings->set('email_host', env('MAIL_HOST'));
+        $settings->set('email_port', env('MAIL_PORT'));
+        $settings->set('email_username', env('MAIL_USERNAME'));
+        $settings->set('email_password', env('MAIL_PASSWORD'));
+        $settings->set('email_encryption', env('MAIL_ENCRYPTION'));
+    }
+
+    public function testBlankEmailSettings()
+    {
+        $this->be($this->userAdmin);
+        $settings = \App::make('App\Contracts\Settings');
+        $host = $settings->get('email_host');
+        $settings->set('email_host', '');
+        $this->actingAs($this->userAdmin)
+             ->visit('/invoice/'.$this->invoice->id.'/email')
+             ->see(trans('invoice_email.warning-empty-settings'));
+
+        $settings->set('email_host', $host);
+    }
+
     public function testBrowseToEmailLaunch()
     {
-        $userAdmin = Role::where('id', 2)->first()->users->first();
-        $invoice = $userAdmin->invoices->first();
-        $this->actingAs($userAdmin)
-             ->visit('/invoice/'.$invoice->id.'/email')
-             ->see($userAdmin->email_address);
+        $this->actingAs($this->userAdmin)
+             ->visit('/invoice/'.$this->invoice->id.'/email')
+             ->see($this->userAdmin->email_address);
     }
 
     public function testSendEmail()
     {
-        $userAdmin = Role::where('id', 2)->first()->users->first();
         $invoices = Invoice::all();
         foreach ($invoices as $invoice) {
             if ($invoice->user->isUser()) {
@@ -39,7 +69,7 @@ class SendInvoiceByEmail extends TestCase
         $pdf = Mockery::spy();
         \PDF::shouldReceive('loadView')->with('invoice.print', Mockery::any())->andReturn($pdf);
 
-        $this->actingAs($userAdmin)
+        $this->actingAs($this->userAdmin)
              ->visit('/invoice/'.$invoice->id.'/email')
              ->type('cc1@b.com', 'cc')
              ->type('bcc1@b.com', 'bcc')
@@ -47,13 +77,23 @@ class SendInvoiceByEmail extends TestCase
              ->press('btnSend');
 
         $mailer_result = $mailer->hasMessageFor([
-                'from' => $userAdmin->email,
+                'from' => $this->userAdmin->email,
                 'to' => $user->email,
                 'cc' => 'cc1@b.com',
                 'bcc' => 'bcc1@b.com',
                 'subject' => 'subject1',
             ]);
         $this->assertTrue($mailer_result == 'FTCBS', $mailer_result);
+    }
+
+    public function testSendEmailReal()
+    {
+        factory(App\InvoiceItem::class, 5)->create(['invoice_id' => $this->invoice->id]);
+
+        $this->actingAs($this->userAdmin)
+            ->visit('/invoice/'.$this->invoice->id.'/email')
+            ->press('btnSend')
+            ->see('Email sent');
     }
 }
 

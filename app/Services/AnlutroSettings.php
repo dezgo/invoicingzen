@@ -18,7 +18,7 @@ class AnlutroSettings implements SettingsContract
             $this->user = Auth::user();
         }
         else {
-            $this->user = User::first();
+            throw new \RuntimeException('No logged in user!');
         }
     }
 
@@ -42,7 +42,6 @@ class AnlutroSettings implements SettingsContract
 
     public function setAllUsing(Request $request)
     {
-        AnlutroSetting::set('next_invoice_number', $request->next_invoice_number);
         AnlutroSetting::set('markup', $request->markup);
         AnlutroSetting::set('abn', $request->abn);
         AnlutroSetting::set('payment_terms', $request->payment_terms);
@@ -84,4 +83,16 @@ class AnlutroSettings implements SettingsContract
 			url('/')."</a>. For first-time users, go to <a href='".
 			url('/password/reset')."'>".url('/password/reset')."</a> to create a password.";
 	}
+
+    public function checkEmailSettings()
+    {
+        $rtn =
+            AnlutroSetting::get('email_host') != '' and
+            AnlutroSetting::get('email_port') != '' and
+            AnlutroSetting::get('email_username') != '' and
+            AnlutroSetting::get('email_password') != '' and
+            AnlutroSetting::get('email_encryption') != '';
+
+        return $rtn;
+    }
 }

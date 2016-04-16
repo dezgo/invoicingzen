@@ -27,8 +27,9 @@ body {
     </tr>
     <tr>
         <td colspan="6" align="left" valign="top">
-            @if (Auth::user()->logo_filename != '')
-                <a href="{{ url('') }}"><img class="left-block" src="{{ url('/images/'.Auth::user()->logo_filename) }}" /></a>
+            @if (Auth::user()->logo_filename != '' and env('APP_ENV') != 'testing')
+                <a href="{{ url('') }}"><img class="left-block"
+                    src="{{ url('/images/'.Auth::user()->logo_filename) }}" /></a>
             @endif
         </td>
         <td colspan="6" align="right">
@@ -55,8 +56,10 @@ body {
         </td>
       <td colspan="2">
         <b>{{ $invoice->type }}&nbsp;Number:</b><br />
-        <b>{{ $invoice->type }}&nbsp;Date:</b><Br />
-        <b>{{ trans('settings.payment_terms') }}:</b>
+        <b>{{ $invoice->type }}&nbsp;Date:</b>
+        @if ($invoice->is_quote == '' and $invoice->owing > 0)
+        <Br /><b>{{ trans('settings.payment_terms') }}:</b>
+        @endif
       </td>
       <td colspan="3" align="right">
           {{ $invoice->invoice_number }}<Br />

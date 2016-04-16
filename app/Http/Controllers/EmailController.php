@@ -74,12 +74,16 @@ class EmailController extends Controller
 		// server. Also I'll immediately know if an email didn't work
 		// dd($email);
 		Mail::send('emails.invoice', ['email' => $email], function ($m) use ($email) {
-			$m->from($email->from, $email->sender->business_name)
-			  ->to($email->to, $email->receiver->full_name)
-			//   ->cc($email->cc)
-			//   ->bcc($email->bcc)
-			  ->subject($email->subject)
-			  ->attach($this->createPDF($email->invoice));
+			$m->from($email->from, $email->sender->business_name);
+			$m->to($email->to, $email->receiver->full_name);
+			if ($email->cc != '') {
+				$m->cc($email->cc);
+			}
+			if ($email->bcc != '') {
+				$m->bcc($email->bcc);
+			}
+			$m->subject($email->subject);
+			$m->attach($this->createPDF($email->invoice));
 		});
 	}
 
@@ -87,6 +91,7 @@ class EmailController extends Controller
 	{
 		$pdf = new PDFFileInvoiceGenerator();
 		$pdf->create($invoice);
+
 		return $pdf->output();
 	}
 }

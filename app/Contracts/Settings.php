@@ -10,5 +10,7 @@ interface Settings
 
     public function get($key, $default = null);
 
+    public function checkEmailSettings();
+
     public function setAllUsing(Request $request);
 }
