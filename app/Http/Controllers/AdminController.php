@@ -24,7 +24,6 @@ class AdminController extends Controller
 	public function update(Request $request)
     {
 		$validator = Validator::make($request->all(), [
-			'next_invoice_number' => 'numeric',
 			'markup' => 'numeric',
 			'bsb' => 'regex:/^\d{6}$/',
 			'bank_account_number' => 'regex:/^\d{6,10}$/',

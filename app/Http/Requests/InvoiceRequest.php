@@ -24,11 +24,15 @@ class InvoiceRequest extends Request
 	 */
 	public function rules()
 	{
+		if (!Auth::check()) {
+			throw new \RuntimeException('No logged in user!');
+		}
 		$invoice_id = $this->request->get('id');
 		return [
 			'customer_id' => 'required|numeric',
 			'invoice_date' => 'required|date',
-			'invoice_number' => 'required|numeric|unique:invoices,invoice_number,'.$invoice_id,
+			'invoice_number' => 'required|numeric|unique:invoices,invoice_number,'.
+				$invoice_id.',id,company_id,'.Auth::user()->company_id,
 			'due_date' => 'required|date',
 		];
 	}

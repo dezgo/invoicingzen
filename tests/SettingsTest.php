@@ -29,7 +29,6 @@ class SettingsTest extends TestCase
     {
         $this->actingAs($this->user)
              ->visit('/settings')
-             ->see(trans('settings.next_invoice_number'))
              ->see(trans('settings.markup'));
     }
 
@@ -42,7 +41,6 @@ class SettingsTest extends TestCase
     {
         $this->actingAs($this->user)
              ->visit('/settings')
-             ->type('a', 'next_invoice_number')
              ->type('a', 'markup')
              ->type('a', 'bsb')
              ->type('a', 'bank_account_number')
@@ -52,7 +50,6 @@ class SettingsTest extends TestCase
              ->type('a', 'enquiries_email')
              ->attach(public_path().'/css/all.css', 'logo')
              ->press('btnSubmit')
-             ->see(trans('validation.numeric', ['attribute' => trans('settings.next_invoice_number')]))
              ->see(trans('validation.custom.markup.numeric'))
              ->see(trans('validation.custom.bsb.regex'))
              ->see(trans('validation.custom.bank_account_number.regex'))
@@ -71,8 +68,6 @@ class SettingsTest extends TestCase
      */
     public function testUpdateSettings()
     {
-
-        $next_invoice_number = 98;
         $bsb = '123483';
         $bank_account_number = '123456789';
         $abn = '12 321 312 567';
@@ -86,7 +81,6 @@ class SettingsTest extends TestCase
 
         $this->actingAs($this->user)
              ->visit('/settings')
-             ->type($next_invoice_number, 'next_invoice_number')
              ->type('20', 'markup')
              ->type($bsb, 'bsb')
              ->type($bank_account_number, 'bank_account_number')
@@ -103,9 +97,9 @@ class SettingsTest extends TestCase
 
          $invoice = factory(App\Invoice::class)->create();
          factory(App\InvoiceItem::class, 5)->create(['invoice_id' => $invoice->id]);
+
          $this->actingAs($this->user)
               ->visit('/invoice/'.$invoice->id.'/print')
-              ->see($next_invoice_number)
               ->see($bsb)
               ->see($bank_account_number)
               ->see($abn)

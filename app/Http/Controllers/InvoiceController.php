@@ -13,6 +13,7 @@ use App\Email;
 use App\Http\Requests\InvoiceRequest;
 use Illuminate\Support\Facades\Auth;
 use Gate;
+use App\Services\SequentialInvoiceNumbers;
 
 class InvoiceController extends Controller
 {
@@ -61,6 +62,10 @@ class InvoiceController extends Controller
 		if (!is_null($customer)) {
 			$invoice->customer_id = $customer->id;
 		}
+
+	    $settings = \App::make('App\Contracts\Settings');
+        $invoice->invoice_number = SequentialInvoiceNumbers::getNextNumber(Auth::user()->company_id);
+
 		$invoice_items = InvoiceItem::invoiceItemList();
 		\Carbon\Carbon::setToStringFormat('d-m-Y');
 		return view('invoice.create',compact('invoice','invoice_items'));
@@ -176,10 +181,18 @@ class InvoiceController extends Controller
 
 		if ($invoice->user->email == '') {
 			\Session()->flash('status-warning', 'Customer does not have an email address!');
+			return redirect('/invoice/'.$invoice->id);
 		}
 		else {
-			$email = $invoice->sendByEmail($email);
-			return view('invoice.email', compact('email'));
+			$settings = \App::make('App\Contracts\Settings');
+			if ($settings->checkEmailSettings()) {
+				$email = $invoice->sendByEmail($email);
+				return view('invoice.email', compact('email'));
+			}
+			else {
+				\Session()->flash('status-warning', trans('invoice_email.warning-empty-settings'));
+				return redirect('/invoice/'.$invoice->id);
+			}
 		}
 	}
 

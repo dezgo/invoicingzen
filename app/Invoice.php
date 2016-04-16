@@ -39,37 +39,9 @@ class Invoice extends Model
 		$defaults = [
 		       'invoice_date' => $this->getDefaultInvoiceDate(),
 		       'due_date' => $this->getDefaultDueDate(),
-		       'invoice_number' => $this->getNextInvoiceNumber(),
 		       ];
 		$this->setRawAttributes($defaults, true);
 		parent::__construct($attributes);
-	}
-
-	/**
-	 * Check if the given invoice number has already been used
-	 *
-	 * @return boolean (true if available)
-	 */
-	private function checkInvoiceNumber($invoice_number)
-	{
-		$count = DB::table('invoices')->where('invoice_number', $invoice_number)->count();
-		return $count == 0;
-	}
-
-	/**
-	 * Gets the next invoice number, being the setting, but if that's already
-	 * taken, keep incrementing until we find an available one
-	 *
-	 * @return int
-	 */
-	private function getNextInvoiceNumber()
-	{
-		$settings = \App::make('App\Contracts\Settings');
-		$invoice_number = $settings->get('next_invoice_number',1);
-		while (!$this->checkInvoiceNumber($invoice_number)) {
-			$invoice_number = $invoice_number + 1;
-		}
-		return $invoice_number;
 	}
 
 	private function getDefaultInvoiceDate()

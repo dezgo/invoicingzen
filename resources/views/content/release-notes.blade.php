@@ -11,6 +11,10 @@
             Ensure user can only view/modify records in own company. Remove Beta
             stamp (7705627)
         </li>
+        <li>
+            Remove next invoice number setting - easier just to calculate it
+            automatically ()
+        </li>
     </ul>
 
     <h3>v1.1.12</h3>
