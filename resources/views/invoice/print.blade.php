@@ -33,7 +33,7 @@ body {
             @endif
         </td>
         <td colspan="6" align="right">
-            <h3>{{ Auth::user()->business_name }}</h3>
+            <h3>{{ Auth::user()->company->company_name }}</h3>
             <br><Br>
             <h4 class="text-uppercase">
                 {{ strtoupper($invoice->type) }}

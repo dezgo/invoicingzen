@@ -4,6 +4,15 @@
 <div class="panel">
     <h1>Invoicing Zen Release Notes</h1>
 
+    <h3>v1.2.1</h3>
+    <h4>17 Apr 2016</h4>
+    <ul>
+        <li>
+            Invoice now shows correct company name. Default from address added
+            ()
+        </li>
+    </ul>
+
     <h3>v1.2.0</h3>
     <h4>16 Apr 2016</h4>
     <ul>
@@ -17,6 +26,9 @@
         </li>
         <li>
             More gracefully handle email errors (a816de4)
+        </li>
+        <li>
+            Add rollbar to capture errors online (6ac6f09)
         </li>
     </ul>
 
