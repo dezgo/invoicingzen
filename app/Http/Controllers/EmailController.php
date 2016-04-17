@@ -59,7 +59,10 @@ class EmailController extends Controller
 			'<br />'.
 			'Click the link below to view invoice '.$invoice->invoice_number.' for $'.
 			number_format($invoice->total, 2).'<br />'.
-            '<a href=\''.url('/view/'.$invoice->uuid).'\'>View Invoice</a>'.
+            '<a href=\''.url('/view/'.$invoice->uuid).'\'>View Invoice</a><br />'.
+			'<br />'.
+			'Or copy and paste the following into your web browser<br />'.
+			url('/view/'.$invoice->uuid).'<br />'.
 			'<br />'.
 			'Thanks,<br />'.
 			Auth::user()->name.'<br />'.
