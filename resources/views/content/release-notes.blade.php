@@ -15,6 +15,10 @@
             Separate testing of invoice print page. Remove hyperlink on logo
             (0da33b9)
         </li>
+        <li>
+            Add direct link to invoice to be used in emails. Create custom
+            error handler (c5ea81c)
+        </li>
     </ul>
 
     <h3>v1.2.0</h3>

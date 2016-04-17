@@ -9,7 +9,6 @@ use App\Http\Controllers\Controller;
 use App\Invoice;
 use App\InvoiceItem;
 use App\User;
-use App\Email;
 use App\Http\Requests\InvoiceRequest;
 use Illuminate\Support\Facades\Auth;
 use Gate;
@@ -169,32 +168,6 @@ class InvoiceController extends Controller
 
 		$settings = \App::make('App\Contracts\Settings');
 		return view('invoice.print', compact('invoice', 'settings'));
-	}
-
-	/**
-	 * Email the invoice to the Customer
-	 */
-	public function email(Invoice $invoice, Email $email)
-	{
-		if (Gate::denies('view-invoice', $invoice)) {
-			abort(403);
-		}
-
-		if ($invoice->user->email == '') {
-			\Session()->flash('status-warning', 'Customer does not have an email address!');
-			return redirect('/invoice/'.$invoice->id);
-		}
-		else {
-			$settings = \App::make('App\Contracts\Settings');
-			if ($settings->checkEmailSettings()) {
-				$email = $invoice->sendByEmail($email);
-				return view('invoice.email', compact('email'));
-			}
-			else {
-				\Session()->flash('status-warning', trans('invoice_email.warning-empty-settings'));
-				return redirect('/invoice/'.$invoice->id);
-			}
-		}
 	}
 
 	public function selectmerge(Invoice $invoice)

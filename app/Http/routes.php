@@ -77,7 +77,7 @@ Route::group(['middleware' => ['web', 'auth']], function() {
 Route::group(['middleware' => ['web', 'admin']], function() {
     Route::get('invoice/{customer}/create', 'InvoiceController@create'); // create invoice for given customer
     Route::get('invoice/{invoice}/delete', 'InvoiceController@delete');
-    Route::get('invoice/{invoice}/email', 'InvoiceController@email')->name('invoice.email');
+    Route::get('invoice/{invoice}/email', 'EmailController@showComposeEmailView');
     Route::get('invoice/{invoice}/merge', 'InvoiceController@selectmerge');
     Route::post('invoice/merge', 'InvoiceController@domerge');
 });

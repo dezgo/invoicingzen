@@ -153,17 +153,6 @@ class Invoice extends Model
    		}
 	}
 
-	public function sendByEmail(Email $email)
-	{
-		$email->to = $this->user->email;
-		$email->receiver_id = $this->user->id;
-		$email->invoice_id = $this->id;
-		$email->subject = $email->subject($this);
-		$email->invoice = $this;
-		$email->body = $email->body($this);
-		return $email;
-	}
-
 	public function merge(Invoice $invoice)
 	{
 		$new_invoice = new Invoice;
