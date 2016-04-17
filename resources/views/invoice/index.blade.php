@@ -58,7 +58,7 @@ $(document).ready (function(){
 
     $('tr').click(function(event) {
         console.log(event);
-        location.href= '/invoice/'+event.currentTarget.id;
+        location.href= '/invoice/'+event.currentTarget.id+'/print';
     });
 
     $('tr').css('cursor', 'pointer');

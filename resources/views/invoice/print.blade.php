@@ -152,5 +152,16 @@ body {
 </td>
 </tr>
 </table>
-<Br />
+
+<table class="hidden-print" cellpadding="0" cellspacing="0" width="780" border="0" align="center">
+    <Tr>
+        <Td>
+            <br />
+            <a class="btn btn-primary" href="{{ url('/invoice') }}">Show Invoices</a>
+            @can ('edit-invoice', $invoice)
+                &nbsp;<a class="btn btn-primary" href="{{ url('/invoice/'.$invoice->id) }}">Edit Invoice</a>
+            @endcan
+            <br /><Br />
+        </Td>
+    </Tr>
 @stop

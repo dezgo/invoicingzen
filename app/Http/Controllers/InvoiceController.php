@@ -195,8 +195,8 @@ class InvoiceController extends Controller
 			throw new CustomException(trans('exception_messages.invalid-uuid'));
 		}
 
+		Auth::login($invoice->user);
 		$settings = \App::make('App\Contracts\Settings');
 		return view('invoice.print', compact('invoice', 'settings'));
-
 	}
 }
