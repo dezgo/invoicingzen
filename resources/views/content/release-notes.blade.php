@@ -19,6 +19,9 @@
             Add direct link to invoice to be used in emails. Create custom
             error handler (c5ea81c)
         </li>
+        <li>
+            From invoice list, now goes straight to print view (9895311)
+        </li>
     </ul>
 
     <h3>v1.2.0</h3>
