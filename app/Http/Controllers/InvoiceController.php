@@ -14,6 +14,7 @@ use App\Http\Requests\InvoiceRequest;
 use Illuminate\Support\Facades\Auth;
 use Gate;
 use App\Services\SequentialInvoiceNumbers;
+use App\Exceptions\CustomException;
 
 class InvoiceController extends Controller
 {
@@ -212,5 +213,17 @@ class InvoiceController extends Controller
 
 		$new_invoice = $invoice1->merge($invoice2);
 		return redirect('/invoice');
+	}
+
+	public function view($uuid)
+	{
+		$invoice = Invoice::where('uuid','=',$uuid)->first();
+		if ($invoice == null) {
+			throw new CustomException(trans('exception_messages.invalid-uuid'));
+		}
+
+		$settings = \App::make('App\Contracts\Settings');
+		return view('invoice.print', compact('invoice', 'settings'));
+
 	}
 }

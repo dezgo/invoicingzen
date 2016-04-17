@@ -59,23 +59,23 @@ class Email extends Model
     }
 
     // the default subject for invoice emails
-    public function subject($invoice_number)
+    public function subject($invoice)
     {
-        return 'Invoice '.$this->invoice_number;
+        return 'Invoice '.$invoice->invoice_number;
     }
 
     // the default body text for invoice emails
-    public function body($first_name, $invoice_number, $total)
+    public function body($invoice)
     {
         return
-			'Hi '.$first_name.',<br />'.
+			'Hi '.$invoice->user->first_name.',<br />'.
 			'<br />'.
-			'Please find attached invoice '.$invoice_number.' for $'.
-			number_format($total, 2).'<br />'.
+			'Click the link below to view invoice '.$invoice->invoice_number.' for $'.
+			number_format($invoice->total, 2).'<br />'.
+            '<a href=\''.url('/view/'.$invoice->uuid).'\'>View Invoice</a>'.
 			'<br />'.
 			'Thanks,<br />'.
 			Auth::user()->name.'<br />'.
-			Auth::user()->business_name.
 			\Setting::get('email_signature');
     }
 }

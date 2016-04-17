@@ -8,11 +8,12 @@
     <h4>17 Apr 2016</h4>
     <ul>
         <li>
-            Invoice now shows correct company name. Default from address added to
-            fix issue when sending password reset link (e2f738d)
+            Invoice now shows correct company name. Default from address added
+            to fix issue when sending password reset link (e2f738d)
         </li>
         <li>
-            Separate testing of invoice print page. Remove hyperlink on logo ()
+            Separate testing of invoice print page. Remove hyperlink on logo
+            (0da33b9)
         </li>
     </ul>
 

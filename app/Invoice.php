@@ -7,6 +7,7 @@ use DB;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
+use Ramsey\Uuid\Uuid;
 
 class Invoice extends Model
 {
@@ -157,12 +158,9 @@ class Invoice extends Model
 		$email->to = $this->user->email;
 		$email->receiver_id = $this->user->id;
 		$email->invoice_id = $this->id;
-		$email->subject = $email->subject($this->invoice_number);
+		$email->subject = $email->subject($this);
 		$email->invoice = $this;
-		$email->body = $email->body(
-			$this->user->first_name,
-			$this->invoice_number,
-			$this->total);
+		$email->body = $email->body($this);
 		return $email;
 	}
 
@@ -201,5 +199,10 @@ class Invoice extends Model
 	public static function allInCompany($company_id)
 	{
 		return Invoice::where('company_id', '=', $company_id)->get();
+	}
+
+	public static function GenerateUUID($id)
+	{
+		return Uuid::uuid5(Uuid::NAMESPACE_DNS, 'invoicingzen '.$id);
 	}
 }

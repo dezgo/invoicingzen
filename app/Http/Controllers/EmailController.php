@@ -83,15 +83,6 @@ class EmailController extends Controller
 				$m->bcc($email->bcc);
 			}
 			$m->subject($email->subject);
-			$m->attach($this->createPDF($email->invoice));
 		});
-	}
-
-	private function createPDF(Invoice $invoice)
-	{
-		$pdf = new PDFFileInvoiceGenerator();
-		$pdf->create($invoice);
-
-		return $pdf->output();
 	}
 }

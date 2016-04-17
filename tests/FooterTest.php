@@ -6,7 +6,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class Footer extends TestCase
 {
-    public function testExample()
+    public function testFooterContainersDebugInfo()
     {
         $this->visit('/')
              ->see('a name="environment"')

@@ -25,6 +25,7 @@ Route::group(['middleware' => 'web'], function () {
        return view('content.release-notes');
     });
 
+    Route::get('/view/{uuid}', 'InvoiceController@view')->name('invoice.view');
 });
 
 Route::group(['middleware' => ['web', 'superadmin']], function() {
