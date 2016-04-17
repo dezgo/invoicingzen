@@ -14,7 +14,6 @@ class InvoiceTest extends TestCase
 
     public function setUp()
     {
-        // This method will automatically be called prior to any of your test cases
         parent::setUp();
 
         $this->user = factory(App\User::class)->create();
@@ -158,36 +157,6 @@ class InvoiceTest extends TestCase
             ->see('Customer Details')
             ->see('How to Pay')
             ->see('Enquiries');
-    }
-
-    public function testPrintPartiallyPaid()
-    {
-        $this->invoice->paid = $this->invoice->owing/2;
-        $this->invoice->save();
-        $this->actingAs($this->userAdmin)
-            ->visit('/invoice/'.$this->invoice->id.'/print')
-            ->see(number_format($this->invoice->paid,2));
-    }
-
-    public function testPrintReceipt()
-    {
-        $this->invoice->paid = $this->invoice->owing;
-        $this->invoice->save();
-        $this->actingAs($this->userAdmin)
-            ->visit('/invoice/'.$this->invoice->id.'/print')
-            ->see(number_format($this->invoice->paid,2))
-            ->see('RECEIPT');
-    }
-
-    public function testPrintQuote()
-    {
-        $this->invoice->is_quote = 'on';
-        $this->invoice->save();
-        $this->actingAs($this->userAdmin)
-            ->visit('/invoice/'.$this->invoice->id.'/print')
-            ->see('QUOTE')
-            ->dontSee('How to Pay')
-            ->dontSee('Amount Paid');
     }
 
     public function testCreateInvoiceWizardValidation()
