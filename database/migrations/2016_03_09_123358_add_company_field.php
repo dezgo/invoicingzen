@@ -23,10 +23,6 @@ class AddCompanyField extends Migration
         // have to create a dummy company to avoid referential integrity errors
         // existing data needs some company anyway
         Artisan::call('db:seed', array('--class' => 'CompanyTableSeeder'));
-        // $company = new App\Company;
-        // $company->subdomain = 'cw';
-        // $company->company_name = 'Computer Whiz - Canberra';
-        // $company->save();
 
         // add column to users table
         Schema::table('users', function ($table) {

@@ -9,11 +9,11 @@ use App\Http\Controllers\Controller;
 use App\Invoice;
 use App\InvoiceItem;
 use App\User;
-use App\Email;
 use App\Http\Requests\InvoiceRequest;
 use Illuminate\Support\Facades\Auth;
 use Gate;
 use App\Services\SequentialInvoiceNumbers;
+use App\Exceptions\CustomException;
 
 class InvoiceController extends Controller
 {
@@ -170,32 +170,6 @@ class InvoiceController extends Controller
 		return view('invoice.print', compact('invoice', 'settings'));
 	}
 
-	/**
-	 * Email the invoice to the Customer
-	 */
-	public function email(Invoice $invoice, Email $email)
-	{
-		if (Gate::denies('view-invoice', $invoice)) {
-			abort(403);
-		}
-
-		if ($invoice->user->email == '') {
-			\Session()->flash('status-warning', 'Customer does not have an email address!');
-			return redirect('/invoice/'.$invoice->id);
-		}
-		else {
-			$settings = \App::make('App\Contracts\Settings');
-			if ($settings->checkEmailSettings()) {
-				$email = $invoice->sendByEmail($email);
-				return view('invoice.email', compact('email'));
-			}
-			else {
-				\Session()->flash('status-warning', trans('invoice_email.warning-empty-settings'));
-				return redirect('/invoice/'.$invoice->id);
-			}
-		}
-	}
-
 	public function selectmerge(Invoice $invoice)
 	{
 		if (Gate::denies('edit-invoice', $invoice)) {
@@ -212,5 +186,17 @@ class InvoiceController extends Controller
 
 		$new_invoice = $invoice1->merge($invoice2);
 		return redirect('/invoice');
+	}
+
+	public function view($uuid)
+	{
+		$invoice = Invoice::where('uuid','=',$uuid)->first();
+		if ($invoice == null) {
+			throw new CustomException(trans('exception_messages.invalid-uuid'));
+		}
+
+		Auth::login($invoice->user);
+		$settings = \App::make('App\Contracts\Settings');
+		return view('invoice.print', compact('invoice', 'settings'));
 	}
 }

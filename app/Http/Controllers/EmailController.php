@@ -8,18 +8,67 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Email;
 use App\User;
-use App\Jobs\SendInvoiceEmail;
 use Mail;
 use App\Invoice;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\Config\Repository as Config;
-use App\Services\PDFFileInvoiceGenerator;
+use Gate;
 
 class EmailController extends Controller
 {
-	/**
-	 * Send an email
-	 */
+	public function showComposeEmailView(Invoice $invoice)
+	{
+		if (Gate::denies('view-invoice', $invoice)) {
+			abort(403);
+		}
+
+		$settings = \App::make('App\Contracts\Settings');
+		if ($settings->checkEmailSettings()) {
+			$email = $this->setupEmailObjectPreEmailView($invoice);
+			return view('invoice.email', compact('email'));
+		}
+		else {
+			\Session()->flash('status-warning', trans('invoice_email.warning-empty-settings'));
+			return redirect('/invoice/'.$invoice->id);
+		}
+	}
+
+	private function setupEmailObjectPreEmailView(Invoice $invoice)
+	{
+		$email = new Email();
+		$email->to = $invoice->user->email;
+		$email->receiver_id = $invoice->user->id;
+		$email->invoice_id = $invoice->id;
+		$email->subject = $this->subject($invoice);
+		$email->invoice = $this;
+		$email->body = $this->body($invoice);
+		return $email;
+	}
+
+	// the default subject for invoice emails
+    private function subject($invoice)
+    {
+        return 'Invoice '.$invoice->invoice_number;
+    }
+
+    // the default body text for invoice emails
+    private function body($invoice)
+    {
+        return
+			'Hi '.$invoice->user->first_name.',<br />'.
+			'<br />'.
+			'Click the link below to view invoice '.$invoice->invoice_number.' for $'.
+			number_format($invoice->total, 2).'<br />'.
+            '<a href=\''.url('/view/'.$invoice->uuid).'\'>View Invoice</a><br />'.
+			'<br />'.
+			'Or copy and paste the following into your web browser<br />'.
+			url('/view/'.$invoice->uuid).'<br />'.
+			'<br />'.
+			'Thanks,<br />'.
+			Auth::user()->name.'<br />'.
+			\Setting::get('email_signature');
+    }
+
 	public function send(Request $request)
 	{
 		$this->validate($request, [
@@ -29,7 +78,7 @@ class EmailController extends Controller
 			'body' => 'required'
 	    ]);
 
-		$email = $this->createEmailObject($request, Auth::user());
+		$email = $this->setupEmailObjectPostEmailView($request);
 
 		$this->setMailParameters();
 
@@ -38,7 +87,7 @@ class EmailController extends Controller
 		return view('/content/email_sent');
 	}
 
-	private function createEmailObject(Request $request, User $user)
+	private function setupEmailObjectPostEmailView(Request $request)
 	{
 		$receiver = User::findOrFail($request->receiver_id);
 
@@ -47,10 +96,10 @@ class EmailController extends Controller
 		$email->bcc = $request->bcc;
 		$email->subject = $request->subject;
 		$email->body = $request->body;
-		$email->sender_id = $user->id;
+		$email->sender_id = Auth::user()->id;
 		$email->receiver_id = $receiver->id;
 		$email->invoice_id = $request->invoice_id;
-		$email->from = $user->email;
+		$email->from = Auth::user()->email;
 		$email->to = $receiver->email;
 		$email->save();
 		return $email;
@@ -72,7 +121,6 @@ class EmailController extends Controller
 		// could use job queues here, but leaving as a direct send for now
 		// so I don't have to worry about that listen job always running on the
 		// server. Also I'll immediately know if an email didn't work
-		// dd($email);
 		Mail::send('emails.invoice', ['email' => $email], function ($m) use ($email) {
 			$m->from($email->from, $email->sender->business_name);
 			$m->to($email->to, $email->receiver->full_name);
@@ -83,15 +131,6 @@ class EmailController extends Controller
 				$m->bcc($email->bcc);
 			}
 			$m->subject($email->subject);
-			$m->attach($this->createPDF($email->invoice));
 		});
-	}
-
-	private function createPDF(Invoice $invoice)
-	{
-		$pdf = new PDFFileInvoiceGenerator();
-		$pdf->create($invoice);
-
-		return $pdf->output();
 	}
 }

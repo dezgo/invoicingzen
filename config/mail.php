@@ -56,7 +56,7 @@ $mail_arr = [
     |
     */
 
-    'from' => ['address' => null, 'name' => null],
+    'from' => ['address' => 'mail@invoicingzen.com', 'name' => 'Invoicing Zen'],
 
     /*
     |--------------------------------------------------------------------------

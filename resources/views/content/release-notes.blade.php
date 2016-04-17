@@ -4,6 +4,26 @@
 <div class="panel">
     <h1>Invoicing Zen Release Notes</h1>
 
+    <h3>v1.2.1</h3>
+    <h4>17 Apr 2016</h4>
+    <ul>
+        <li>
+            Invoice now shows correct company name. Default from address added
+            to fix issue when sending password reset link (e2f738d)
+        </li>
+        <li>
+            Separate testing of invoice print page. Remove hyperlink on logo
+            (0da33b9)
+        </li>
+        <li>
+            Add direct link to invoice to be used in emails. Create custom
+            error handler (c5ea81c)
+        </li>
+        <li>
+            From invoice list, now goes straight to print view (9895311)
+        </li>
+    </ul>
+
     <h3>v1.2.0</h3>
     <h4>16 Apr 2016</h4>
     <ul>
@@ -17,6 +37,9 @@
         </li>
         <li>
             More gracefully handle email errors (a816de4)
+        </li>
+        <li>
+            Add rollbar to capture errors online (6ac6f09)
         </li>
     </ul>
 

@@ -28,12 +28,11 @@ body {
     <tr>
         <td colspan="6" align="left" valign="top">
             @if (Auth::user()->logo_filename != '' and env('APP_ENV') != 'testing')
-                <a href="{{ url('') }}"><img class="left-block"
-                    src="{{ url('/images/'.Auth::user()->logo_filename) }}" /></a>
+                <img class="left-block" src="{{ url('/images/'.Auth::user()->logo_filename) }}" />
             @endif
         </td>
         <td colspan="6" align="right">
-            <h3>{{ Auth::user()->business_name }}</h3>
+            <h3>{{ Auth::user()->company->company_name }}</h3>
             <br><Br>
             <h4 class="text-uppercase">
                 {{ strtoupper($invoice->type) }}
@@ -153,5 +152,16 @@ body {
 </td>
 </tr>
 </table>
-<Br />
+
+<table class="hidden-print" cellpadding="0" cellspacing="0" width="780" border="0" align="center">
+    <Tr>
+        <Td>
+            <br />
+            <a class="btn btn-primary" href="{{ url('/invoice') }}">Show Invoices</a>
+            @can ('edit-invoice', $invoice)
+                &nbsp;<a class="btn btn-primary" href="{{ url('/invoice/'.$invoice->id) }}">Edit Invoice</a>
+            @endcan
+            <br /><Br />
+        </Td>
+    </Tr>
 @stop

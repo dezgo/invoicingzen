@@ -54,6 +54,10 @@ class AppServiceProvider extends ServiceProvider
         Invoice::saving(function ($invoice) {
             $invoice->company_id = Company::my_id();
         });
+        Invoice::created(function ($invoice) {
+            $invoice->uuid = Invoice::GenerateUUID($invoice->id);
+            $invoice->save();
+        });
         InvoiceItem::saving(function ($invoice_item) {
             $invoice_item->company_id = Company::my_id();
         });
