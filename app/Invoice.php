@@ -102,7 +102,13 @@ class Invoice extends Model
 			return "Quote";
 		}
 		elseif (round($this->owing,2) > 0.00) {
-			return "Invoice";
+			$settings = \App::make('App\Contracts\Settings');
+			if ($settings->get('gst_registered')) {
+				return "Tax Invoice";
+			}
+			else {
+				return "Invoice";
+			}
 		}
 		else {
 			return "Receipt";

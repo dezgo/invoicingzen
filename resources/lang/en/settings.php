@@ -12,7 +12,8 @@ return [
     */
 
     'title'                  => 'Settings',
-    'markup'                 => 'Default Parts Markup (%)',
+    'markup'                 => 'Default Item Markup (%)',
+    'gst_registered'         => 'GST Registered',
     'bsb'                    => 'BSB',
     'bank_account_number'    => 'Bank Account number',
     'update_success'         => 'Settings updated',

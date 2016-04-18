@@ -8,7 +8,10 @@
     <h4>18 Apr 2016</h4>
     <ul>
         <li>
-            Company Separation fixes ()
+            Company Separation fixes (32d7ebb)
+        </li>
+        <li>
+            Add GST registered setting and update invoice ()
         </li>
     </ul>
 
