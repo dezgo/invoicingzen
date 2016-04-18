@@ -11,7 +11,7 @@
             Company Separation fixes (32d7ebb)
         </li>
         <li>
-            Add GST registered setting and update invoice ()
+            Add GST registered setting and update invoice (3c227cb)
         </li>
     </ul>
 
