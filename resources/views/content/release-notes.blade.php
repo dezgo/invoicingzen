@@ -4,6 +4,14 @@
 <div class="panel">
     <h1>Invoicing Zen Release Notes</h1>
 
+    <h3>v1.2.2</h3>
+    <h4>18 Apr 2016</h4>
+    <ul>
+        <li>
+            Company Separation fixes ()
+        </li>
+    </ul>
+
     <h3>v1.2.1</h3>
     <h4>17 Apr 2016</h4>
     <ul>

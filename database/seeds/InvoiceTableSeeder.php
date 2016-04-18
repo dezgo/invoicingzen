@@ -18,10 +18,12 @@ class InvoiceTableSeeder extends Seeder
         $users = User::all();
         foreach ($users as $user) {
             for ($i = 0; $i <= 1; $i++) {
-                $invoice[$i] = factory(Invoice::class)->create();
-                factory(InvoiceItem::class, 5)->create(['invoice_id' => $invoice[$i]->id]);
-                $invoice[$i]->customer_id = $user->id;
-                $invoice[$i]->save();
+                $invoice[$i] = factory(Invoice::class)->create([
+                    'customer_id' => $user->id,
+                ]);
+                factory(InvoiceItem::class, 5)->create([
+                    'invoice_id' => $invoice[$i]->id,
+                ]);
             }
         }
     }

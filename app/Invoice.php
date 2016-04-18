@@ -156,6 +156,7 @@ class Invoice extends Model
 	public function merge(Invoice $invoice)
 	{
 		$new_invoice = new Invoice;
+		$new_invoice->company_id = $invoice->user->company_id;
 		$new_invoice->customer_id = $this->customer_id;
 		if ($this->invoice_date->gt($invoice->invoice_date)) {
 			$new_invoice->invoice_date = $this->invoice_date;
