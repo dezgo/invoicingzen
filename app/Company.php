@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Company extends Model
 {
@@ -20,11 +21,11 @@ class Company extends Model
 
     public static function my_id()
     {
-        if (\Auth::check()) {
-            return \Auth::user()->company_id;
+        if (Auth::check()) {
+            return Auth::user()->company_id;
         }
         else {
-            return 1;
+            throw new \RuntimeException('No logged in user');
         }
     }
 }

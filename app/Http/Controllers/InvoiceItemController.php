@@ -8,6 +8,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Invoice;
 use App\InvoiceItem;
+use App\Company;
 use App\InvoiceItemCategory;
 use App\Http\Requests\InvoiceItemRequest;
 
@@ -20,7 +21,8 @@ class InvoiceItemController extends Controller
      */
     public function create1(Invoice $invoice)
     {
-        $invoice_item_categories = \App\InvoiceItemCategory::all()->lists('description', 'id');
+        $invoice_item_categories = \App\InvoiceItemCategory::allInCompany(Company::my_id())
+            ->lists('description', 'id');
         return view('invoiceitem.create1', compact('invoice','invoice_item_categories'));
     }
 

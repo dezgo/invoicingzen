@@ -38,13 +38,10 @@ class AppServiceProvider extends ServiceProvider
 
         view()->composer('user.select', function($view)
         {
-            $view->with('customer_list', Auth::User()->userSelectList());
+            if (Auth::check()) {
+                $view->with('customer_list', Auth::User()->userSelectList());
+            }
         });
-
-        // Invoice::created(function ($invoice) {
-        //     $settings = \App::make('App\Contracts\Settings');
-        //     $settings->set('next_invoice_number',$invoice->invoice_number+1);
-        // });
 
         User::saving(function ($user) {
             if (Auth::check()) {
@@ -52,17 +49,23 @@ class AppServiceProvider extends ServiceProvider
             }
         });
         Invoice::saving(function ($invoice) {
-            $invoice->company_id = Company::my_id();
+            if (Auth::check()) {
+                $invoice->company_id = Auth::user()->company_id;
+            }
         });
         Invoice::created(function ($invoice) {
             $invoice->uuid = Invoice::GenerateUUID($invoice->id);
             $invoice->save();
         });
         InvoiceItem::saving(function ($invoice_item) {
-            $invoice_item->company_id = Company::my_id();
+            if (Auth::check()) {
+                $invoice_item->company_id = Auth::user()->company_id;
+            }
         });
         InvoiceItemCategory::saving(function ($invoice_item_categories) {
-            $invoice_item_categories->company_id = Company::my_id();
+            if (Auth::check()) {
+                $invoice_item_categories->company_id = Auth::user()->company_id;
+            }
         });
     }
 

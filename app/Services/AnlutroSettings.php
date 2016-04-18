@@ -42,6 +42,7 @@ class AnlutroSettings implements SettingsContract
 
     public function setAllUsing(Request $request)
     {
+        AnlutroSetting::set('gst_registered', $request->gst_registered != null);
         AnlutroSetting::set('markup', $request->markup);
         AnlutroSetting::set('abn', $request->abn);
         AnlutroSetting::set('payment_terms', $request->payment_terms);

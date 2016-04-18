@@ -102,7 +102,13 @@ class Invoice extends Model
 			return "Quote";
 		}
 		elseif (round($this->owing,2) > 0.00) {
-			return "Invoice";
+			$settings = \App::make('App\Contracts\Settings');
+			if ($settings->get('gst_registered')) {
+				return "Tax Invoice";
+			}
+			else {
+				return "Invoice";
+			}
 		}
 		else {
 			return "Receipt";
@@ -156,6 +162,7 @@ class Invoice extends Model
 	public function merge(Invoice $invoice)
 	{
 		$new_invoice = new Invoice;
+		$new_invoice->company_id = $invoice->user->company_id;
 		$new_invoice->customer_id = $this->customer_id;
 		if ($this->invoice_date->gt($invoice->invoice_date)) {
 			$new_invoice->invoice_date = $this->invoice_date;

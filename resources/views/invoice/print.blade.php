@@ -53,34 +53,58 @@ body {
             {{ $invoice->user->full_name }}<br />
             {!! $invoice->user->address_multi !!}
         </td>
-      <td colspan="2">
-        <b>{{ $invoice->type }}&nbsp;Number:</b><br />
-        <b>{{ $invoice->type }}&nbsp;Date:</b>
+      <td colspan="3">
+        <b>Number:</b><br />
+        <b>Date:</b>
         @if ($invoice->is_quote == '' and $invoice->owing > 0)
         <Br /><b>{{ trans('settings.payment_terms') }}:</b>
         @endif
       </td>
-      <td colspan="3" align="right">
+      <td colspan="2" align="right">
           {{ $invoice->invoice_number }}<Br />
-          {{ $invoice->invoice_date->format('d-m-Y') }}
-          @if ($invoice->is_quote == '' and $invoice->owing > 0)
-            <br />{{ $settings->get('payment_terms') }}
-          @endif
+          {{ $invoice->invoice_date->format('d-m-Y') }}{!!
+              ($invoice->owing > 0) ? '<br />'.$settings->get('payment_terms') : '' !!}
       </td>
     </tr>
     <tr><td colspan="12"><br /><br /></td></tr>
 
     <tr>
-      <td colspan="8"><b>Item</b></td>
-      <td colspan="2" align="right"><b>Unit&nbsp;Price</b></td>
-      <td colspan="2" align="right"><b>Total</b></td>
-  </tr>
+      @if ($settings->get('gst_registered'))
+      <td colspan="9"><b>Item</b></td>
+      @else
+      <td colspan="10"><b>Item</b></td>
+      @endif
+      <td colspan="1" align="right"><b>Unit&nbsp;Price</b></td>
+      @if ($settings->get('gst_registered'))
+      <td colspan="1" align="right"><b>GST</b></td>
+      @endif
+      <td colspan="1" align="right"><b>Total</b></td>
+    </tr>
+    @if ($settings->get('gst_registered'))
+    <tr>
+        <td colspan="9">&nbsp;</td>
+        <td>(excl&nbsp;GST)</td>
+        <td>&nbsp;</td>
+        <td>(incl&nbsp;GST)</td>
+    </tr>
+    @endif
 
   @foreach($invoice->invoice_items as $invoice_item)
     <tr>
-      <td colspan="8">{{ (int) $invoice_item->quantity }} x {{ $invoice_item->description }}</td>
-      <td colspan="2" align="right">{{ $invoice_item->price }}</td>
-      <td colspan="2" align="right">{{ number_format($invoice_item->total, 2) }}</td>
+      @if ($settings->get('gst_registered'))
+      <td colspan="9">
+      @else
+      <td colspan="10">
+      @endif
+          {{ (int) $invoice_item->quantity }} x {{ $invoice_item->description }}
+      </td>
+      @if ($settings->get('gst_registered'))
+      <td colspan="1" align="right">{{ number_format($invoice_item->price*10/11, 2) }}</td>
+      <td colspan="1" align="right">{{ number_format($invoice_item->total/11, 2) }}</td>
+      @else
+      <td colspan="1" align="right">{{ $invoice_item->price }}</td>
+      @endif
+      <td colspan="1" align="right">{{ number_format($invoice_item->total, 2) }}</td>
     </tr>
   @endforeach
   <tr><td><br /></td></tr>
@@ -101,10 +125,12 @@ body {
   <td colspan="2" align="right">{{ number_format($invoice->owing, 2) }}</td>
 </tr>
 @endif
+@if (!$settings->get('gst_registered'))
 <tr>
   <td colspan="7">&nbsp;</td>
   <td colspan="5">{{ trans('invoice.no-gst') }}</td>
 </tr>
+@endif
 <tr><td height="50%">&nbsp;</td></tr>
 <tr><td colspan="12"><hr /></td></tr>
 <tr>

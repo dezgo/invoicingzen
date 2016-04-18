@@ -75,4 +75,15 @@ class InvoiceItem extends Model
 			$this->attributes['url'] = 'http://'.$value;
 		}
 	}
+
+	public function getCategoryDescriptionAttribute()
+	{
+		if ($this->category == null) {
+			return $this->category()->withTrashed()->get()->first()->description.
+				' (deleted)';
+		}
+		else {
+			return $this->category->description;
+		}
+	}
 }

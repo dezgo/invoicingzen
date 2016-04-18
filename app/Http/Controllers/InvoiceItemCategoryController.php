@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\InvoiceItemCategory;
 use Illuminate\Http\Request;
-
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\InvoiceItemCategoryRequest;
+use Illuminate\Support\Facades\Auth;
 
 class InvoiceItemCategoryController extends Controller
 {
@@ -18,7 +18,7 @@ class InvoiceItemCategoryController extends Controller
      */
     public function index()
     {
-        $invoice_item_categories = InvoiceItemCategory::all();
+        $invoice_item_categories = InvoiceItemCategory::allInCompany(Auth::user()->company_id);
         return view('invoiceitemcategory.index', compact('invoice_item_categories'));
     }
 

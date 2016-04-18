@@ -29,7 +29,26 @@ class SettingsTest extends TestCase
     {
         $this->actingAs($this->user)
              ->visit('/settings')
-             ->see(trans('settings.markup'));
+             ->see(trans('settings.title'))
+             ->see(trans('settings.markup'))
+             ->see(trans('settings.gst_registered'))
+             ->see(trans('settings.bsb'))
+             ->see(trans('settings.bank_account_number'))
+             ->see(trans('settings.abn'))
+             ->see(trans('settings.payment_terms'))
+             ->see(trans('settings.mailing_address_line_1'))
+             ->see(trans('settings.mailing_address_line_2'))
+             ->see(trans('settings.mailing_address_line_3'))
+             ->see(trans('settings.enquiries_phone'))
+             ->see(trans('settings.enquiries_email'))
+             ->see(trans('settings.enquiries_web'))
+             ->see(trans('settings.logo'))
+             ->see(trans('settings.email_signature'))
+             ->see(trans('settings.email_host'))
+             ->see(trans('settings.email_port'))
+             ->see(trans('settings.email_username'))
+             ->see(trans('settings.email_password'))
+             ->see(trans('settings.email_encryption'));
     }
 
     /**
@@ -81,6 +100,7 @@ class SettingsTest extends TestCase
 
         $this->actingAs($this->user)
              ->visit('/settings')
+             ->check('gst_registered')
              ->type('20', 'markup')
              ->type($bsb, 'bsb')
              ->type($bank_account_number, 'bank_account_number')
@@ -101,6 +121,7 @@ class SettingsTest extends TestCase
          $this->actingAs($this->user)
               ->visit('/invoice/'.$invoice->id.'/print')
               ->see($bsb)
+              ->dontSee(trans('invoice.no-gst'))
               ->see($bank_account_number)
               ->see($abn)
               ->see($payment_terms)
@@ -139,5 +160,16 @@ class SettingsTest extends TestCase
                     'key'           => 'payment_terms',
                     'value'         => 'Terms for user2',
                     'company_id'    => $company->id]);
+    }
+
+    public function testGSTCheckbox()
+    {
+        $this->actingAs($this->user)
+             ->visit('/settings')
+             ->check('gst_registered')
+             ->press('btnSubmit');
+
+        $settings = \App::make('App\Contracts\Settings');
+        $this->assertTrue($settings->get('gst_registered') == true);
     }
 }

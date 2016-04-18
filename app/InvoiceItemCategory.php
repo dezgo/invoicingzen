@@ -9,50 +9,15 @@ class InvoiceItemCategory extends Model
 {
 	use SoftDeletes;
 
-	/**
-	 * The attributes that should be mutated to dates.
-	 *
-	 * @var array
-	 */
 	protected $dates = ['deleted_at'];
 
-	/**
-	 * Explicitly specify the table name for this model.
-	 *
-	 * @var string
-	 */
 	protected $table = 'invoice_item_categories';
 
-	/**
-	 * The attributes that are mass assignable.
-	 *
-	 * @var array
-	 */
 	protected $fillable = ['description'];
 
-	/**
-	 * Constructor - set default values for new record
-	 *
-	 * @return null
-	 */
-	public function __construct(array $attributes = array())
-	{
-		$this->setRawAttributes(array(
-			'company_id' => Company::my_id(),
-		), true);
-		parent::__construct($attributes);
-	}
-
-	/**
-	 * Get the invoice items in this category
-	 */
 	public function category()
 	{
 		return $this->hasMany('App\InvoiceItem', 'category_id');
-	}
-
-	public static function categoryList() {
-		return InvoiceItemCategory::all()->lists('description', 'id');
 	}
 
 	/**
@@ -67,5 +32,10 @@ class InvoiceItemCategory extends Model
 			->groupBy('description')
 			->get()
 			->lists('description');
+	}
+
+	public static function allInCompany($company_id)
+	{
+		return InvoiceItemCategory::where('company_id', '=', $company_id)->get();
 	}
 }

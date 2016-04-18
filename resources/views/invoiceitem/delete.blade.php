@@ -5,7 +5,7 @@
 
     WARNING: The following Invoice Item will be permanently deleted.<br />
     <br />
-    <b>Category:</b> {{ $invoice_item->category->description }}<br />
+    <b>Category:</b> {{ $invoice_item->categoryDescription }}<br />
     <b>Description:</b> {{ $invoice_item->description }}<br />
     <b>Quantity:</b> {{ $invoice_item->quantity }}<br />
     <b>Price:</b> {{ $invoice_item->price }}<br />
