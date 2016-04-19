@@ -12,7 +12,7 @@
             (342b67b)
         </li>
         <li>
-            Add invoice delete button and cascade delete invoice items ()
+            Add invoice delete button and cascade delete invoice items (9c0fb00)
         </li>
     </ul>
 
