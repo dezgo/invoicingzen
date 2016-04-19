@@ -14,6 +14,9 @@
         <li>
             Add invoice delete button and cascade delete invoice items (9c0fb00)
         </li>
+        <li>
+            Add option to download invoice as PDF ()
+        </li>
     </ul>
 
     <h3>v1.2.2</h3>

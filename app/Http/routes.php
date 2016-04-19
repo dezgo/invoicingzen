@@ -71,6 +71,7 @@ Route::group(['middleware' => ['web', 'auth']], function() {
     // Invoice
     Route::resource('invoice', 'InvoiceController');
     Route::get('invoice/{invoice}/print', 'InvoiceController@prnt');
+    Route::get('invoice/{invoice}/pdf', 'InvoiceController@generate_pdf');
 });
 
 // routes only accessible to administrators

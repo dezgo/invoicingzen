@@ -15,6 +15,7 @@ use Gate;
 use App\Services\SequentialInvoiceNumbers;
 use App\Exceptions\CustomException;
 use App\InvoiceMerger;
+use App\Services\PDFStreamInvoiceGenerator;
 
 class InvoiceController extends Controller
 {
@@ -200,5 +201,13 @@ class InvoiceController extends Controller
 		Auth::login($invoice->user);
 		$settings = \App::make('App\Contracts\Settings');
 		return view('invoice.print', compact('invoice', 'settings'));
+	}
+
+	public function generate_pdf(Invoice $invoice)
+	{
+		$pdf = new PDFStreamInvoiceGenerator();
+        $pdf->create($invoice);
+
+        return $pdf->output();
 	}
 }

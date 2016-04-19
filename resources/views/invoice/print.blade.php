@@ -27,6 +27,7 @@ body {
             @can ('edit-invoice', $invoice)
                 &nbsp;<a class="btn btn-primary" href="{{ url('/invoice/'.$invoice->id) }}">Edit Invoice</a>
             @endcan
+            <a class="btn btn-primary" href="{{ url('/invoice/'.$invoice->id.'/pdf') }}">Downoad PDF</a>
             <br />
         </Td>
     </Tr>
