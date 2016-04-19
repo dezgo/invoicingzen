@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use App\InvoiceMerger;
 
 class InvoiceMergeTest extends TestCase
 {
@@ -20,12 +21,9 @@ class InvoiceMergeTest extends TestCase
         }
         $new_total_count = 10;
 
-        $invoice_merged = $invoice[0]->merge($invoice[1]);
+        $invoiceMerger = new InvoiceMerger($invoice[0], $invoice[1]);
+        $invoice_merged = $invoiceMerger->merge();
         $this->assertTrue($invoice_merged->invoice_items->count() == $new_total_count);
-
-        $invoice_merged1 = $invoice[1]->merge($invoice[0]);
-        $this->assertTrue($invoice_merged1->invoice_items->count() == $new_total_count);
-
     }
 
     public function testMergeButtonExists()

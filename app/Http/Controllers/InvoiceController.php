@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Gate;
 use App\Services\SequentialInvoiceNumbers;
 use App\Exceptions\CustomException;
+use App\InvoiceMerger;
 
 class InvoiceController extends Controller
 {
@@ -184,7 +185,8 @@ class InvoiceController extends Controller
 		$invoice1 = Invoice::find($request->merge_invoice_1);
 		$invoice2 = Invoice::find($request->merge_invoice_2);
 
-		$new_invoice = $invoice1->merge($invoice2);
+		$invoice_merger = new InvoiceMerger($invoice1, $invoice2);
+		$invoice_merger->merge();
 		return redirect('/invoice');
 	}
 
