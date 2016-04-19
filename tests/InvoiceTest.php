@@ -134,8 +134,14 @@ class InvoiceTest extends TestCase
     {
         $this->actingAs($this->userAdmin)
             ->visit('/invoice/'.$this->invoice->id.'/delete')
-            ->press('Delete')
+            ->press('btnConfirmDelete')
             ->seePageIs('/invoice');
+
+        $invoice = App\Invoice::where('id', '=', $this->invoice->id)->first();
+        $this->assertTrue($invoice == null);
+
+        $invoice_item = App\InvoiceItem::where('invoice_id', '=', $this->invoice->id)->first();
+        $this->assertTrue($invoice_item == null);
     }
 
     public function testPrintAsUser()

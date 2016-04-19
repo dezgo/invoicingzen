@@ -159,6 +159,11 @@ class Invoice extends Model
    		}
 	}
 
+	public function getCustomerAttribute()
+	{
+		return $this->user->description;
+	}
+
 	public function merge(Invoice $invoice)
 	{
 		$new_invoice = new Invoice;

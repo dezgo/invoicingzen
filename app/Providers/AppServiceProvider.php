@@ -53,6 +53,9 @@ class AppServiceProvider extends ServiceProvider
                 $invoice->company_id = Auth::user()->company_id;
             }
         });
+        Invoice::deleting(function ($invoice) {
+            $invoice->invoice_items()->delete();
+        });
         Invoice::created(function ($invoice) {
             $invoice->uuid = Invoice::GenerateUUID($invoice->id);
             $invoice->save();
