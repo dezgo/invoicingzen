@@ -164,39 +164,6 @@ class Invoice extends Model
 		return $this->user->description;
 	}
 
-	public function merge(Invoice $invoice)
-	{
-		$new_invoice = new Invoice;
-		$new_invoice->company_id = $invoice->user->company_id;
-		$new_invoice->customer_id = $this->customer_id;
-		if ($this->invoice_date->gt($invoice->invoice_date)) {
-			$new_invoice->invoice_date = $this->invoice_date;
-			$new_invoice->due_date = $this->due_date;
-		}
-		else {
-			$new_invoice->invoice_date = $invoice->invoice_date;
-			$new_invoice->due_date = $invoice->due_date;
-		}
-		$new_invoice->paid = $this->paid + $invoice->paid;
-
-		$new_invoice->save();
-
-		// move invoice items from previous invoices to new merged invoice
-		foreach($this->invoice_items as $invoice_item) {
-			$invoice_item->invoice_id = $new_invoice->id;
-			$invoice_item->save();
-		}
-		foreach($invoice->invoice_items as $invoice_item) {
-			$invoice_item->invoice_id = $new_invoice->id;
-			$invoice_item->save();
-		}
-
-		$invoice->delete();
-		$this->delete();
-
-		return $new_invoice;
-	}
-
 	public static function allInCompany($company_id)
 	{
 		return Invoice::where('company_id', '=', $company_id)->get();

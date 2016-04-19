@@ -5,13 +5,40 @@ body {
     background-color: #EBEBEB;
 }
 </style>
+<style type="text/css" media="print">
+    @page
+    {
+        size: auto;   /* auto is the current printer page size */
+        margin: 0mm;  /* this affects the margin in the printer settings */
+    }
+
+    body
+    {
+        background-color:#FFFFFF;
+        /*border: solid 1px black ;*/
+        margin: 0px;  /* the margin on the content before printing */
+   }
+</style>
+<table class="hidden-print" cellpadding="0" cellspacing="0" width="720" border="0" align="center">
+    <Tr>
+        <Td>
+            <br />
+            <a class="btn btn-primary" href="{{ url('/invoice') }}">Show Invoices</a>
+            @can ('edit-invoice', $invoice)
+                &nbsp;<a class="btn btn-primary" href="{{ url('/invoice/'.$invoice->id) }}">Edit Invoice</a>
+            @endcan
+            <a class="btn btn-primary" href="{{ url('/invoice/'.$invoice->id.'/pdf') }}">Downoad PDF</a>
+            <br />
+        </Td>
+    </Tr>
+</table>
 <br />
-<table cellpadding="30" cellspacing="0" width="780" border="1" align="center" style="background-color: white">
+<table cellpadding="0" cellspacing="0" width="720" border="1" align="center" style="background-color: white">
     <tr>
         <td>
 
-<table class="table-condensed" width="720" height="1018" align="center">
-    <tr>
+<table class="table-condensed" width="700" height="1018" align="center">
+    <tr style="display:none; border-collapse">
         <td width="60">&nbsp;</td>
         <td width="60">&nbsp;</td>
         <td width="60">&nbsp;</td>
@@ -178,16 +205,4 @@ body {
 </td>
 </tr>
 </table>
-
-<table class="hidden-print" cellpadding="0" cellspacing="0" width="780" border="0" align="center">
-    <Tr>
-        <Td>
-            <br />
-            <a class="btn btn-primary" href="{{ url('/invoice') }}">Show Invoices</a>
-            @can ('edit-invoice', $invoice)
-                &nbsp;<a class="btn btn-primary" href="{{ url('/invoice/'.$invoice->id) }}">Edit Invoice</a>
-            @endcan
-            <br /><Br />
-        </Td>
-    </Tr>
 @stop
