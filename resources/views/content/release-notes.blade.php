@@ -4,6 +4,18 @@
 <div class="panel">
     <h1>Invoicing Zen Release Notes</h1>
 
+    <h3>v1.2.3</h3>
+    <h4>19 Apr 2016</h4>
+    <ul>
+        <li>
+            Bug fixes - email signature, email settings check now company-specific
+            (342b67b)
+        </li>
+        <li>
+            Add invoice delete button and cascade delete invoice items (9c0fb00)
+        </li>
+    </ul>
+
     <h3>v1.2.2</h3>
     <h4>18 Apr 2016</h4>
     <ul>

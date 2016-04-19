@@ -87,6 +87,7 @@ class AnlutroSettings implements SettingsContract
 
     public function checkEmailSettings()
     {
+        AnlutroSetting::setExtraColumns(['company_id' => $this->user->company_id]);
         $rtn =
             AnlutroSetting::get('email_host') != '' and
             AnlutroSetting::get('email_port') != '' and

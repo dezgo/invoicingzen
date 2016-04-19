@@ -23,6 +23,9 @@
     <a name='btnMerge' class="btn btn-info" href="{{ url('/invoice/'.$invoice->id.'/merge') }}">
         Merge
     </a>
+    <a name='btnDelete' class="btn btn-danger" href="{{ url('/invoice/'.$invoice->id.'/delete') }}">
+        Delete
+    </a>
     @endif
 
 @stop

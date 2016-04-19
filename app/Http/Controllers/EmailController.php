@@ -54,6 +54,7 @@ class EmailController extends Controller
     // the default body text for invoice emails
     private function body($invoice)
     {
+		$settings = \App::make('App\Contracts\Settings');
         return
 			'Hi '.$invoice->user->first_name.',<br />'.
 			'<br />'.
@@ -66,7 +67,7 @@ class EmailController extends Controller
 			'<br />'.
 			'Thanks,<br />'.
 			Auth::user()->name.'<br />'.
-			\Setting::get('email_signature');
+			$settings->get('email_signature');
     }
 
 	public function send(Request $request)
