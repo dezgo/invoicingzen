@@ -75,7 +75,6 @@ class InvoiceTest extends TestCase
             ->see('btnAddInvoiceItem')
             ->seeInDatabase('invoices', [
                 'invoice_number' => $invoice_number,
-                'company_id' => $this->userAdmin->company_id,
             ]);
     }
 

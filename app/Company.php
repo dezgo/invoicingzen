@@ -28,4 +28,9 @@ class Company extends Model
             throw new \RuntimeException('No logged in user');
         }
     }
+
+    public function invoices()
+    {
+        return $this->hasManyThrough('App\Invoice', 'App\User', 'company_id', 'customer_id');
+    }
 }

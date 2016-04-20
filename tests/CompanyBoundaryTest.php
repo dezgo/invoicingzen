@@ -27,18 +27,20 @@ class CompanyBoundaryTest extends TestCase
         $this->user1 = factory(App\User::class)->create();
         $this->user1->roles()->attach(2);
         $this->user1->company_id = $this->company1->id;
+        $this->user1->save();
 
         $this->user2 = factory(App\User::class)->create();
         $this->user2->roles()->attach(2);
         $this->user2->company_id = $this->company2->id;
+        $this->user2->save();
 
-        $this->actingAs($this->user1);
+        $this->be($this->user1);
         $this->invoice1 = factory(App\Invoice::class)->create();
         factory(App\InvoiceItem::class)->create(['invoice_id' => $this->invoice1->id]);
         $this->invoice1->customer_id = $this->user1->id;
         $this->invoice1->save();
 
-        $this->actingAs($this->user2);
+        $this->be($this->user2);
         $this->invoice2 = factory(App\Invoice::class)->create();
         factory(App\InvoiceItem::class)->create(['invoice_id' => $this->invoice2->id]);
         $this->invoice2->customer_id = $this->user2->id;

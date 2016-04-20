@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Ramsey\Uuid\Uuid;
+use App\User;
 
 class Invoice extends Model
 {
@@ -166,9 +167,9 @@ class Invoice extends Model
 
 	public static function allInCompany($company_id)
 	{
-		return Invoice::where('company_id', '=', $company_id)->get();
+		return Company::find($company_id)->invoices;
 	}
-
+	
 	public static function GenerateUUID($id)
 	{
 		return Uuid::uuid5(Uuid::NAMESPACE_DNS, 'invoicingzen '.$id);
