@@ -6,9 +6,9 @@
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <meta name="description" content="Invoicing Zen is a simple Australian-based invoicing system for small to medium-sized businesses." />
     <title>Invoicing Zen - A simple Australian-based invoicing system</title>
-    <link href="{{ url('/css/all.css') }}" rel="stylesheet">
+    <link href="/css/all.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Merriweather:300' rel='stylesheet' type='text/css'>
-    <script src="{{ url('/js/all.js') }}"></script>
+    <script src="/js/all.js"></script>
     @yield('head')
 </head>
 

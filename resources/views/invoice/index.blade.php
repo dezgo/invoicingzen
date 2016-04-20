@@ -40,7 +40,7 @@
     <hr />
 
     @if(Gate::check('admin'))
-    <a href="{{ url('/invoice/create') }}" class="btn btn-success">Create</a>
+    <a href="/invoice/create" class="btn btn-success">Create</a>
     @endif
 @stop
 
