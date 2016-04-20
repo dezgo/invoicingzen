@@ -8,7 +8,7 @@
     <h4>20 Apr 2016</h4>
     <ul>
         <li>
-            Remove company id field from invoice tables ()
+            Remove company id field from invoice tables (dfdaa09)
         </li>
     </ul>
 
