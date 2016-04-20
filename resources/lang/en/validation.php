@@ -121,6 +121,9 @@ return [
                          'password using the forgot password link on the '.
                          'login screen.',
         ],
+        'invoice_number' => [
+            'invoice_number_unique' => 'That invoice number has already been used.',
+        ],
     ],
 
     /*

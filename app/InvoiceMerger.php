@@ -30,7 +30,6 @@ class InvoiceMerger
     private function cloneInvoice()
     {
         $this->invoiceDest = new Invoice;
-        $this->invoiceDest->company_id = $this->invoiceSrc1->user->company_id;
         $this->invoiceDest->customer_id = $this->invoiceSrc1->customer_id;
         $this->invoiceDest->invoice_number = SequentialInvoiceNumbers::getNextNumber($this->invoiceSrc1->user->company_id);
         $this->invoiceDest->invoice_date = $this->invoiceSrc1->invoice_date;
@@ -43,7 +42,6 @@ class InvoiceMerger
 
     private function mergeInvoiceDetails()
     {
-        $this->invoiceDest->company_id = $this->invoiceSrc1->user->company_id;
         $this->invoiceDest->customer_id = $this->invoiceSrc2->customer_id;
         if ($this->invoiceSrc2->invoice_date->gt($this->invoiceSrc1->invoice_date)) {
             $this->invoiceDest->invoice_date = $this->invoiceSrc2->invoice_date;

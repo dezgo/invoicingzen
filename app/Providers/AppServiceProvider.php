@@ -6,10 +6,11 @@ use App\Invoice;
 use App\InvoiceItem;
 use App\InvoiceItemCategory;
 use App\User;
-use App\Company;
 use App\Contracts\Settings;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Auth;
+use Validator;
+use App\InvoiceNumberChecker;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -48,11 +49,6 @@ class AppServiceProvider extends ServiceProvider
                 $user->company_id = Auth::user()->company_id;
             }
         });
-        Invoice::saving(function ($invoice) {
-            if (Auth::check()) {
-                $invoice->company_id = Auth::user()->company_id;
-            }
-        });
         Invoice::deleting(function ($invoice) {
             $invoice->invoice_items()->delete();
         });
@@ -60,14 +56,21 @@ class AppServiceProvider extends ServiceProvider
             $invoice->uuid = Invoice::GenerateUUID($invoice->id);
             $invoice->save();
         });
-        InvoiceItem::saving(function ($invoice_item) {
-            if (Auth::check()) {
-                $invoice_item->company_id = Auth::user()->company_id;
-            }
-        });
         InvoiceItemCategory::saving(function ($invoice_item_categories) {
             if (Auth::check()) {
                 $invoice_item_categories->company_id = Auth::user()->company_id;
+            }
+        });
+
+        Validator::extend('invoice_number_unique', function($field,$value,$parameters){
+            $new_invoice_number = $value;
+            $id = $parameters[0];
+
+            if ($id != null and Invoice::find($id)->invoice_number == $new_invoice_number) {
+                return true;
+            }
+            else {
+                return InvoiceNumberChecker::number_available($new_invoice_number, Auth::user()->company_id);
             }
         });
     }

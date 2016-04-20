@@ -4,6 +4,14 @@
 <div class="panel">
     <h1>Invoicing Zen Release Notes</h1>
 
+    <h3>v1.2.4</h3>
+    <h4>20 Apr 2016</h4>
+    <ul>
+        <li>
+            Remove company id field from invoice tables ()
+        </li>
+    </ul>
+
     <h3>v1.2.3</h3>
     <h4>19 Apr 2016</h4>
     <ul>

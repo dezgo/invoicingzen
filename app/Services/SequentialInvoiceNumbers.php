@@ -9,6 +9,9 @@ class SequentialInvoiceNumbers implements Contract
 {
     public static function getNextNumber($company_id)
     {
-        return Invoice::withTrashed()->where('company_id', '=', $company_id)->max('invoice_number')+1;
+        return \DB::table('invoices')
+				  ->join('users', 'users.id', '=', 'invoices.id')
+				  ->where('users.company_id', '=', $company_id)
+                  ->max('invoices.invoice_number')+1;
     }
 }
