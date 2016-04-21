@@ -55,7 +55,7 @@ body {
     <tr>
         <td colspan="6" align="left" valign="top">
             @if (Auth::user()->logo_filename != '' and env('APP_ENV') != 'testing')
-                <img class="left-block" src="{{ '/images/'.Auth::user()->logo_filename }}" />
+                <img class="left-block" src="{{ secure_url('/images/'.Auth::user()->logo_filename) }}" />
             @endif
         </td>
         <td colspan="6" align="right">
