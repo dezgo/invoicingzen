@@ -16,18 +16,6 @@
     <a id='btnViewInvoice' class="btn btn-info" href="{{ '/invoice/'.$invoice->id.'/print' }}">
         View
     </a>
-    @if(Gate::check('admin'))
-    <a class="btn btn-info" href="{{ 'invoice/'.$invoice->id.'/email' }}">
-        Email
-    </a>
-    <a name='btnMerge' class="btn btn-info" href="{{ '/invoice/'.$invoice->id.'/merge' }}">
-        Merge
-    </a>
-    <a name='btnDelete' class="btn btn-danger" href="{{ '/invoice/'.$invoice->id.'/delete' }}">
-        Delete
-    </a>
-    @endif
-
 @stop
 
 @section('footer')

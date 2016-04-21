@@ -19,17 +19,30 @@ body {
         margin: 0px;  /* the margin on the content before printing */
    }
 </style>
+<br class="hidden-print" />
 <table class="hidden-print" cellpadding="0" cellspacing="0" width="720" border="0" align="center">
     <Tr>
         <Td>
-            <br />
-            <a class="btn btn-primary" href="/invoice">Show All Invoices</a>
             @can ('edit-invoice', $invoice)
-                &nbsp;<a class="btn btn-primary" href="{{ '/invoice/'.$invoice->id }}">Edit Invoice</a>
+                &nbsp;<a class="btn btn-primary" href="{{ '/invoice/'.$invoice->id }}">Edit</a>
             @endcan
             <a class="btn btn-primary" href="{{ '/invoice/'.$invoice->id.'/pdf' }}">View As PDF</a>
-            <br />
+            @if(Gate::check('admin'))
+            <a class="btn btn-primary" href="{{ 'invoice/'.$invoice->id.'/email' }}">
+                Email
+            </a>
+            <a name='btnMerge' class="btn btn-primary" href="{{ '/invoice/'.$invoice->id.'/merge' }}">
+                Merge
+            </a>
+            @endif
         </Td>
+        <td align="right">
+            @if(Gate::check('admin'))
+            <a name='btnDelete' class="btn btn-danger" href="{{ '/invoice/'.$invoice->id.'/delete' }}">
+                Delete
+            </a>
+            @endif
+        </td>
     </Tr>
 </table>
 <br />
@@ -205,4 +218,5 @@ body {
 </td>
 </tr>
 </table>
+<br class="hidden-print" />
 @stop
