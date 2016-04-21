@@ -27,7 +27,7 @@
                 <a href="#"><span class="glyphicon glyphicon-copyright-mark" aria-hidden="true"></span><small>Invoicing Zen</small></a>
             </li>
             <li>
-                <a href="/release-notes">Release Notes</a>
+                <a href="/release-notes" name="linkReleaseNotes">Release Notes</a>
             </li>
             @if (env('APP_ENV') == 'local')
             <li>

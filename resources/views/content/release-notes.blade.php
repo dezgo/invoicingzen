@@ -4,11 +4,24 @@
 <div class="panel">
     <h1>Invoicing Zen Release Notes</h1>
 
+    <h3>v1.2.5</h3>
+    <h4>20 Apr 2016</h4>
+    <ul>
+        <li>
+            Bug fix: Issue with PDF generation needed fully-qualified path to
+            logo image (f59978e)
+        </li>
+    </ul>
+
     <h3>v1.2.4</h3>
     <h4>20 Apr 2016</h4>
     <ul>
         <li>
             Remove company id field from invoice tables (dfdaa09)
+        </li>
+        <li>
+            Change to SSL - remove references to non-secure URL helper function
+            (54beadf)
         </li>
     </ul>
 

@@ -126,7 +126,7 @@
                               </button>
                           </div>
                           <div class="col-md-5">
-                              <a href='/login'>Existing User? Login</a>
+                              <a href='/login' name='linkExistingUser'>Existing User? Login</a>
                           </div>
                       </div>
                   </form>

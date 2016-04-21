@@ -11,7 +11,6 @@ use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 use Illuminate\Http\Request;
 use Log;
 use App\Company;
-use Illuminate\Support\Facades\Session;
 
 class AuthController extends Controller
 {
@@ -98,7 +97,6 @@ class AuthController extends Controller
         $user->company_id = $company->id;
         $user->save();
         $user->roles()->attach(2);
-        Session::put('company_id', $company->id);
 
         return $user;
     }
