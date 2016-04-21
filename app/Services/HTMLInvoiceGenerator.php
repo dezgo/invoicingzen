@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Contracts\InvoiceGenerator;
+use App\Factories\SettingsFactory;
 
 class HTMLInvoiceGenerator implements InvoiceGenerator
 {
@@ -15,7 +16,7 @@ class HTMLInvoiceGenerator implements InvoiceGenerator
 
     public function output()
     {
-        $settings = \App::make('App\Contracts\Settings');
+        $settings = SettingsFactory::create();
         $invoice = $this->invoice;
 		return view('invoice.print', compact('invoice', 'settings'));
     }

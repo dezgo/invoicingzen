@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Ramsey\Uuid\Uuid;
 use App\User;
+use App\Factories\SettingsFactory;
 
 class Invoice extends Model
 {
@@ -103,7 +104,7 @@ class Invoice extends Model
 			return "Quote";
 		}
 		elseif (round($this->owing,2) > 0.00) {
-			$settings = \App::make('App\Contracts\Settings');
+			$settings = SettingsFactory::create();
 			if ($settings->get('gst_registered')) {
 				return "Tax Invoice";
 			}
@@ -169,7 +170,7 @@ class Invoice extends Model
 	{
 		return Company::find($company_id)->invoices;
 	}
-	
+
 	public static function GenerateUUID($id)
 	{
 		return Uuid::uuid5(Uuid::NAMESPACE_DNS, 'invoicingzen '.$id);

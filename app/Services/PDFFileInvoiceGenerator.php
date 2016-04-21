@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Contracts\InvoiceGenerator;
 use App\Invoice;
+use App\Factories\SettingsFactory;
 
 class PDFFileInvoiceGenerator implements InvoiceGenerator
 {
@@ -13,7 +14,7 @@ class PDFFileInvoiceGenerator implements InvoiceGenerator
     public function create(Invoice $invoice)
     {
         $this->invoice = $invoice;
-        $settings = \App::make('App\Contracts\Settings');
+        $settings = SettingsFactory::create();
 		$this->pdf = \PDF::loadView('invoice.print', compact('invoice', 'settings'));
     }
 

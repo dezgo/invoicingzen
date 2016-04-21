@@ -62,7 +62,6 @@ class InvoiceTest extends TestCase
     public function testCreate_save()
     {
         $this->be($this->userAdmin);
-        $settings = \App::make('App\Contracts\Settings');
         $invoice_number = \App\Services\SequentialInvoiceNumbers::getNextNumber($this->userAdmin->company_id);
 
         $customer = factory(App\User::class)->create();

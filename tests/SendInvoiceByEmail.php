@@ -8,6 +8,7 @@ use App\Role;
 use App\Email;
 use Illuminate\Support\Facades\Auth;
 use App\Invoice;
+use App\Factories\SettingsFactory;
 
 class SendInvoiceByEmail extends TestCase
 {
@@ -21,9 +22,7 @@ class SendInvoiceByEmail extends TestCase
         $this->userAdmin = Role::where('id', 2)->first()->users->first();
         $this->invoice = $this->userAdmin->invoices->first();
 
-        // now put in mail settings as userAdmin
-        $this->be($this->userAdmin);
-        $settings = \App::make('App\Contracts\Settings');
+        $settings = SettingsFactory::create($this->userAdmin->company->id);
         $settings->set('email_host', env('MAIL_HOST'));
         $settings->set('email_port', env('MAIL_PORT'));
         $settings->set('email_username', env('MAIL_USERNAME'));
@@ -33,8 +32,7 @@ class SendInvoiceByEmail extends TestCase
 
     public function testBlankEmailSettings()
     {
-        $this->be($this->userAdmin);
-        $settings = \App::make('App\Contracts\Settings');
+        $settings = SettingsFactory::create($this->userAdmin->company->id);
         $host = $settings->get('email_host');
         $settings->set('email_host', '');
         $this->actingAs($this->userAdmin)
@@ -63,8 +61,6 @@ class SendInvoiceByEmail extends TestCase
 
         $mailer = new InMemoryInbox;
         $this->app->instance('mailer', $mailer);
-
-        // $this->pdf = \PDF::loadView('invoice.print', compact('invoice', 'settings'));
 
         $pdf = Mockery::spy();
         \PDF::shouldReceive('loadView')->with('invoice.print', Mockery::any())->andReturn($pdf);

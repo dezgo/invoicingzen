@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\Services\SequentialInvoiceNumbers;
+use App\Factories\NextInvoiceNumberFactory;
 use App\Invoice;
 
 class InvoiceMerger
@@ -31,7 +31,7 @@ class InvoiceMerger
     {
         $this->invoiceDest = new Invoice;
         $this->invoiceDest->customer_id = $this->invoiceSrc1->customer_id;
-        $this->invoiceDest->invoice_number = SequentialInvoiceNumbers::getNextNumber($this->invoiceSrc1->user->company_id);
+        $this->invoiceDest->invoice_number = NextInvoiceNumberFactory::get($this->invoiceSrc1->user->company_id);
         $this->invoiceDest->invoice_date = $this->invoiceSrc1->invoice_date;
         $this->invoiceDest->due_date = $this->invoiceSrc1->due_date;
         if ($this->invoiceSrc1->paid != null) {

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Contracts\InvoiceGenerator;
 use App\Invoice;
+use App\Factories\SettingsFactory;
 
 class PDFStreamInvoiceGenerator implements InvoiceGenerator
 {
@@ -11,7 +12,7 @@ class PDFStreamInvoiceGenerator implements InvoiceGenerator
 
     public function create(Invoice $invoice)
     {
-        $settings = \App::make('App\Contracts\Settings');
+        $settings = SettingsFactory::create();
 		$this->pdf = \PDF::loadView('invoice.print', compact('invoice', 'settings'));
         $this->pdf->setOption('print-media-type', true);
     }

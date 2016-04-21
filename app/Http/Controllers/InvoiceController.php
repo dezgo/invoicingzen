@@ -12,20 +12,14 @@ use App\User;
 use App\Http\Requests\InvoiceRequest;
 use Illuminate\Support\Facades\Auth;
 use Gate;
-use App\Services\SequentialInvoiceNumbers;
+use App\Factories\NextInvoiceNumberFactory;
 use App\Exceptions\CustomException;
 use App\InvoiceMerger;
 use App\Services\PDFStreamInvoiceGenerator;
+use App\Factories\SettingsFactory;
 
 class InvoiceController extends Controller
 {
-
-
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
 	public function index()
 	{
 		if (Auth::user()->isAdmin()) {
@@ -65,8 +59,7 @@ class InvoiceController extends Controller
 			$invoice->customer_id = $customer->id;
 		}
 
-	    $settings = \App::make('App\Contracts\Settings');
-        $invoice->invoice_number = SequentialInvoiceNumbers::getNextNumber(Auth::user()->company_id);
+        $invoice->invoice_number = NextInvoiceNumberFactory::get(Auth::user()->company_id);
 
 		$invoice_items = InvoiceItem::invoiceItemList();
 		\Carbon\Carbon::setToStringFormat('d-m-Y');
@@ -168,7 +161,7 @@ class InvoiceController extends Controller
 			abort(403);
 		}
 
-		$settings = \App::make('App\Contracts\Settings');
+		$settings = SettingsFactory::create();
 		return view('invoice.print', compact('invoice', 'settings'));
 	}
 
@@ -199,7 +192,7 @@ class InvoiceController extends Controller
 		}
 
 		Auth::login($invoice->user);
-		$settings = \App::make('App\Contracts\Settings');
+		$settings = SettingsFactory::create();
 		return view('invoice.print', compact('invoice', 'settings'));
 	}
 
