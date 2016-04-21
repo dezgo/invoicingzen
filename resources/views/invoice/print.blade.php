@@ -205,4 +205,5 @@ body {
 </td>
 </tr>
 </table>
+<br class="hidden-print" />
 @stop
