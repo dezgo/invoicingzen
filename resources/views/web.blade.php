@@ -1,11 +1,5 @@
 @extends('master')
 
-@section('topbar')
-@if(Gate::check('authenticated'))
-    @include('topbar')
-@endif
-@stop
-
 @section('bodytag')
 @if(Gate::check('authenticated'))
 <body id="app-layout">

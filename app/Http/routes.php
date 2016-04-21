@@ -17,9 +17,7 @@ Route::group(['middleware' => 'web'], function () {
     // Route::match(['put', 'patch'], 'profile/update', 'Auth\AuthController@update');
     // Route::post('profile/edit', 'Auth\AuthController@update');
     // Route::get('profile/edit', 'Auth\AuthController@edit');
-    Route::get('/', function () {
-       return view('content.index');
-    });
+    Route::get('/', 'HomeController@index')->name('home.index');
 
     Route::get('/release-notes', function () {
        return view('content.release-notes');

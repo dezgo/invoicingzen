@@ -25,7 +25,7 @@ class MainSiteNavigationTest extends TestCase
 			->type('Password01', 'password')
 			->type('Password01', 'password_confirmation')
 			->press('btnSignUp')
-			->seePageIs('https://localhost');
+			->seePageIs('https://localhost/invoice');
 	}
 
 	public function testHome_ExistingUser()
@@ -49,7 +49,7 @@ class MainSiteNavigationTest extends TestCase
 			->type($user->email, 'email')
 			->type('password', 'password')
 			->press('btnLogin')
-			->seePageIs('https://localhost');
+			->seePageIs('https://localhost/invoice');
 	}
 
 	public function testLogin_NewUser()

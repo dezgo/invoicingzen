@@ -31,7 +31,7 @@ class InvoiceMergeTest extends TestCase
         $userAdmin = App\User::find(2);
         $invoice = $userAdmin->invoices->first();
         $this->actingAs($userAdmin)
-            ->visit('/invoice/'.$invoice->id)
+            ->visit('/invoice/'.$invoice->id.'/print')
             ->see('btnMerge');
     }
 
@@ -40,7 +40,7 @@ class InvoiceMergeTest extends TestCase
         $user = App\User::find(3);
         $invoice = $user->invoices->first();
         $this->actingAs($user)
-            ->visit('/invoice/'.$invoice->id)
+            ->visit('/invoice/'.$invoice->id.'/print')
             ->dontSee('btnMerge');
     }
 
@@ -49,7 +49,7 @@ class InvoiceMergeTest extends TestCase
         $userAdmin = App\User::find(2);
         $invoice = $userAdmin->invoices->first();
         $this->actingAs($userAdmin)
-            ->visit('/invoice/'.$invoice->id)
+            ->visit('/invoice/'.$invoice->id.'/print')
             ->click('btnMerge')
             ->see('Merge Invoice');
     }
