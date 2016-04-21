@@ -55,12 +55,12 @@
                                 </button>
                             </div>
                             <div class="col-md-5">
-                                <a href='/'>New User? Sign Up</a>
+                                <a href='/' name='linkSignUp'>New User? Sign Up</a>
                             </div>
 
                             <div class="form-group">
                                 <div class="col-md-3 col-md-offset-4">
-                                    <a class="btn btn-link" href="/password/reset">Don't know your password?</a>
+                                    <a class="btn btn-link" href="/password/reset" name="linkForgotPassword">Don't know your password?</a>
                                 </div>
                             </div>
                         </div>

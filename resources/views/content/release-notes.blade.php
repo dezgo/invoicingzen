@@ -10,6 +10,10 @@
         <li>
             Remove company id field from invoice tables (dfdaa09)
         </li>
+        <li>
+            Change to SSL - remove references to non-secure URL helper function
+            (54beadf)
+        </li>
     </ul>
 
     <h3>v1.2.3</h3>
