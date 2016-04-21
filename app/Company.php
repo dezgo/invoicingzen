@@ -33,4 +33,10 @@ class Company extends Model
     {
         return $this->hasManyThrough('App\Invoice', 'App\User', 'company_id', 'customer_id');
     }
+
+    public function getLogoFilenameAttribute()
+    {
+        return 'logo'.$this->id.'.img';
+    }
+
 }

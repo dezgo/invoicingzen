@@ -6,7 +6,6 @@ use App\Invoice;
 use App\InvoiceItem;
 use App\InvoiceItemCategory;
 use App\User;
-use App\Contracts\Settings;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Auth;
 use Validator;
@@ -82,7 +81,5 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('App\Contracts\Settings', 'App\Services\AnlutroSettings');
-        $this->app->bind('App\Contract\InvoiceNumberGenerator', 'App\Services\SequentialInvoiceNumbers');
     }
 }

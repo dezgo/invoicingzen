@@ -3,35 +3,40 @@
 namespace App\Services;
 
 use Setting as AnlutroSetting;
-use App\User;
+use App\Company;
 use Illuminate\Http\Request;
 use App\Contracts\Settings as SettingsContract;
 use Illuminate\Support\Facades\Auth;
 
 class AnlutroSettings implements SettingsContract
 {
-    private $user;
+    private $company_id;
 
-    public function __construct()
+    public function __construct($company_id = 0)
     {
-        if (Auth::check()) {
-            $this->user = Auth::user();
+        if ($company_id === 0) {
+            if (Auth::check()) {
+                $this->company_id = Auth::user()->company_id;
+            }
+            else {
+                throw new \RuntimeException('No logged in user!');
+            }
         }
         else {
-            throw new \RuntimeException('No logged in user!');
+            $this->company_id = $company_id;
         }
     }
 
     public function set($key, $value)
     {
-        AnlutroSetting::setExtraColumns(['company_id' => $this->user->company_id]);
+        AnlutroSetting::setExtraColumns(['company_id' => $this->company_id]);
         AnlutroSetting::set($key, $value);
         AnlutroSetting::save();
     }
 
     public function get($key, $default = null)
     {
-        AnlutroSetting::setExtraColumns(['company_id' => $this->user->company_id]);
+        AnlutroSetting::setExtraColumns(['company_id' => $this->company_id]);
         if ($default == null) {
             return AnlutroSetting::get($key);
         }
@@ -57,7 +62,8 @@ class AnlutroSettings implements SettingsContract
         if ($request->hasFile('logo')) {
             AnlutroSetting::set('logo', $request->file('logo'));
             $destinationPath = public_path().'/images';
-            $request->file('logo')->move($destinationPath, $this->user->logo_filename);
+            $company = Company::find($this->company_id);
+            $request->file('logo')->move($destinationPath, $company->logo_filename);
         }
         if ($request->email_signature == '') {
             $email_signature = $this->defaultEmailFooterText();
@@ -71,7 +77,7 @@ class AnlutroSettings implements SettingsContract
         AnlutroSetting::set('email_username', $request->email_username);
         AnlutroSetting::set('email_password', $request->email_password);
         AnlutroSetting::set('email_encryption', $request->email_encryption);
-        AnlutroSetting::setExtraColumns(['company_id' => $this->user->company_id]);
+        AnlutroSetting::setExtraColumns(['company_id' => $this->company_id]);
         AnlutroSetting::save();
     }
 
@@ -87,7 +93,7 @@ class AnlutroSettings implements SettingsContract
 
     public function checkEmailSettings()
     {
-        AnlutroSetting::setExtraColumns(['company_id' => $this->user->company_id]);
+        AnlutroSetting::setExtraColumns(['company_id' => $this->company_id]);
         $rtn =
             AnlutroSetting::get('email_host') != '' and
             AnlutroSetting::get('email_port') != '' and

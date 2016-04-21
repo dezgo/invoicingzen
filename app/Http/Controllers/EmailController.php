@@ -13,6 +13,7 @@ use App\Invoice;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\Config\Repository as Config;
 use Gate;
+use App\Factories\SettingsFactory;
 
 class EmailController extends Controller
 {
@@ -22,7 +23,7 @@ class EmailController extends Controller
 			abort(403);
 		}
 
-		$settings = \App::make('App\Contracts\Settings');
+		$settings = SettingsFactory::create();
 		if ($settings->checkEmailSettings()) {
 			$email = $this->setupEmailObjectPreEmailView($invoice);
 			return view('invoice.email', compact('email'));
@@ -54,7 +55,7 @@ class EmailController extends Controller
     // the default body text for invoice emails
     private function body($invoice)
     {
-		$settings = \App::make('App\Contracts\Settings');
+		$settings = SettingsFactory::create();
         return
 			'Hi '.$invoice->user->first_name.',<br />'.
 			'<br />'.
@@ -108,7 +109,7 @@ class EmailController extends Controller
 
 	private function setMailParameters()
 	{
-		$settings = \App::make('App\Contracts\Settings');
+		$settings = SettingsFactory::create();
 		app()->config['mail.host'] = $settings->get('email_host');
 		app()->config['mail.port'] = $settings->get('email_port');
 		app()->config['mail.username'] = $settings->get('email_username');

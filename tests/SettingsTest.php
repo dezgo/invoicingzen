@@ -169,7 +169,7 @@ class SettingsTest extends TestCase
              ->check('gst_registered')
              ->press('btnSubmit');
 
-        $settings = \App::make('App\Contracts\Settings');
+        $settings = \App\Factories\SettingsFactory::create();
         $this->assertTrue($settings->get('gst_registered') == true);
     }
 }

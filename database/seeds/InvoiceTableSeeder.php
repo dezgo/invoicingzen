@@ -4,7 +4,6 @@ use Illuminate\Database\Seeder;
 use App\User;
 use App\Invoice;
 use App\InvoiceItem;
-use App\Contracts\Settings;
 
 class InvoiceTableSeeder extends Seeder
 {

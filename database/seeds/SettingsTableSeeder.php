@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Setting;
+use App\Factories\SettingsFactory;
 
 class SettingsTableSeeder extends Seeder
 {
@@ -12,19 +12,18 @@ class SettingsTableSeeder extends Seeder
      */
     public function run()
     {
-        \Setting::set('next_invoice_number', 1);
-        \Setting::set('markup', '20');
-        \Setting::set('abn', '12 234 234 234');
-        \Setting::set('payment_terms', '7 Days');
-        \Setting::set('bsb', '123123');
-        \Setting::set('bank_account_number', '12121212');
-        \Setting::set('mailing_address_line_1', '7 Rose Avenue');
-        \Setting::set('mailing_address_line_2', 'Manuka ACT 2603');
-        \Setting::set('mailing_address_line_3', '');
-        \Setting::set('enquiries_phone', '02 6123 4567');
-        \Setting::set('enquiries_email', 'mail@widgetscorp.com');
-        \Setting::set('enquiries_web', 'http://www.widgetscorp.com');
-        \Setting::setExtraColumns(['company_id' => 1]);
-        \Setting::save();
+        $setting = SettingsFactory::create(1);
+        $setting->set('next_invoice_number', 1);
+        $setting->set('markup', '20');
+        $setting->set('abn', '12 234 234 234');
+        $setting->set('payment_terms', '7 Days');
+        $setting->set('bsb', '123123');
+        $setting->set('bank_account_number', '12121212');
+        $setting->set('mailing_address_line_1', '7 Rose Avenue');
+        $setting->set('mailing_address_line_2', 'Manuka ACT 2603');
+        $setting->set('mailing_address_line_3', '');
+        $setting->set('enquiries_phone', '02 6123 4567');
+        $setting->set('enquiries_email', 'mail@widgetscorp.com');
+        $setting->set('enquiries_web', 'http://www.widgetscorp.com');
     }
 }

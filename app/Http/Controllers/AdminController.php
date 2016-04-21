@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Validator;
+use App\Factories\SettingsFactory;
 
 class AdminController extends Controller
 {
@@ -17,7 +18,7 @@ class AdminController extends Controller
 	 */
 	public function show()
 	{
-		$settings = \App::make('App\Contracts\Settings');
+        $settings = SettingsFactory::create();
 		return view('admin.settings', compact('settings'));
 	}
 
@@ -52,7 +53,7 @@ class AdminController extends Controller
 					->withInput();
 		}
 
-		$settings = \App::make('App\Contracts\Settings');
+        $settings = SettingsFactory::create();
 		$settings->setAllUsing($request);
 		$request->session()->flash('status', trans('settings.update_success'));
         return redirect(url('/settings'));

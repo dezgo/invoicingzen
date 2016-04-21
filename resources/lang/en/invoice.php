@@ -22,4 +22,7 @@ return [
     'balance-due' => 'Balance owing',
     'no-gst' => 'No GST has been charged',
 
+    // invoice template generator
+    'token-mismatch' => 'Mismatching number of start and end tokens',
+
 ];

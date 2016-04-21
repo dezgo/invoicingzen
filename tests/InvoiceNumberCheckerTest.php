@@ -5,7 +5,7 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use App\InvoiceNumberChecker;
 use App\Invoice;
-use App\Services\SequentialInvoiceNumbers;
+use App\Factories\NextInvoiceNumberFactory;
 use App\Company;
 
 class InvoiceNumberCheckerTest extends TestCase
@@ -13,8 +13,7 @@ class InvoiceNumberCheckerTest extends TestCase
     public function testCheckNumberAvailable()
     {
         $company_id = Company::first()->id;
-        $next_number = SequentialInvoiceNumbers::getNextNumber($company_id);
-
+        $next_number = NextInvoiceNumberFactory::get($company_id);
         $this->assertTrue(InvoiceNumberChecker::number_available($next_number, $company_id));
     }
 

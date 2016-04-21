@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use App\Factories\SettingsFactory;
 
 class InvoiceItemTest extends TestCase
 {
@@ -98,7 +99,8 @@ class InvoiceItemTest extends TestCase
 
     public function testMarkupNotSet()
     {
-        Setting::set('markup', '');
+        $settings = SettingsFactory::create($this->user->company_id);
+        $settings->set('markup', '');
         $invoice_item = $this->invoice->invoice_items->first();
         $this->actingAs($this->user)
             ->visit('/invoice_item/'.$invoice_item->id.'/edit')
@@ -107,17 +109,13 @@ class InvoiceItemTest extends TestCase
 
     public function testMarkup()
     {
-        Setting::set('markup', '15');
+        $settings = SettingsFactory::create($this->user->company_id);
+        $settings->set('markup', '15');
         $invoice_item = $this->invoice->invoice_items->first();
         $this->actingAs($this->user)
             ->visit('/invoice_item/'.$invoice_item->id.'/edit')
             ->click('btnMarkup')
             ->click('btnMarkDown');
-
-// would be nice to test for new value, but not possible as it's in javascript
-// and 'see' is looking at HTML sent back by browser only. at least we can
-// test clicking the buttons to ensure nothing bad happens!
-            // ->see(round($invoice_item->price * (1+\Setting::get('markup')/100), 2));
     }
 
     public function testURL()
