@@ -15,8 +15,16 @@
 @yield('bodytag')
     @if(Gate::check('authenticated'))
         @include('topbar')
+        <div class="container">
+    @else
+        <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class='freetext'>Invoicing Zen</h1>
+                <br />
+            </div>
+        </div>
     @endif
-    <div class="container">
         @yield('content')
         @yield('footer')
         @yield('footer-web')
