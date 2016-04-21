@@ -3,12 +3,6 @@
 @section('content')
 
   <div class="row">
-      <div class="col-md-12">
-          <h1 class='freetext'>Invoicing Zen</h1>
-          <br />
-      </div>
-  </div>
-  <div class="row">
       <div class="col-md-5">
           <div class="panel panel-default">
               <div class="panel-heading">Need a simple invoicing system?</div>
