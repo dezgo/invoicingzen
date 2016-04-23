@@ -1,30 +1,27 @@
 <?php
 
-namespace App;
+namespace App\Services\CustomInvoice;
 
-use App\Factories\SettingsFactory;
+use App\Services\CustomInvoice\TemplateField\TemplateFieldFactory;
+use App\Services\CustomInvoice\FieldWriter\FieldWriterFactory;
 
 class InvoiceGenerator
 {
     const TOKEN_START = "$*";
     const TOKEN_END = "*$";
+    const TOKEN_DELIMITER = ".";
 
-    private $invoice;
     private $template;
-    private $settings;
 
-    public function __construct(Invoice $invoice, $template)
+    public function __construct($template)
     {
         $this->template = $template;
         if (!$this->checkTemplate()) {
-            throw new \RuntimeException(trans('invoice.token-mismatch'));
+            throw new \Exception(trans('invoice.token-mismatch'));
         }
-
-        $this->invoice = $invoice;
-        $this->settings = SettingsFactory::create();
     }
 
-    public function output()
+    public function output($invoice)
     {
         $position = 0;
         $output = $this->template;
@@ -33,7 +30,7 @@ class InvoiceGenerator
             $end_position = $this->findEndToken($start_position) + strlen(self::TOKEN_END);
             $length = $end_position - $start_position;
             $foundWithTokens = substr($this->template, $start_position, $length);
-            $output = $this->replaceToken($foundWithTokens, $output);
+            $output = $this->replaceToken($foundWithTokens, $output, $invoice);
             $start_position = $this->findStartToken($end_position);
         }
         return $output;
@@ -63,41 +60,21 @@ class InvoiceGenerator
         return strpos($this->template, $token, $offset);
     }
 
-    private function replaceToken($foundWithTokens, $output)
+    private function replaceToken($foundWithTokens, $output, $invoice)
     {
         $foundWithoutTokens = $this->trimTokens($foundWithTokens);
-        $fields = $this->invoice->toArray();
-        if (array_key_exists($foundWithoutTokens, $fields)) {
-            $output = str_ireplace($foundWithTokens, $fields[$foundWithoutTokens], $output);
-        }
-        else {
-            $output = str_ireplace($foundWithTokens, $this->customReplacement($foundWithoutTokens), $output);
-        }
-        return $output;
+        $templateField = TemplateFieldFactory::getTemplateField($foundWithoutTokens[0], $invoice);
+        $fieldWriter = FieldWriterFactory::getFieldWriter($foundWithoutTokens[0], $foundWithoutTokens[1]);
+        $replacementContent = $fieldWriter->write($templateField);
+        return str_ireplace($foundWithTokens, $replacementContent, $output);
     }
 
+    // removve tokens from found field and separate by delimiter
+    // returns array
     private function trimTokens($foundWithTokens)
     {
         $start = strlen(self::TOKEN_START);
         $length = strlen($foundWithTokens) - strlen(self::TOKEN_START) - strlen(self::TOKEN_END);
-        $return = substr($foundWithTokens, $start, $length);
-        return $return;
+        return explode(self::TOKEN_DELIMITER, substr($foundWithTokens, $start, $length));
     }
-
-    private function customReplacement($field)
-    {
-        switch ($field) {
-            case 'logo':
-                if (Auth::user()->logo_filename != '') {
-                    return "<img class='left-block' src='".secure_url('/images/'.Auth::user()->logo_filename)."' />";
-                }
-                else {
-                    return "";
-                }
-
-            case 'business_name':
-                return Auth::user()->business_name;
-        }
-    }
-
 }

@@ -25,7 +25,7 @@ class MainSiteNavigationTest extends TestCase
 			->type('Password01', 'password')
 			->type('Password01', 'password_confirmation')
 			->press('btnSignUp')
-			->seePageIs('https://localhost/invoice');
+			->seePageIs('https://localhost');
 	}
 
 	public function testHome_ExistingUser()
