@@ -19,7 +19,8 @@ class InvoiceTemplateField implements TemplateField
             return $this->invoice->toArray()[$fieldName];
         }
         else {
-            throw new \RuntimeException('Invoice field '.$fieldName.' doesn\'t exist.');
+            $reflectionMethod = new \ReflectionMethod('\\App\\Invoice', 'get'.$fieldName.'Attribute');
+            return $reflectionMethod->invoke($this->invoice);
         }
     }
 }

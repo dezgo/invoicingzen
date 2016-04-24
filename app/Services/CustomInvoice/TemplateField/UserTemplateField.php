@@ -10,7 +10,7 @@ class UserTemplateField implements TemplateField
 
     public function __construct(Invoice $invoice)
     {
-        $this->user = \Auth::user();
+        $this->user = $invoice->user;
     }
 
     public function get($fieldName)
@@ -19,7 +19,8 @@ class UserTemplateField implements TemplateField
             return $this->user->toArray()[$fieldName];
         }
         else {
-            throw new \RuntimeException('User field '.$fieldName.' doesn\'t exist.');
+            $reflectionMethod = new \ReflectionMethod('\\App\\User', 'get'.$fieldName.'Attribute');
+            return $reflectionMethod->invoke($this->user);
         }
     }
 }

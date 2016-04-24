@@ -4,6 +4,7 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use App\Services\CustomInvoice\InvoiceGenerator;
+use App\Factories\SettingsFactory;
 
 class InvoiceGeneratorTest extends TestCase
 {
@@ -14,7 +15,6 @@ class InvoiceGeneratorTest extends TestCase
     public function create($template)
     {
         $this->invoice = factory(App\Invoice::class)->create();
-        $this->be($this->invoice->user);
         $invoice_generator = new InvoiceGenerator($template);
         return $invoice_generator;
     }
@@ -83,19 +83,83 @@ class InvoiceGeneratorTest extends TestCase
     {
         $invoice_generator = $this->create("$*Company.Logo*$");
         $this->assertTrue($invoice_generator->output($this->invoice) ==
-            "<img class='left-block' src='https://localhost/images/logo.img' />"
+            "<img class='left-block' src='https://localhost/images/".$this->invoice->user->company->logofilename."' />"
         );
     }
 
-    public function testOutputBusinessName()
+    public function testOutputCompanyName()
     {
-        $invoice_generator = $this->create("$*User.BusinessName*$");
+        $invoice_generator = $this->create("$*Company.Name*$");
 
-        $this->invoice->user->business_name = "Acme Inc";
+        $this->invoice->user->company->company_name = "Acme Inc";
         $this->invoice->user->save();
 
         $this->assertTrue($invoice_generator->output($this->invoice) ==
             "Acme Inc"
+        );
+    }
+
+    public function testOutputABN()
+    {
+        $invoice_generator = $this->create("$*Settings.ABN*$");
+        $this->be($this->invoice->user);
+
+        $settings = SettingsFactory::create();
+        $settings->set('abn', '12121212');
+
+        $this->assertTrue($invoice_generator->output($this->invoice) ==
+            "12121212"
+        );
+    }
+
+    public function testOutputFullname()
+    {
+        $invoice_generator = $this->create("$*User.Fullname*$");
+
+        $this->invoice->user->first_name = "Joe";
+        $this->invoice->user->last_name = "Bloggs";
+        $this->invoice->user->save();
+
+        $this->assertTrue($invoice_generator->output($this->invoice) ==
+            "Joe Bloggs"
+        );
+    }
+
+    public function testOutputAddressMulti()
+    {
+        $invoice_generator = $this->create("$*User.AddressMulti*$");
+
+        $this->invoice->user->business_name = "Kaos Inc";
+        $this->invoice->user->address1 = "AON Building";
+        $this->invoice->user->address2 = "1 George St";
+        $this->invoice->user->suburb = "Canberra";
+        $this->invoice->user->state = "ACT";
+        $this->invoice->user->postcode = "2600";
+        $this->invoice->user->save();
+
+        $this->assertTrue($invoice_generator->output($this->invoice) ==
+            "Kaos Inc<br />AON Building<br />1 George St<br />Canberra ACT 2600"
+        );
+    }
+
+    public function testOutputInvoiceDate()
+    {
+        $invoice_generator = $this->create("$*Invoice.InvoiceDate*$");
+        $this->assertTrue($invoice_generator->output($this->invoice) ==
+            $this->invoice->invoice_date
+        );
+    }
+
+    public function testOutputPaymentTerms()
+    {
+        $invoice_generator = $this->create("$*Settings.PaymentTerms*$");
+        $this->be($this->invoice->user);
+
+        $settings = SettingsFactory::create();
+        $settings->set('payment_terms', '8 Days');
+
+        $this->assertTrue($invoice_generator->output($this->invoice) ==
+            "8 Days"
         );
     }
 }

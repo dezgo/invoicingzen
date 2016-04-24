@@ -11,6 +11,27 @@ use Illuminate\Support\Facades\Auth;
 class AnlutroSettings implements SettingsContract
 {
     private $company_id;
+    private $valid_settings = [
+        'gst_registered',
+        'markup',
+        'bsb',
+        'bank_account_number',
+        'abn',
+        'payment_terms',
+        'mailing_address_line_1',
+        'mailing_address_line_2',
+        'mailing_address_line_3',
+        'enquiries_phone',
+        'enquiries_email',
+        'enquiries_web',
+        'logo',
+        'email_signature',
+        'email_host',
+        'email_port',
+        'email_username',
+        'email_password',
+        'email_encryption',
+    ];
 
     public function __construct($company_id = 0)
     {
@@ -29,19 +50,27 @@ class AnlutroSettings implements SettingsContract
 
     public function set($key, $value)
     {
-        AnlutroSetting::setExtraColumns(['company_id' => $this->company_id]);
-        AnlutroSetting::set($key, $value);
-        AnlutroSetting::save();
+        if (in_array($key, $this->valid_settings)) {
+            AnlutroSetting::setExtraColumns(['company_id' => $this->company_id]);
+            AnlutroSetting::set($key, $value);
+            AnlutroSetting::save();
+        } else {
+            throw new \RuntimeException('\''.$key.'\' not a valid setting');
+        }
     }
 
     public function get($key, $default = null)
     {
-        AnlutroSetting::setExtraColumns(['company_id' => $this->company_id]);
-        if ($default == null) {
-            return AnlutroSetting::get($key);
-        }
-        else {
-            return AnlutroSetting::get($key, $default);
+        if (in_array($key, $this->valid_settings)) {
+            AnlutroSetting::setExtraColumns(['company_id' => $this->company_id]);
+            if ($default == null) {
+                return AnlutroSetting::get($key);
+            }
+            else {
+                return AnlutroSetting::get($key, $default);
+            }
+        } else {
+            throw new \RuntimeException('\''.$key.'\' not a valid setting');
         }
     }
 

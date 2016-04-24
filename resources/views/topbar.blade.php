@@ -35,6 +35,7 @@
 
             @if(Gate::check('admin'))
                             <li><a href="/user" name='userAnchor'>Users</a></li>
+                            <li><a href="/invoice_template" name='userAnchor'>Templates</a></li>
             @endif
                 </ul>
 

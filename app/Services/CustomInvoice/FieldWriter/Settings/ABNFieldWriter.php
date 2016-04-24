@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Services\CustomInvoice\FieldWriter\User;
+namespace App\Services\CustomInvoice\FieldWriter\Settings;
 
 use App\Services\CustomInvoice\TemplateField\TemplateField;
 use App\Services\CustomInvoice\FieldWriter\TemplateFieldWriter;
 
-class BusinessNameFieldWriter implements TemplateFieldWriter
+class ABNFieldWriter implements TemplateFieldWriter
 {
     public function write(TemplateField $field)
     {
-        return $field->get('business_name');
+        return $field->get('abn');
     }
 }

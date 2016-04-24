@@ -64,9 +64,9 @@ class User extends Model implements AuthenticatableContract,
 
     public function getAddressMultiAttribute()
     {
-        return (($this->business_name != '')?$this->business_name.'<br>':'').
-            $this->address1.'<br>'.
-            (($this->address2 != '')?$this->address2.'<br>':'').
+        return (($this->business_name != '')?$this->business_name.'<br />':'').
+            $this->address1.'<br />'.
+            (($this->address2 != '')?$this->address2.'<br />':'').
             $this->suburb.' '.$this->state.' '.$this->postcode;
     }
 

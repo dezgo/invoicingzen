@@ -10,7 +10,7 @@ class CompanyTemplateField implements TemplateField
 
     public function __construct(Invoice $invoice)
     {
-        $this->company = \Auth::user()->company;
+        $this->company = $invoice->user->company;
     }
 
     public function get($fieldName)
@@ -20,7 +20,7 @@ class CompanyTemplateField implements TemplateField
         }
         else {
             $reflectionMethod = new \ReflectionMethod('\\App\\Company', 'get'.$fieldName.'Attribute');
-            return $reflectionMethod->invoke(new \App\Company());
+            return $reflectionMethod->invoke($this->company);
         }
     }
 }
