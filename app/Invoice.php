@@ -169,4 +169,16 @@ class Invoice extends Model
 	{
 		return Uuid::uuid5(Uuid::NAMESPACE_DNS, 'invoicingzen '.$id);
 	}
+
+	public function markPaid()
+	{
+		$this->paid = $this->total;
+		$this->save();
+	}
+
+	public function markUnpaid()
+	{
+		$this->paid = 0;
+		$this->save();
+	}
 }

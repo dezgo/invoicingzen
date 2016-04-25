@@ -3,6 +3,10 @@
 @section('content')
     <h1>Show Invoices</h1>
 
+    <div class="input-group"> <span class="input-group-addon">Filter</span>
+
+        <input id="filter" type="text" class="form-control" placeholder="Type here...">
+    </div>
         <table class="table-condensed" id="invoiceTable">
             <thead>
                 <tr>
@@ -23,15 +27,15 @@
                     @endif
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="searchable">
 
     @foreach($invoices as $invoice)
     <tr id='{{ $invoice->id }}'>
         <td>{{ $invoice->description }}</td>
-        <td>{{ $invoice->invoice_date }}</td>
-        <td class="text-right">${{ money_format('%i', $invoice->total) }}</td>
-        <td class="text-right">${{ money_format('%i', $invoice->owing) }}</td>
-        <td>{{ $invoice->type }}</td>
+        <td>{{ $invoice->invoice_date->format('d-m-Y') }}</td>
+        <td class="text-right">${{ App\Money::getFormatted($invoice->total) }}</td>
+        <td class="text-right">${{ App\Money::getFormatted($invoice->owing) }}</td>
+        <td>{{ ucfirst($invoice->type) }}</td>
     </tr>
     @endforeach
     </tbody>
@@ -62,6 +66,21 @@ $(document).ready (function(){
     });
 
     $('tr').css('cursor', 'pointer');
+
+    // thanks to http://jsfiddle.net/giorgitbs/52ak9/1/
+    (function ($) {
+
+        $('#filter').keyup(function () {
+
+            var rex = new RegExp($(this).val(), 'i');
+            $('.searchable tr').hide();
+            $('.searchable tr').filter(function () {
+                return rex.test($(this).text());
+            }).show();
+
+        })
+
+    }(jQuery));
 });
 
 </script>

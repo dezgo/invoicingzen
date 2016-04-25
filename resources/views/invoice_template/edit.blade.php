@@ -29,8 +29,8 @@
             >{{ old('template') == '' ? $invoice_template->template : old('template') }}</textarea>
         </div>
 
-        <input class="btn btn-primary" id="btnSubmit" type="submit" value="Update">
-        <a class="btn btn-danger" id="linkDelete"
+        <input class="btn btn-primary" id="btnSubmit" type="submit" value="Update" name="btnUpdate">
+        <a class="btn btn-danger" id="linkDelete" name="btnDelete"
             href="{{ secure_url('/invoice_template/'.$invoice_template->id.'/delete') }}">Delete</a>
 
     </form>

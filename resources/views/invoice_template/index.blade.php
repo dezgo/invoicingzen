@@ -17,8 +17,8 @@
 
 <hr />
 
-<a href="/invoice_template/create" class="btn btn-success">Create</a>
-<a href="/invoice_template/defaults" class="btn btn-primary">Restore Defaults</a>
+<a href="/invoice_template/create" class="btn btn-success" name="btnCreate">Create</a>
+<a href="/invoice_template/defaults" class="btn btn-primary" name="btnDefaults">Restore Defaults</a>
 
 <script language="javascript">
 

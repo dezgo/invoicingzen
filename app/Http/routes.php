@@ -78,6 +78,8 @@ Route::group(['middleware' => ['web', 'admin']], function() {
     Route::get('invoice/{invoice}/delete', 'InvoiceController@delete');
     Route::get('invoice/{invoice}/email', 'EmailController@showComposeEmailView');
     Route::get('invoice/{invoice}/merge', 'InvoiceController@selectmerge');
+    Route::get('invoice/{invoice}/pay', 'InvoiceController@markPaid');
+    Route::get('invoice/{invoice}/unpay', 'InvoiceController@markUnpaid');
     Route::post('invoice/merge', 'InvoiceController@domerge');
 
     Route::get('invoice_template/defaults', 'InvoiceTemplateController@defaults');

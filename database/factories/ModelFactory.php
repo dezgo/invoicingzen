@@ -44,7 +44,7 @@ $factory->define(App\InvoiceItem::class, function (Faker\Generator $faker) {
     return [
         'description' => $faker->sentence,
         'quantity' => $faker->numberBetween(1,10),
-        'price' => $faker->randomFloat(2,1,500),
+        'price' => $faker->numberBetween(100,50000)/100,
         'category_id' => App\InvoiceItemCategory::orderByRaw("RAND()")->first()->id,
     ];
 });

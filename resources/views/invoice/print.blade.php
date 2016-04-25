@@ -26,7 +26,7 @@ body {
             @can ('edit-invoice', $invoice)
                 &nbsp;<a class="btn btn-primary" href="{{ '/invoice/'.$invoice->id }}">Edit</a>
             @endcan
-            <a class="btn btn-primary" href="{{ '/invoice/'.$invoice->id.'/pdf' }}">View As PDF</a>
+            <a class="btn btn-primary" href="{{ '/invoice/'.$invoice->id.'/pdf' }}" name="linkPDF">View As PDF</a>
             @if(Gate::check('admin'))
             <a class="btn btn-primary" href="{{ 'invoice/'.$invoice->id.'/email' }}">
                 Email
@@ -34,6 +34,15 @@ body {
             <a name='btnMerge' class="btn btn-primary" href="{{ '/invoice/'.$invoice->id.'/merge' }}">
                 Merge
             </a>
+                @if ($invoice->owing > 0)
+                <a name='btnPay' class="btn btn-primary" href="{{ '/invoice/'.$invoice->id.'/pay' }}">
+                    Mark Paid
+                </a>
+                @else
+                <a name='btnUnpay' class="btn btn-primary" href="{{ '/invoice/'.$invoice->id.'/unpay' }}">
+                    Mark Unpaid
+                </a>
+                @endif
             @endif
         </Td>
         <td align="right">

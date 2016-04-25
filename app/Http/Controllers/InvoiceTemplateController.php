@@ -109,18 +109,18 @@ class InvoiceTemplateController extends Controller
 
     public function defaults()
     {
-        if (RestoreDefaultTemplates::checkExists()) {
+        if (RestoreDefaultTemplates::checkExists(Auth::user()->company_id)) {
             return view('invoice_template.confirm_delete');
         }
         else {
-            RestoreDefaultTemplates::restoreDefaults();
+            RestoreDefaultTemplates::restoreDefaults(Auth::user()->company_id);
         }
         return redirect('/invoice_template');
     }
 
     public function defaults_force()
     {
-        RestoreDefaultTemplates::restoreDefaults();
+        RestoreDefaultTemplates::restoreDefaults(Auth::user()->company_id);
         return redirect('/invoice_template');
     }
 }

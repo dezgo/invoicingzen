@@ -163,11 +163,7 @@ class InvoiceController extends Controller
 			abort(403);
 		}
 
-		$settings = SettingsFactory::create();
-		$invoice_generator = new InvoiceGenerator();
-		$template = InvoiceTemplate::get($invoice->type);
-		$invoice_content = $invoice_generator->output($template, $invoice);
-		return view('invoice.print', compact('invoice', 'settings', 'invoice_content'));
+		return $this->viewPrint($invoice);
 	}
 
 	public function selectmerge(Invoice $invoice)
@@ -197,9 +193,14 @@ class InvoiceController extends Controller
 		}
 
 		Auth::login($invoice->user);
+		return $this->viewPrint($invoice);
+	}
+
+	private function viewPrint(Invoice $invoice)
+	{
 		$settings = SettingsFactory::create();
 		$invoice_generator = new InvoiceGenerator();
-		$template = InvoiceTemplate::get($invoice->type);
+		$template = InvoiceTemplate::get($invoice->type, Auth::user()->company);
 		$invoice_content = $invoice_generator->output($template, $invoice);
 		return view('invoice.print', compact('invoice', 'settings', 'invoice_content'));
 	}
@@ -210,5 +211,17 @@ class InvoiceController extends Controller
         $pdf->create($invoice);
 
         return $pdf->output();
+	}
+
+	public function markPaid(Invoice $invoice)
+	{
+		$invoice->markPaid();
+		return $this->viewPrint($invoice);
+	}
+
+	public function markUnpaid(Invoice $invoice)
+	{
+		$invoice->markUnpaid();
+		return $this->viewPrint($invoice);
 	}
 }

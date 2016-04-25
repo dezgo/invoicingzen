@@ -90,7 +90,7 @@ class SettingsTest extends TestCase
         $this->be($this->user);
         $settings = \App\Factories\SettingsFactory::create();
         $settings->set('taxable', false);
-        App\Services\RestoreDefaultTemplates::restoreDefaults();
+        App\Services\RestoreDefaultTemplates::restoreDefaults($this->user->company_id);
         $bsb = '123483';
         $bank_account_number = '123456789';
         $abn = '12 321 312 567';
