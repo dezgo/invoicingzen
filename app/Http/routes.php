@@ -80,6 +80,8 @@ Route::group(['middleware' => ['web', 'admin']], function() {
     Route::get('invoice/{invoice}/merge', 'InvoiceController@selectmerge');
     Route::post('invoice/merge', 'InvoiceController@domerge');
 
+    Route::get('invoice_template/defaults', 'InvoiceTemplateController@defaults');
+    Route::post('invoice_template/defaults', 'InvoiceTemplateController@defaults_force');
     Route::resource('invoice_template', 'InvoiceTemplateController');
     Route::get('invoice_template/{invoice_template}/delete', 'InvoiceTemplateController@delete')->name('invoice_template.delete');
 });

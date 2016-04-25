@@ -18,6 +18,8 @@ class CreateInvoiceTemplatesTable extends Migration
             $table->foreign('company_id')->references('id')->on('companies');
             $table->string('title');
             $table->text('template');
+            $table->string('type');
+            $table->boolean('default');
             $table->timestamps();
         });
     }

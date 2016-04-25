@@ -72,6 +72,10 @@ class AppServiceProvider extends ServiceProvider
                 return InvoiceNumberChecker::number_available($new_invoice_number, Auth::user()->company_id);
             }
         });
+
+        Validator::extend('noscript', function($field,$value,$parameters){
+            return strpos($value, '<script') === false;
+        });
     }
 
     /**

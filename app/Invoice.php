@@ -101,19 +101,13 @@ class Invoice extends Model
 	public function getTypeAttribute($value)
 	{
 		if ($this->is_quote == 'on') {
-			return "Quote";
+			return "quote";
 		}
 		elseif (round($this->owing,2) > 0.00) {
-			$settings = SettingsFactory::create();
-			if ($settings->get('gst_registered')) {
-				return "Tax Invoice";
-			}
-			else {
-				return "Invoice";
-			}
+			return "invoice";
 		}
 		else {
-			return "Receipt";
+			return "receipt";
 		}
 	}
 

@@ -124,6 +124,9 @@ return [
         'invoice_number' => [
             'invoice_number_unique' => 'That invoice number has already been used.',
         ],
+        'template' => [
+            'noscript' => 'No script is allowed in the invoice template.',
+        ]
     ],
 
     /*

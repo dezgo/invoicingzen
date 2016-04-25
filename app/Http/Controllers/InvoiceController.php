@@ -17,6 +17,8 @@ use App\Exceptions\CustomException;
 use App\InvoiceMerger;
 use App\Services\PDFStreamInvoiceGenerator;
 use App\Factories\SettingsFactory;
+use App\Services\CustomInvoice\InvoiceGenerator;
+use App\InvoiceTemplate;
 
 class InvoiceController extends Controller
 {
@@ -162,7 +164,10 @@ class InvoiceController extends Controller
 		}
 
 		$settings = SettingsFactory::create();
-		return view('invoice.print', compact('invoice', 'settings'));
+		$invoice_generator = new InvoiceGenerator();
+		$template = InvoiceTemplate::get($invoice->type);
+		$invoice_content = $invoice_generator->output($template, $invoice);
+		return view('invoice.print', compact('invoice', 'settings', 'invoice_content'));
 	}
 
 	public function selectmerge(Invoice $invoice)

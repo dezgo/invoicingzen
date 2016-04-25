@@ -12,7 +12,7 @@ class AnlutroSettings implements SettingsContract
 {
     private $company_id;
     private $valid_settings = [
-        'gst_registered',
+        'taxable',
         'markup',
         'bsb',
         'bank_account_number',
@@ -76,7 +76,7 @@ class AnlutroSettings implements SettingsContract
 
     public function setAllUsing(Request $request)
     {
-        AnlutroSetting::set('gst_registered', $request->gst_registered != null);
+        AnlutroSetting::set('taxable', $request->taxable != null);
         AnlutroSetting::set('markup', $request->markup);
         AnlutroSetting::set('abn', $request->abn);
         AnlutroSetting::set('payment_terms', $request->payment_terms);

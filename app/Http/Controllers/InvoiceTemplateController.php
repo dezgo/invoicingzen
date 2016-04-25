@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 use App\Http\Requests;
 use App\InvoiceTemplate;
 use Illuminate\Support\Facades\Auth;
+use App\Invoice;
+use App\Services\RestoreDefaultTemplates;
 
 class InvoiceTemplateController extends Controller
 {
@@ -40,8 +41,10 @@ class InvoiceTemplateController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'title' => 'string|required',
-            'template' => 'string|required',
+            'title' => 'string|required|unique:invoice_templates,title,0'.
+                ',id,company_id,'.Auth::user()->company_id,
+            'type' => 'required',
+            'template' => 'string|required|noscript',
         ]);
 
         $invoice_template = new InvoiceTemplate();
@@ -73,6 +76,13 @@ class InvoiceTemplateController extends Controller
      */
     public function update(Request $request, InvoiceTemplate $invoice_template)
     {
+        $this->validate($request, [
+            'title' => 'string|required|unique:invoice_templates,title,'.
+                $invoice_template->id.',id,company_id,'.Auth::user()->company_id,
+            'type' => 'required',
+            'template' => 'string|required|noscript',
+        ]);
+
         $invoice_template->title = $request->title;
         $invoice_template->template = $request->template;
         $invoice_template->update();
@@ -91,9 +101,26 @@ class InvoiceTemplateController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-     public function destroy(InvoiceTemplate $invoice_template)
+    public function destroy(InvoiceTemplate $invoice_template)
  	{
  		$invoice_template->delete();
  		return redirect('/invoice_template');
  	}
+
+    public function defaults()
+    {
+        if (RestoreDefaultTemplates::checkExists()) {
+            return view('invoice_template.confirm_delete');
+        }
+        else {
+            RestoreDefaultTemplates::restoreDefaults();
+        }
+        return redirect('/invoice_template');
+    }
+
+    public function defaults_force()
+    {
+        RestoreDefaultTemplates::restoreDefaults();
+        return redirect('/invoice_template');
+    }
 }

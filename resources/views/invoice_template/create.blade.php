@@ -13,6 +13,16 @@
         </div>
 
         <div class="form-group">
+            <label for="type" class="control-label">Type:</label>
+            <select class="form-control" name="type" value="{{ old('type') }}" id="type">
+                <option value=""></option>
+                <option value="receipt"{{ old('type') == 'receipt' ? ' selected' : ''}}>Receipt</option>
+                <option value="invoice"{{ old('type') == 'invoice' ? ' selected' : ''}}>Invoice</option>
+                <option value="quote"{{ old('type') == 'quote' ? ' selected' : ''}}>Quote</option>
+            </select>
+        </div>
+
+        <div class="form-group">
             <label for="template" class="control-label">Template Content:</label>
             <textarea class="form-control" name="template" id="template" rows="25"
             >{{ old('template') }}</textarea>

@@ -10,13 +10,23 @@
 
         <div class="form-group">
             <label for="title" class="control-label">Title:</label>
-            <input class="form-control" name="title" type="text" value="{{ $invoice_template->title }}" id="title">
+            <input class="form-control" name="title" type="text" value="{{ old('title') == '' ? $invoice_template->title : old('title') }}" id="title">
+        </div>
+
+        <div class="form-group">
+            <label for="type" class="control-label">Type:</label>
+            <select class="form-control" name="type" value="{{ old('type') }}" id="type">
+                <option value=""></option>
+                <option value="receipt"{{ (old('type') == 'receipt' or $invoice_template->type == 'receipt') ? ' selected' : ''}}>Receipt</option>
+                <option value="invoice"{{ (old('type') == 'invoice' or $invoice_template->type == 'invoice') ? ' selected' : ''}}>Invoice</option>
+                <option value="quote"{{ (old('type') == 'quote' or $invoice_template->type == 'quote') ? ' selected' : ''}}>Quote</option>
+            </select>
         </div>
 
         <div class="form-group">
             <label for="template" class="control-label">Template Content:</label>
             <textarea class="form-control" name="template" id="template" rows="25"
-            >{{ $invoice_template->template }}</textarea>
+            >{{ old('template') == '' ? $invoice_template->template : old('template') }}</textarea>
         </div>
 
         <input class="btn btn-primary" id="btnSubmit" type="submit" value="Update">
