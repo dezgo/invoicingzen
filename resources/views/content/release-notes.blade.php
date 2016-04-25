@@ -9,7 +9,7 @@
     <ul>
         <li>
             Custom invoicing added. Quickly mark invoice paid/unpaid. Invoice
-            list now filterable ()
+            list now filterable (091ca17)
         </li>
     </ul>
 
