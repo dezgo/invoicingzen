@@ -20,7 +20,7 @@ return [
     'grand-total' => 'Grand-total',
     'amount-paid' => 'Amount paid',
     'balance-due' => 'Balance owing',
-    'no-gst' => 'No GST has been charged',
+    'no-tax' => 'No '.trans('settings.tax').' has been charged',
 
     // invoice template generator
     'token-mismatch' => 'Mismatching number of start and end tokens',

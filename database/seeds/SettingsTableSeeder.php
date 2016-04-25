@@ -13,7 +13,6 @@ class SettingsTableSeeder extends Seeder
     public function run()
     {
         $setting = SettingsFactory::create(1);
-        $setting->set('next_invoice_number', 1);
         $setting->set('markup', '20');
         $setting->set('abn', '12 234 234 234');
         $setting->set('payment_terms', '7 Days');

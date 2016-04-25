@@ -31,7 +31,7 @@ class SettingsTest extends TestCase
              ->visit('/settings')
              ->see(trans('settings.title'))
              ->see(trans('settings.markup'))
-             ->see(trans('settings.gst_registered'))
+             ->see(trans('settings.taxable'))
              ->see(trans('settings.bsb'))
              ->see(trans('settings.bank_account_number'))
              ->see(trans('settings.abn'))
@@ -87,6 +87,10 @@ class SettingsTest extends TestCase
      */
     public function testUpdateSettings()
     {
+        $this->be($this->user);
+        $settings = \App\Factories\SettingsFactory::create();
+        $settings->set('taxable', false);
+        App\Services\RestoreDefaultTemplates::restoreDefaults($this->user->company_id);
         $bsb = '123483';
         $bank_account_number = '123456789';
         $abn = '12 321 312 567';
@@ -100,7 +104,7 @@ class SettingsTest extends TestCase
 
         $this->actingAs($this->user)
              ->visit('/settings')
-             ->check('gst_registered')
+             ->check('taxable')
              ->type('20', 'markup')
              ->type($bsb, 'bsb')
              ->type($bank_account_number, 'bank_account_number')
@@ -121,7 +125,7 @@ class SettingsTest extends TestCase
          $this->actingAs($this->user)
               ->visit('/invoice/'.$invoice->id.'/print')
               ->see($bsb)
-              ->dontSee(trans('invoice.no-gst'))
+              ->see(trans('invoice.no-tax'))
               ->see($bank_account_number)
               ->see($abn)
               ->see($payment_terms)
@@ -162,14 +166,14 @@ class SettingsTest extends TestCase
                     'company_id'    => $company->id]);
     }
 
-    public function testGSTCheckbox()
+    public function testTaxCheckbox()
     {
         $this->actingAs($this->user)
              ->visit('/settings')
-             ->check('gst_registered')
+             ->check('taxable')
              ->press('btnSubmit');
 
         $settings = \App\Factories\SettingsFactory::create();
-        $this->assertTrue($settings->get('gst_registered') == true);
+        $this->assertTrue($settings->get('taxable') == true);
     }
 }

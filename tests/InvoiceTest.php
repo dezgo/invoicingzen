@@ -21,8 +21,13 @@ class InvoiceTest extends TestCase
         $this->userAdmin->roles()->attach(2);
         $this->invoice = factory(App\Invoice::class)->create();
         factory(App\InvoiceItem::class, 5)->create(['invoice_id' => $this->invoice->id]);
-        $this->invoice->customer_id = $this->user->id;
+        $this->invoice->user()->associate($this->user);
         $this->invoice->save();
+
+        $this->be($this->userAdmin);
+        $settings = \App\Factories\SettingsFactory::create();
+        $settings->set('taxable', false);
+        App\Services\RestoreDefaultTemplates::restoreDefaults($this->userAdmin->company_id);
     }
 
     public function testShowIndexAsAdmin()

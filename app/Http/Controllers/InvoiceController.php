@@ -17,6 +17,8 @@ use App\Exceptions\CustomException;
 use App\InvoiceMerger;
 use App\Services\PDFStreamInvoiceGenerator;
 use App\Factories\SettingsFactory;
+use App\Services\CustomInvoice\InvoiceGenerator;
+use App\InvoiceTemplate;
 
 class InvoiceController extends Controller
 {
@@ -161,8 +163,7 @@ class InvoiceController extends Controller
 			abort(403);
 		}
 
-		$settings = SettingsFactory::create();
-		return view('invoice.print', compact('invoice', 'settings'));
+		return $this->viewPrint($invoice);
 	}
 
 	public function selectmerge(Invoice $invoice)
@@ -192,8 +193,16 @@ class InvoiceController extends Controller
 		}
 
 		Auth::login($invoice->user);
+		return $this->viewPrint($invoice);
+	}
+
+	private function viewPrint(Invoice $invoice)
+	{
 		$settings = SettingsFactory::create();
-		return view('invoice.print', compact('invoice', 'settings'));
+		$invoice_generator = new InvoiceGenerator();
+		$template = InvoiceTemplate::get($invoice->type, Auth::user()->company);
+		$invoice_content = $invoice_generator->output($template, $invoice);
+		return view('invoice.print', compact('invoice', 'settings', 'invoice_content'));
 	}
 
 	public function generate_pdf(Invoice $invoice)
@@ -202,5 +211,17 @@ class InvoiceController extends Controller
         $pdf->create($invoice);
 
         return $pdf->output();
+	}
+
+	public function markPaid(Invoice $invoice)
+	{
+		$invoice->markPaid();
+		return $this->viewPrint($invoice);
+	}
+
+	public function markUnpaid(Invoice $invoice)
+	{
+		$invoice->markUnpaid();
+		return $this->viewPrint($invoice);
 	}
 }

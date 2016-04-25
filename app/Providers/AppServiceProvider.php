@@ -6,10 +6,12 @@ use App\Invoice;
 use App\InvoiceItem;
 use App\InvoiceItemCategory;
 use App\User;
+use App\Company;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Auth;
 use Validator;
 use App\InvoiceNumberChecker;
+use App\Services\RestoreDefaultTemplates;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -45,7 +47,14 @@ class AppServiceProvider extends ServiceProvider
 
         User::saving(function ($user) {
             if (Auth::check()) {
-                $user->company_id = Auth::user()->company_id;
+                $user->company()->associate(Auth::user()->company);
+            }
+        });
+        Company::created(function ($company) {
+            // do this check because when migrating data a company is created
+            // before the invoice template table is created
+            if (\Schema::hasTable('invoice_templates')) {
+                RestoreDefaultTemplates::restoreDefaults($company->id);
             }
         });
         Invoice::deleting(function ($invoice) {
@@ -71,6 +80,10 @@ class AppServiceProvider extends ServiceProvider
             else {
                 return InvoiceNumberChecker::number_available($new_invoice_number, Auth::user()->company_id);
             }
+        });
+
+        Validator::extend('noscript', function($field,$value,$parameters){
+            return strpos($value, '<script') === false;
         });
     }
 

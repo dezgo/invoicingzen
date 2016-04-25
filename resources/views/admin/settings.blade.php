@@ -15,8 +15,8 @@
     {!! Form::open(['route' => 'settings.update', 'files' => true]) !!}
 
     <div class="form-group">
-        {!! Form::label('gst_registered', trans('settings.gst_registered'), ['class' => 'control-label']) !!}<Br />
-        {{ Form::checkbox('gst_registered', 'on', $settings->get('gst_registered'), ['class' => 'form-control', 'data-size' => 'mini']) }}
+        {!! Form::label('taxable', trans('settings.taxable'), ['class' => 'control-label']) !!}<Br />
+        {{ Form::checkbox('taxable', 'on', $settings->get('taxable'), ['class' => 'form-control', 'data-size' => 'mini']) }}
     </div>
 
     <div class="form-group">
@@ -123,7 +123,7 @@ $(document).ready (function(){
     $("#success-alert").fadeTo(2000, 500).slideUp(500, function(){
         $("#success-alert").alert('close');
     });
-    $("[name='gst_registered']").bootstrapSwitch();
+    $("[name='taxable']").bootstrapSwitch();
 });
 </script>
 

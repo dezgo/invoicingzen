@@ -4,6 +4,15 @@
 <div class="panel">
     <h1>Invoicing Zen Release Notes</h1>
 
+    <h3>v1.3.0</h3>
+    <h4>25 Apr 2016</h4>
+    <ul>
+        <li>
+            Custom invoicing added. Quickly mark invoice paid/unpaid. Invoice
+            list now filterable (091ca17)
+        </li>
+    </ul>
+
     <h3>v1.2.5</h3>
     <h4>20 Apr 2016</h4>
     <ul>

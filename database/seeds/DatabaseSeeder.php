@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
+use App\Services\RestoreDefaultTemplates;
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,8 +19,6 @@ class DatabaseSeeder extends Seeder
         $this->call(RoleUserTableSeeder::class);
         $this->call(InvoiceTableSeeder::class);
         $this->call(SettingsTableSeeder::class);
-
-        // don't call this one as it's already called during the migration
-        // $this->call(CompanyTableSeeder::class);
+        RestoreDefaultTemplates::restoreDefaults(1);
     }
 }
