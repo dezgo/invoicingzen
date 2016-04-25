@@ -69,9 +69,9 @@
     @if ($taxable)
     <tr>
         <td colspan="9">&nbsp;</td>
-        <td>(excl&nbsp;{{ trans('settings.tax') }})</td>
+        <td align="right">(excl&nbsp;{{ trans('settings.tax') }})</td>
         <td>&nbsp;</td>
-        <td>(incl&nbsp;{{ trans('settings.tax') }})</td>
+        <td align="right">(incl&nbsp;{{ trans('settings.tax') }})</td>
     </tr>
     @endif
 

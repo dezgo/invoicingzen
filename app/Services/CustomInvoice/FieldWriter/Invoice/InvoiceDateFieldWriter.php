@@ -9,6 +9,6 @@ class InvoiceDateFieldWriter implements TemplateFieldWriter
 {
     public function write(TemplateField $field)
     {
-        return $field->get('invoice_date');
+        return $field->get('invoice_date')->format('d-m-Y');
     }
 }

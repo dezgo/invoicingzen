@@ -198,7 +198,10 @@ class InvoiceController extends Controller
 
 		Auth::login($invoice->user);
 		$settings = SettingsFactory::create();
-		return view('invoice.print', compact('invoice', 'settings'));
+		$invoice_generator = new InvoiceGenerator();
+		$template = InvoiceTemplate::get($invoice->type);
+		$invoice_content = $invoice_generator->output($template, $invoice);
+		return view('invoice.print', compact('invoice', 'settings', 'invoice_content'));
 	}
 
 	public function generate_pdf(Invoice $invoice)

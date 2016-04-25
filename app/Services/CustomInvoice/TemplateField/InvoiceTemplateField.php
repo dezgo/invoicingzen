@@ -16,7 +16,7 @@ class InvoiceTemplateField implements TemplateField
     public function get($fieldName)
     {
         if (array_key_exists($fieldName, $this->invoice->toArray())) {
-            return $this->invoice->toArray()[$fieldName];
+            return $this->invoice[$fieldName];
         }
         else {
             $reflectionMethod = new \ReflectionMethod('\\App\\Invoice', 'get'.$fieldName.'Attribute');
