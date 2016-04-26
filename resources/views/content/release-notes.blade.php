@@ -4,6 +4,14 @@
 <div class="panel">
     <h1>Invoicing Zen Release Notes</h1>
 
+    <h3>v1.3.1</h3>
+    <h4>26 Apr 2016</h4>
+    <ul>
+        <li>
+            Add pricing and contact pages (cffc94d)
+        </li>
+    </ul>
+
     <h3>v1.3.0</h3>
     <h4>25 Apr 2016</h4>
     <ul>

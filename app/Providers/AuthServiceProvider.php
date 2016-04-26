@@ -68,5 +68,12 @@ class AuthServiceProvider extends ServiceProvider
                 return true;
             }
         });
+
+        $gate->define('premium', function($user) {
+            if ($user->isAdmin() and $user->premium)
+            {
+                return true;
+            }
+        });
     }
 }

@@ -12,27 +12,12 @@ class AuthenticationTest extends TestCase
     public function testRegisterAllBlank()
     {
         $this->visit('/')
-             ->see('Confirm Password')
              ->press('btnSignUp')
              ->see(trans('validation.required', ['attribute' => 'first name']))
              ->see(trans('validation.required', ['attribute' => 'last name']))
              ->see(trans('validation.required', ['attribute' => 'password']))
              ->see(trans('validation.required', ['attribute' => 'business name']))
              ->see(trans('validation.required', ['attribute' => 'email']));
-    }
-
-    // enter different passwords when registering and ensure appropriate
-    // message is displayed
-    public function testRegisterDiffPasswords()
-    {
-        $this->visit('/')
-             ->type('Holly','first_name')
-             ->type('Edwards','last_name')
-             ->type('holly@edwards.com', 'email')
-             ->type('password1','password')
-             ->type('password2','password_confirmation')
-             ->press('btnSignUp')
-             ->see('The password confirmation does not match');
     }
 
     // enter an invalid email address and ensure appropriate
@@ -44,7 +29,6 @@ class AuthenticationTest extends TestCase
              ->type('Edwards','last_name')
              ->type('holly@edwards','email')
              ->type('password1','password')
-             ->type('password1','password_confirmation')
              ->press('btnSignUp')
              ->see(trans('validation.email', ['attribute' => 'email']));
     }
@@ -58,7 +42,6 @@ class AuthenticationTest extends TestCase
              ->type('Edwards','last_name')
              ->type('holly@edwards.com','email')
              ->type('password1','password')
-             ->type('password1','password_confirmation')
              ->type('Willy\'s Widgets','business_name')
              ->press('btnSignUp')
              ->see('Holly Edwards')
@@ -69,7 +52,6 @@ class AuthenticationTest extends TestCase
              ->type('Edwards','last_name')
              ->type('edward@edwards.com','email')
              ->type('password1','password')
-             ->type('password1','password_confirmation')
              ->type('Willy\'s Widgets','business_name')
              ->press('btnSignUp')
              ->see(trans('validation.custom.business_name.unique'));
@@ -87,7 +69,6 @@ class AuthenticationTest extends TestCase
              ->type('Edwards','last_name')
              ->type('holly@edwards.com','email')
              ->type('password1','password')
-             ->type('password1','password_confirmation')
              ->type('Willy\'s Widgets','business_name')
              ->press('btnSignUp')
              ->see('Holly Edwards')
@@ -103,7 +84,6 @@ class AuthenticationTest extends TestCase
              ->type('Edwards','last_name')
               ->type('holly@edwards.com','email')
               ->type('password1','password')
-              ->type('password1','password_confirmation')
               ->type('Willy\'s Widgets','business_name')
               ->press('btnSignUp')
               ->see(trans('validation.unique', ['attribute' => 'email']));

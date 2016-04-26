@@ -160,4 +160,9 @@ class User extends Model implements AuthenticatableContract,
         $attributes['company_id'] = $company_id;
         return parent::create($attributes);
     }
+
+    public function getPremiumAttribute()
+    {
+        return true;
+    }
 }
