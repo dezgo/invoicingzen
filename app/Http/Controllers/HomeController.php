@@ -18,4 +18,14 @@ class HomeController extends Controller
             return view('content.index');
         }
     }
+
+    public function contact()
+    {
+        return view('content.contact');
+    }
+
+    public function pricing()
+    {
+        return view('content.pricing');
+    }
 }

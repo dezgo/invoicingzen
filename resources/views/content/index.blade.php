@@ -2,25 +2,44 @@
 
 @section('content')
 
-  <div class="row">
-      <div class="col-md-5">
-          <div class="panel panel-default">
-              <div class="panel-heading">Need a simple invoicing system?</div>
-              <div class="panel-body">
-                  Invoicing Zen is an Australian-based service designed for businesses
-                  needing a quick and simple invoicing system.<br />
-                  <br />
-                  It's currently in Beta, so sign
-                  up and give it a go. We welcome any feedback,
-                  while it's in Beta you can use it for free.<br />
-                  <br />
-                  If you're interested in the progress we've made so far, check
-                  out the <u><a href="/release-notes">release notes</a></u>.
-              </div>
-          </div>
-      </div>
-
-      <div class="col-md-5 col-md-offset-2">
+<table>
+    <tr valign="top">
+        <td width="45%">
+            <div class="panel panel-default">
+                <div class="panel-heading">Need a simple invoicing system?</div>
+                <div class="panel-body">
+                    Hi, I'm Derek. I wrote InvoicingZen to fill a need I had in
+                    my <a target="_blank" href="http://computerwhiz.com.au">own
+                    small business</a> for a simple invoicing system without the
+                    high costs charged by many of the online systems.<br />
+                </div>
+            </div>
+            <Br />
+            <div class="panel panel-default">
+                <div class="panel-heading">What does it do?</div>
+                <div class="panel-body">
+                    Here's what you get:<br />
+                    <ul>
+                        <li>Works for GST and non-GST registered businesses</li>
+                        <li>Custom Invoice/Quote/Receipt Templates</li>
+                        <li>Ability to upload your own logo</li>
+                        <li>Invoices viewable online and downloadable as PDF</li>
+                        <li>One-click to mark invoice as paid/unpaid</li>
+                        <li>Peace-of-mind - SSL encrypts all data communications
+                            between browser and server</li>
+                        <li>Email invoices using your own email address</li>
+                        <li>Customise email signature</li>
+                        <li>Customers get link in email which takes them straight
+                            to their invoice in one click</li>
+                        <li>Lightning-fast filter on invoice list page to quickly
+                            find invoices</li>
+                        <li>Missing something? <a href="/contact">Let me know</a></li>
+                    </ul>
+                </div>
+            </div>
+        </td>
+        <td width="10%">&nbsp;</Td>
+        <td width="45%">
           <div class="panel panel-default">
               <div class="panel-heading">Sign Up. It's free!</div>
               <div class="panel-body">
@@ -97,20 +116,6 @@
                           </div>
                       </div>
 
-                      <div class="form-group{{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
-                          <label class="col-md-4 control-label">Confirm Password</label>
-
-                          <div class="col-md-6">
-                              <input type="password" class="form-control" name="password_confirmation">
-
-                              @if ($errors->has('password_confirmation'))
-                                  <span class="help-block">
-                                      <strong>{{ $errors->first('password_confirmation') }}</strong>
-                                  </span>
-                              @endif
-                          </div>
-                      </div>
-
                       <div class="form-group">
                           <div class="col-md-3 col-md-offset-4">
                               <button id="btnSignUp" type="submit" class="btn btn-primary">
@@ -124,7 +129,8 @@
                   </form>
               </div>
           </div>
-      </div>
-  </div>
+      </td>
+  </tr>
+</table>
 
 @stop

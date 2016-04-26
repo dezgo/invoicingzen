@@ -23,7 +23,6 @@ class MainSiteNavigationTest extends TestCase
 			->type('Joe Bloe Inc', 'business_name')
 			->type('joe@bloe.com', 'email')
 			->type('Password01', 'password')
-			->type('Password01', 'password_confirmation')
 			->press('btnSignUp')
 			->seePageIs('https://localhost/invoice');
 	}
@@ -81,5 +80,27 @@ class MainSiteNavigationTest extends TestCase
 			->type($user->email, 'email')
 			->press('btnSubmit')
 			->seePageIs('https://localhost/password/reset');
+	}
+
+	public function testPricing()
+	{
+		$this->visit('https://localhost')
+			->click('linkPricing')
+			->see('Get Started')
+			->see('Features');
+	}
+
+	public function testContact()
+	{
+		$this->visit('https://localhost')
+			->click('linkContact')
+			->seePageIs('https://localhost/contact');
+	}
+
+	public function testSignup()
+	{
+		$this->visit('https://localhost/pricing')
+			->click('btnSignUp')
+			->seePageIs('https://localhost');
 	}
 }
