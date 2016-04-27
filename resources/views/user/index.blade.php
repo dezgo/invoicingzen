@@ -32,8 +32,6 @@
 @stop
 
 @section('footer')
-@include('/includes/flash_message_footer')
-
 <script language="javascript">
 
 $(document).ready (function(){
