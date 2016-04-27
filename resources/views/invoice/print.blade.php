@@ -45,7 +45,7 @@ body {
                 @endif
             @endif
             @if ($invoice->owing > 0)
-
+<br /><br />
             {!! Form::open(['method' => 'POST', 'url' => url('/invoice/'.$invoice->id.'/pay')]) !!}
               <script
                 src="https://checkout.stripe.com/checkout.js" class="stripe-button"
@@ -53,7 +53,7 @@ body {
                 data-amount="{{ $invoice->owing*100 }}"
                 data-name="Invoicing Zen"
                 data-description="{{ $invoice->description }}"
-                data-image="{{ url('/images/logo.jpg') }}"
+                data-image="{{ url('/images/'.Auth::user()->company->logofilename) }}"
                 data-locale="auto">
               </script>
               {!! Form::close() !!}
