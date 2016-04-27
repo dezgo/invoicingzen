@@ -14,7 +14,6 @@ class InvoiceTest extends TestCase
 
     public function setUp()
     {
-        // This method will automatically be called prior to any of your test cases
         parent::setUp();
 
         $this->user = factory(App\User::class)->create();
@@ -22,8 +21,13 @@ class InvoiceTest extends TestCase
         $this->userAdmin->roles()->attach(2);
         $this->invoice = factory(App\Invoice::class)->create();
         factory(App\InvoiceItem::class, 5)->create(['invoice_id' => $this->invoice->id]);
-        $this->invoice->customer_id = $this->user->id;
+        $this->invoice->user()->associate($this->user);
         $this->invoice->save();
+
+        $this->be($this->userAdmin);
+        $settings = \App\Factories\SettingsFactory::create();
+        $settings->set('taxable', false);
+        App\Services\RestoreDefaultTemplates::restoreDefaults($this->userAdmin->company_id);
     }
 
     public function testShowIndexAsAdmin()
@@ -56,11 +60,15 @@ class InvoiceTest extends TestCase
             ->visit('/invoice/create')
             ->type('','invoice_number')
             ->press('Save')
-            ->see('The invoice number field is required');
+            ->see(trans('validation.required', ['attribute' => 'invoice number']))
+            ->see(trans('validation.required', ['attribute' => 'customer id']));
     }
 
     public function testCreate_save()
     {
+        $this->be($this->userAdmin);
+        $invoice_number = \App\Services\SequentialInvoiceNumbers::getNextNumber($this->userAdmin->company_id);
+
         $customer = factory(App\User::class)->create();
         $this->actingAs($this->userAdmin)
             ->visit('/invoice/create')
@@ -68,7 +76,10 @@ class InvoiceTest extends TestCase
             ->press('Save')
             ->see('Show Invoice')
             ->see('Great, you have your invoice')
-            ->see('btnAddInvoiceItem');
+            ->see('btnAddInvoiceItem')
+            ->seeInDatabase('invoices', [
+                'invoice_number' => $invoice_number,
+            ]);
     }
 
     public function testEdit()
@@ -99,7 +110,7 @@ class InvoiceTest extends TestCase
         $this->actingAs($this->userAdmin)
             ->visit('/invoice/'.$this->invoice->id.'/edit')
             ->type('01-02-2015', 'invoice_date')
-            ->press('Update')
+            ->press('btnSubmit')
             ->seePageIs('/invoice/'.$this->invoice->id);
     }
 
@@ -126,8 +137,14 @@ class InvoiceTest extends TestCase
     {
         $this->actingAs($this->userAdmin)
             ->visit('/invoice/'.$this->invoice->id.'/delete')
-            ->press('Delete')
+            ->press('btnConfirmDelete')
             ->seePageIs('/invoice');
+
+        $invoice = App\Invoice::where('id', '=', $this->invoice->id)->first();
+        $this->assertTrue($invoice == null);
+
+        $invoice_item = App\InvoiceItem::where('invoice_id', '=', $this->invoice->id)->first();
+        $this->assertTrue($invoice_item == null);
     }
 
     public function testPrintAsUser()
@@ -149,36 +166,6 @@ class InvoiceTest extends TestCase
             ->see('Customer Details')
             ->see('How to Pay')
             ->see('Enquiries');
-    }
-
-    public function testPrintPartiallyPaid()
-    {
-        $this->invoice->paid = $this->invoice->owing/2;
-        $this->invoice->save();
-        $this->actingAs($this->userAdmin)
-            ->visit('/invoice/'.$this->invoice->id.'/print')
-            ->see(number_format($this->invoice->paid,2));
-    }
-
-    public function testPrintReceipt()
-    {
-        $this->invoice->paid = $this->invoice->owing;
-        $this->invoice->save();
-        $this->actingAs($this->userAdmin)
-            ->visit('/invoice/'.$this->invoice->id.'/print')
-            ->see(number_format($this->invoice->paid,2))
-            ->see('RECEIPT');
-    }
-
-    public function testPrintQuote()
-    {
-        $this->invoice->is_quote = 'on';
-        $this->invoice->save();
-        $this->actingAs($this->userAdmin)
-            ->visit('/invoice/'.$this->invoice->id.'/print')
-            ->see('QUOTE')
-            ->dontSee('How to Pay')
-            ->dontSee('Amount Paid');
     }
 
     public function testCreateInvoiceWizardValidation()
@@ -222,27 +209,10 @@ class InvoiceTest extends TestCase
             ->see('Robert Wagner');
     }
 
-    // check next invoice number logic
-    public function testNextInvoiceNumber()
-    {
-        $next = \Setting::get('next_invoice_number');
-        $inv1 = new App\Invoice();
-        $inv1->customer_id = $this->user->id;
-        $inv1->save();
-        $inv2 = new App\Invoice();
-        $inv2->customer_id = $this->user->id;
-        $inv2->save();
-        $inv3 = new App\Invoice();
-        $inv3->customer_id = $this->user->id;
-        $inv3->save();
-        assert($inv1->invoice_number == ($next));
-        assert($inv2->invoice_number == ($next+1));
-        assert($inv3->invoice_number == ($next+2));
-    }
-
     // ensure there's an option to make a quote
     public function testFindIsQuoteCheckbox()
     {
+
         $this->actingAs($this->userAdmin)
              ->visit('/invoice/'.$this->invoice->id)
              ->see('is_quote')
@@ -257,15 +227,15 @@ class InvoiceTest extends TestCase
     {
         $this->actingAs($this->userAdmin)
              ->visit('/invoice/'.$this->invoice->id)
-             ->see("$('#customer_list').select2({");
+             ->see("$('#customer_list').select2(");
 
          $this->actingAs($this->userAdmin)
               ->visit('/user/select')
-              ->see("$('#customer_list').select2({");
+              ->see("$('#customer_list').select2(");
 
           $this->actingAs($this->userAdmin)
                ->visit('/invoice/create')
-               ->see("$('#customer_list').select2({");
+               ->see("$('#customer_list').select2(");
     }
 
     // ensure user sees correct message on blank invoices page
@@ -288,7 +258,8 @@ class InvoiceTest extends TestCase
     // ensure admin sees correct message on blank invoices page
     public function testBlankInvoicePageAdmin()
     {
-        $this->userAdmin->company_id = 2;
+        $company = factory(App\Company::class)->create();
+        $this->userAdmin->company_id = $company->id;
         $this->actingAs($this->userAdmin)
              ->visit('/invoice')
              ->see(trans('invoice.welcome-admin'));
@@ -301,5 +272,17 @@ class InvoiceTest extends TestCase
         $this->actingAs($this->userAdmin)
              ->visit('/invoice')
              ->dontSee(trans('invoice.welcome-admin'));
+    }
+
+    // check that only admins can toggle ready tick on invoice item
+    public function testReadyTickAccess()
+    {
+        $this->actingAs($this->userAdmin)
+             ->visit('/invoice/'.$this->invoice->id)
+             ->see('<input type="checkbox" name="chkReady" iiid="');
+
+        $this->actingAs($this->user)
+             ->visit('/invoice/'.$this->invoice->id)
+             ->dontSee('<input type="checkbox" name="chkReady" iiid="');
     }
 }

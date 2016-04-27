@@ -20,7 +20,7 @@
                 <a class="btn btn-primary" href="{{ action('InvoiceItemCategoryController@show', [$invoice_item_category->id]) }}">
                     Details
                 </a>
-                <a class="btn btn-danger" href="{{ url('/invoice_item_category/'.$invoice_item_category->id.'/delete') }}">
+                <a class="btn btn-danger" href="{{ '/invoice_item_category/'.$invoice_item_category->id.'/delete' }}">
                     Delete
                 </a>
             </div>

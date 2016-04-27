@@ -12,8 +12,9 @@ return [
     */
 
     'title'                  => 'Settings',
-    'next_invoice_number'    => 'Next Invoice Number',
-    'markup'                 => 'Default Parts Markup (%)',
+    'markup'                 => 'Default Item Markup (%)',
+    'tax'                    => 'GST',
+    'taxable'                => 'GST Registered',
     'bsb'                    => 'BSB',
     'bank_account_number'    => 'Bank Account number',
     'update_success'         => 'Settings updated',
@@ -26,5 +27,12 @@ return [
     'enquiries_email'        => 'Email',
     'enquiries_web'          => 'Web',
     'logo'                   => 'Company Logo',
-    
+    'logo_format_validation' => 'Expecting logo to be in jpg, png, or gif format.',
+    'email_signature'        => 'Email Signature',
+    'email_host'             => 'Email Host',
+    'email_port'             => 'Email Port',
+    'email_username'         => 'Email Username',
+    'email_password'         => 'Email Password',
+    'email_encryption'       => 'Email Encryption',
+
 ];

@@ -8,15 +8,69 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Email;
 use App\User;
-use App\Jobs\SendInvoiceEmail;
 use Mail;
+use App\Invoice;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Contracts\Config\Repository as Config;
+use Gate;
+use App\Factories\SettingsFactory;
 
 class EmailController extends Controller
 {
-	/**
-	 * Send an email
-	 */
+	public function showComposeEmailView(Invoice $invoice)
+	{
+		if (Gate::denies('view-invoice', $invoice)) {
+			abort(403);
+		}
+
+		$settings = SettingsFactory::create();
+		if ($settings->checkEmailSettings()) {
+			$email = $this->setupEmailObjectPreEmailView($invoice);
+			return view('invoice.email', compact('email'));
+		}
+		else {
+			\Session()->flash('status-warning', trans('invoice_email.warning-empty-settings'));
+			return redirect('/invoice/'.$invoice->id);
+		}
+	}
+
+	private function setupEmailObjectPreEmailView(Invoice $invoice)
+	{
+		$email = new Email();
+		$email->to = $invoice->user->email;
+		$email->receiver_id = $invoice->user->id;
+		$email->invoice_id = $invoice->id;
+		$email->subject = $this->subject($invoice);
+		$email->invoice = $this;
+		$email->body = $this->body($invoice);
+		return $email;
+	}
+
+	// the default subject for invoice emails
+    private function subject($invoice)
+    {
+        return 'Invoice '.$invoice->invoice_number;
+    }
+
+    // the default body text for invoice emails
+    private function body($invoice)
+    {
+		$settings = SettingsFactory::create();
+        return
+			'Hi '.$invoice->user->first_name.',<br />'.
+			'<br />'.
+			'Click the link below to view invoice '.$invoice->invoice_number.' for $'.
+			number_format($invoice->total, 2).'<br />'.
+            '<a href=\''.url('/view/'.$invoice->uuid).'\'>View Invoice</a><br />'.
+			'<br />'.
+			'Or copy and paste the following into your web browser<br />'.
+			url('/view/'.$invoice->uuid).'<br />'.
+			'<br />'.
+			'Thanks,<br />'.
+			Auth::user()->name.'<br />'.
+			$settings->get('email_signature');
+    }
+
 	public function send(Request $request)
 	{
 		$this->validate($request, [
@@ -26,9 +80,20 @@ class EmailController extends Controller
 			'body' => 'required'
 	    ]);
 
+		$email = $this->setupEmailObjectPostEmailView($request);
+
+		$this->setMailParameters();
+
+		$this->sendEmail($email);
+
+		return view('/content/email_sent');
+	}
+
+	private function setupEmailObjectPostEmailView(Request $request)
+	{
 		$receiver = User::findOrFail($request->receiver_id);
 
-		$email = new Email;
+		$email = new Email();
 		$email->cc = $request->cc;
 		$email->bcc = $request->bcc;
 		$email->subject = $request->subject;
@@ -39,33 +104,35 @@ class EmailController extends Controller
 		$email->from = Auth::user()->email;
 		$email->to = $receiver->email;
 		$email->save();
-		$this->sendMail($email);
-		// $this->dispatch(new SendInvoiceEmail($email));
-		return view('/content/email_sent');
+		return $email;
 	}
 
-	private function sendMail(Email $email)
+	private function setMailParameters()
 	{
-		$invoice = $email->invoice;
+		$settings = SettingsFactory::create();
+		app()->config['mail.host'] = $settings->get('email_host');
+		app()->config['mail.port'] = $settings->get('email_port');
+		app()->config['mail.username'] = $settings->get('email_username');
+		app()->config['mail.password'] = $settings->get('email_password');
+		app()->config['mail.encryption'] = $settings->get('email_encryption');
+	}
 
-		// create the pdf of the printed invoice
-		$pdf = \PDF::loadView('invoice.print', compact('invoice'));
-		$filename = '/tmp/invoice'.$invoice->invoice_number.'.pdf';
-
-		// and save it somewhere
-		\File::delete($filename);
-		$pdf->save($filename);
-
+	private function sendEmail(Email $email)
+	{
 		// then email the customer attaching the invoice
 		// could use job queues here, but leaving as a direct send for now
 		// so I don't have to worry about that listen job always running on the
 		// server. Also I'll immediately know if an email didn't work
-		Mail::send('emails.invoice', ['email' => $email], function ($m) use ($email, $filename) {
-			$m->from($email->from, $email->sender->business_name)
-			  ->to($email->to, $email->receiver->full_name)
-			  ->subject($email->subject)
-			  ->attach($filename);
+		Mail::send('emails.invoice', ['email' => $email], function ($m) use ($email) {
+			$m->from($email->from, $email->sender->business_name);
+			$m->to($email->to, $email->receiver->full_name);
+			if ($email->cc != '') {
+				$m->cc($email->cc);
+			}
+			if ($email->bcc != '') {
+				$m->bcc($email->bcc);
+			}
+			$m->subject($email->subject);
 		});
-
 	}
 }

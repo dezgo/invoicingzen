@@ -15,63 +15,63 @@
     {!! Form::open(['route' => 'settings.update', 'files' => true]) !!}
 
     <div class="form-group">
-        {!! Form::label('next_invoice_number', trans('settings.next_invoice_number'), ['class' => 'control-label']) !!}
-        {{ Form::text('next_invoice_number', Setting::get('next_invoice_number', '1'), ['class' => 'form-control']) }}
+        {!! Form::label('taxable', trans('settings.taxable'), ['class' => 'control-label']) !!}<Br />
+        {{ Form::checkbox('taxable', 'on', $settings->get('taxable'), ['class' => 'form-control', 'data-size' => 'mini']) }}
     </div>
 
     <div class="form-group">
         {!! Form::label('markup', trans('settings.markup'), ['class' => 'control-label']) !!}
-        {{ Form::text('markup', Setting::get('markup'), ['class' => 'form-control']) }}
+        {{ Form::text('markup', $settings->get('markup'), ['class' => 'form-control']) }}
     </div>
 
     <div class="form-group">
         {!! Form::label('bsb', trans('settings.bsb'), ['class' => 'control-label']) !!}
-        {{ Form::text('bsb', Setting::get('bsb'), ['class' => 'form-control']) }}
+        {{ Form::text('bsb', $settings->get('bsb'), ['class' => 'form-control']) }}
     </div>
 
     <div class="form-group">
         {!! Form::label('bank_account_number', trans('settings.bank_account_number'), ['class' => 'control-label']) !!}
-        {{ Form::text('bank_account_number', Setting::get('bank_account_number'), ['class' => 'form-control']) }}
+        {{ Form::text('bank_account_number', $settings->get('bank_account_number'), ['class' => 'form-control']) }}
     </div>
 
     <div class="form-group">
         {!! Form::label('abn', trans('settings.abn'), ['class' => 'control-label']) !!}
-        {{ Form::text('abn', Setting::get('abn'), ['class' => 'form-control']) }}
+        {{ Form::text('abn', $settings->get('abn'), ['class' => 'form-control']) }}
     </div>
 
     <div class="form-group">
         {!! Form::label('payment_terms', trans('settings.payment_terms'), ['class' => 'control-label']) !!}
-        {{ Form::text('payment_terms', Setting::get('payment_terms'), ['class' => 'form-control']) }}
+        {{ Form::text('payment_terms', $settings->get('payment_terms'), ['class' => 'form-control']) }}
     </div>
 
     <div class="form-group">
         {!! Form::label('mailing_address_line_1', trans('settings.mailing_address_line_1'), ['class' => 'control-label']) !!}
-        {{ Form::text('mailing_address_line_1', Setting::get('mailing_address_line_1'), ['class' => 'form-control']) }}
+        {{ Form::text('mailing_address_line_1', $settings->get('mailing_address_line_1'), ['class' => 'form-control']) }}
     </div>
 
     <div class="form-group">
         {!! Form::label('mailing_address_line_2', trans('settings.mailing_address_line_2'), ['class' => 'control-label']) !!}
-        {{ Form::text('mailing_address_line_2', Setting::get('mailing_address_line_2'), ['class' => 'form-control']) }}
+        {{ Form::text('mailing_address_line_2', $settings->get('mailing_address_line_2'), ['class' => 'form-control']) }}
     </div>
 
     <div class="form-group">
         {!! Form::label('mailing_address_line_3', trans('settings.mailing_address_line_3'), ['class' => 'control-label']) !!}
-        {{ Form::text('mailing_address_line_3', Setting::get('mailing_address_line_3'), ['class' => 'form-control']) }}
+        {{ Form::text('mailing_address_line_3', $settings->get('mailing_address_line_3'), ['class' => 'form-control']) }}
     </div>
 
     <div class="form-group">
         {!! Form::label('enquiries_phone', trans('settings.enquiries_phone'), ['class' => 'control-label']) !!}
-        {{ Form::text('enquiries_phone', Setting::get('enquiries_phone'), ['class' => 'form-control']) }}
+        {{ Form::text('enquiries_phone', $settings->get('enquiries_phone'), ['class' => 'form-control']) }}
     </div>
 
     <div class="form-group">
         {!! Form::label('enquiries_email', trans('settings.enquiries_email'), ['class' => 'control-label']) !!}
-        {{ Form::text('enquiries_email', Setting::get('enquiries_email'), ['class' => 'form-control']) }}
+        {{ Form::text('enquiries_email', $settings->get('enquiries_email'), ['class' => 'form-control']) }}
     </div>
 
     <div class="form-group">
         {!! Form::label('enquiries_web', trans('settings.enquiries_web'), ['class' => 'control-label']) !!}
-        {{ Form::text('enquiries_web', Setting::get('enquiries_web'), ['class' => 'form-control']) }}
+        {{ Form::text('enquiries_web', $settings->get('enquiries_web'), ['class' => 'form-control']) }}
     </div>
 
     <div class="form-group">
@@ -80,7 +80,37 @@
         {{ Form::file('logo') }}
     </div>
 
-        {!! Form::submit('Update', ['class' => 'btn btn-primary', 'id' => 'btnSubmit']) !!}
+    <div class="form-group">
+        {!! Form::label('email_signature', trans('settings.email_signature'), ['class' => 'control-label']) !!}
+        {{ Form::textarea('email_signature', $settings->get('email_signature'), ['class' => 'form-control']) }}
+    </div>
+
+    <div class="form-group">
+        {!! Form::label('email_host', trans('settings.email_host'), ['class' => 'control-label']) !!}
+        {{ Form::text('email_host', $settings->get('email_host'), ['class' => 'form-control']) }}
+    </div>
+
+    <div class="form-group">
+        {!! Form::label('email_port', trans('settings.email_port'), ['class' => 'control-label']) !!}
+        {{ Form::text('email_port', $settings->get('email_port'), ['class' => 'form-control']) }}
+    </div>
+
+    <div class="form-group">
+        {!! Form::label('email_username', trans('settings.email_username'), ['class' => 'control-label']) !!}
+        {{ Form::text('email_username', $settings->get('email_username'), ['class' => 'form-control']) }}
+    </div>
+
+    <div class="form-group">
+        {!! Form::label('email_password', trans('settings.email_password'), ['class' => 'control-label']) !!}
+        <input type='password' id='email_password' name='email_password' value='{{ $settings->get('email_password') }}' class='form-control' />
+    </div>
+
+    <div class="form-group">
+        {!! Form::label('email_encryption', trans('settings.email_encryption'), ['class' => 'control-label']) !!}
+        {{ Form::text('email_encryption', $settings->get('email_encryption'), ['class' => 'form-control']) }}
+    </div>
+
+    {!! Form::submit('Update', ['class' => 'btn btn-primary', 'id' => 'btnSubmit']) !!}
 
     {!! Form::close() !!}
 
@@ -93,6 +123,12 @@ $(document).ready (function(){
     $("#success-alert").fadeTo(2000, 500).slideUp(500, function(){
         $("#success-alert").alert('close');
     });
+    $("[name='taxable']").bootstrapSwitch();
 });
 </script>
+
+<script src="/vendor/unisharp/laravel-ckeditor/ckeditor.js"></script>
+    <script>
+        CKEDITOR.replace( 'email_signature' );
+    </script>
 @stop

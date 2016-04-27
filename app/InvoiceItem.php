@@ -3,7 +3,6 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Company;
 
 class InvoiceItem extends Model
 {
@@ -73,6 +72,17 @@ class InvoiceItem extends Model
 		$this->attributes['url'] = strtolower($value);
 		if ($value != '' && substr($value, 0, 4) != 'http') {
 			$this->attributes['url'] = 'http://'.$value;
+		}
+	}
+
+	public function getCategoryDescriptionAttribute()
+	{
+		if ($this->category == null) {
+			return $this->category()->withTrashed()->get()->first()->description.
+				' (deleted)';
+		}
+		else {
+			return $this->category->description;
 		}
 	}
 }

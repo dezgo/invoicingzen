@@ -9,36 +9,23 @@ use App\Http\Controllers\Controller;
 use App\Invoice;
 use App\InvoiceItem;
 use App\User;
-use App\Email;
 use App\Http\Requests\InvoiceRequest;
 use Illuminate\Support\Facades\Auth;
+use Gate;
+use App\Factories\NextInvoiceNumberFactory;
+use App\Exceptions\CustomException;
+use App\InvoiceMerger;
+use App\Services\PDFStreamInvoiceGenerator;
+use App\Factories\SettingsFactory;
+use App\Services\CustomInvoice\InvoiceGenerator;
+use App\InvoiceTemplate;
 
 class InvoiceController extends Controller
 {
-	/**
-	 * Check that the current user is allowed to see the specified invoice
-	 *
-	 * @return boolean
-	 */
-	private function checkOKToAccess(Invoice $invoice)
-	{
-		if (Auth::user()->isAdmin()) {
-			return true;
-		}
-		else {
-			return Auth::user()->id == $invoice->user->id;
-		}
-	}
-
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
 	public function index()
 	{
 		if (Auth::user()->isAdmin()) {
-			$invoices = Invoice::all();
+			$invoices = Invoice::allInCompany(Auth::user()->company_id);
 		}
 		else {
 			$invoices = Invoice::where('customer_id', Auth::user()->id)->get();
@@ -64,17 +51,20 @@ class InvoiceController extends Controller
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function create(User $customer = null)
+	public function create(User $customer = null, Invoice $invoice)
 	{
-		if (!Auth::user()->isAdmin()) {
+		if (Gate::denies('admin')) {
 			abort(403);
 		}
 
-		$invoice = new Invoice();
 		if (!is_null($customer)) {
 			$invoice->customer_id = $customer->id;
 		}
+
+        $invoice->invoice_number = NextInvoiceNumberFactory::get(Auth::user()->company_id);
+
 		$invoice_items = InvoiceItem::invoiceItemList();
+		\Carbon\Carbon::setToStringFormat('d-m-Y');
 		return view('invoice.create',compact('invoice','invoice_items'));
 	}
 
@@ -86,9 +76,6 @@ class InvoiceController extends Controller
 	 */
 	public function store(InvoiceRequest $request)
 	{
-		if (!Auth::user()->isAdmin()) {
-			abort(403);
-		}
 		$invoice = Invoice::create($request->all());
 		return redirect('/invoice/'.$invoice->id);
 	}
@@ -101,10 +88,11 @@ class InvoiceController extends Controller
 	 */
 	public function show(Invoice $invoice)
 	{
-		if (!$this->checkOKToAccess($invoice)) {
+		if (Gate::denies('view-invoice', $invoice)) {
 			abort(403);
 		}
 
+		\Carbon\Carbon::setToStringFormat('d-m-Y');
 		return view('invoice.show', compact('invoice'));
 	}
 
@@ -116,10 +104,11 @@ class InvoiceController extends Controller
 	 */
 	public function edit(Invoice $invoice)
 	{
-		if (!Auth::user()->isAdmin()) {
+		if (Gate::denies('edit-invoice', $invoice)) {
 			abort(403);
 		}
 
+		\Carbon\Carbon::setToStringFormat('d-m-Y');
 		$invoice_items = InvoiceItem::all()->where('invoice_id', $invoice->id);
 		return view('invoice.edit', compact('invoice','invoice_items'));
 	}
@@ -133,10 +122,6 @@ class InvoiceController extends Controller
 	 */
 	public function update(InvoiceRequest $request, Invoice $invoice)
 	{
-		if (!Auth::user()->isAdmin()) {
-			abort(403);
-		}
-
 		$invoice->update($request->all());
 		return redirect('/invoice/'.$invoice->id);
 	}
@@ -149,10 +134,6 @@ class InvoiceController extends Controller
 	 */
 	public function destroy(Invoice $invoice)
 	{
-		if (!Auth::user()->isAdmin()) {
-			abort(403);
-		}
-
 		$invoice->delete();
 		return redirect('/invoice');
 	}
@@ -165,7 +146,7 @@ class InvoiceController extends Controller
 	 */
 	public function delete(Invoice $invoice)
 	{
-		if (!Auth::user()->isAdmin()) {
+		if (Gate::denies('edit-invoice', $invoice)) {
 			abort(403);
 		}
 
@@ -178,46 +159,70 @@ class InvoiceController extends Controller
 	 */
 	public function prnt(Invoice $invoice)
 	{
-		if (!$this->checkOKToAccess($invoice)) {
+		if (Gate::denies('view-invoice', $invoice)) {
 			abort(403);
 		}
 
-		return view('invoice.print', compact('invoice'));
+		return $this->viewPrint($invoice);
 	}
 
-	/**
-	 * Email the invoice to the Customer
-	 */
-	public function email(Invoice $invoice)
+	public function selectmerge(Invoice $invoice)
 	{
-		if (!Auth::user()->isAdmin()) {
+		if (Gate::denies('edit-invoice', $invoice)) {
 			abort(403);
 		}
 
-		if ($invoice->user->email != '') {
-			$email = new Email;
-			$email->from = Auth::user()->email;
-			$email->to = $invoice->user->email;
-			$email->receiver_id = $invoice->user->id;
-			$email->invoice_id = $invoice->id;
-			$email->subject = 'Invoice '.$invoice->invoice_number;
-			$email->invoice = $invoice;
-			$email->body =
-				'Hi '.$invoice->user->first_name.',<br />'.
-				'<br />'.
-				'Please find attached invoice '.$invoice->invoice_number.' for $'.
-				number_format($invoice->total, 2).'<br />'.
-				'<br />'.
-				'Thanks,<br />'.
-				Auth::user()->name.'<br />'.
-				Auth::user()->business_name.
-				$email->footer_text;
+		return view('invoice.selectmerge', compact('invoice'));
+	}
 
-			return view('invoice.email', compact('email'));
+	public function domerge(Request $request)
+	{
+		$invoice1 = Invoice::find($request->merge_invoice_1);
+		$invoice2 = Invoice::find($request->merge_invoice_2);
+
+		$invoice_merger = new InvoiceMerger($invoice1, $invoice2);
+		$invoice_merger->merge();
+		return redirect('/invoice');
+	}
+
+	public function view($uuid)
+	{
+		$invoice = Invoice::where('uuid','=',$uuid)->first();
+		if ($invoice == null) {
+			throw new CustomException(trans('exception_messages.invalid-uuid'));
 		}
-		else {
-			\Session()->flash('status-warning', 'Customer does not have an email address!');
-		}
+
+		Auth::login($invoice->user);
+		return $this->viewPrint($invoice);
+	}
+
+	private function viewPrint(Invoice $invoice)
+	{
+		$settings = SettingsFactory::create();
+		$invoice_generator = new InvoiceGenerator();
+		$template = InvoiceTemplate::get($invoice->type, Auth::user()->company);
+		$invoice_content = $invoice_generator->output($template, $invoice);
+		return view('invoice.print', compact('invoice', 'settings', 'invoice_content'));
+	}
+
+	public function generate_pdf(Invoice $invoice)
+	{
+		$pdf = new PDFStreamInvoiceGenerator();
+        $pdf->create($invoice);
+
+        return $pdf->output();
+	}
+
+	public function markPaid(Invoice $invoice)
+	{
+		$invoice->markPaid();
+		return $this->viewPrint($invoice);
+	}
+
+	public function markUnpaid(Invoice $invoice)
+	{
+		$invoice->markUnpaid();
+		return $this->viewPrint($invoice);
 	}
 
 	/**

@@ -2,13 +2,48 @@
 
 @section('content')
 
-  @if(!Gate::check('authenticated'))
-  <div class="row">
-      <div class="col-md-5 col-md-offset-7">
+<table>
+    <tr valign="top">
+        <td width="45%">
+            <div class="panel panel-default">
+                <div class="panel-heading">Need a simple invoicing system?</div>
+                <div class="panel-body">
+                    Hi, I'm Derek. I wrote InvoicingZen to fill a need I had in
+                    my <a target="_blank" href="http://computerwhiz.com.au">own
+                    small business</a> for a simple invoicing system without the
+                    high costs charged by many of the online systems.<br />
+                </div>
+            </div>
+            <Br />
+            <div class="panel panel-default">
+                <div class="panel-heading">What does it do?</div>
+                <div class="panel-body">
+                    Here's what you get:<br />
+                    <ul>
+                        <li>Works for GST and non-GST registered businesses</li>
+                        <li>Custom Invoice/Quote/Receipt Templates</li>
+                        <li>Ability to upload your own logo</li>
+                        <li>Invoices viewable online and downloadable as PDF</li>
+                        <li>One-click to mark invoice as paid/unpaid</li>
+                        <li>Peace-of-mind - SSL encrypts all data communications
+                            between browser and server</li>
+                        <li>Email invoices using your own email address</li>
+                        <li>Customise email signature</li>
+                        <li>Customers get link in email which takes them straight
+                            to their invoice in one click</li>
+                        <li>Lightning-fast filter on invoice list page to quickly
+                            find invoices</li>
+                        <li>Missing something? <a href="/contact">Let me know</a></li>
+                    </ul>
+                </div>
+            </div>
+        </td>
+        <td width="10%">&nbsp;</Td>
+        <td width="45%">
           <div class="panel panel-default">
               <div class="panel-heading">Sign Up. It's free!</div>
               <div class="panel-body">
-                  <form class="form-horizontal" role="form" method="POST" action="{{ url('/register') }}">
+                  <form class="form-horizontal" role="form" method="POST" action="/register">
                       {!! csrf_field() !!}
 
                       <div class="form-group{{ $errors->has('first_name') ? ' has-error' : '' }}">
@@ -34,6 +69,20 @@
                               @if ($errors->has('last_name'))
                                   <span class="help-block">
                                       <strong>{{ $errors->first('last_name') }}</strong>
+                                  </span>
+                              @endif
+                          </div>
+                      </div>
+
+                      <div class="form-group{{ $errors->has('business_name') ? ' has-error' : '' }}">
+                          <label class="col-md-4 control-label">Business Name</label>
+
+                          <div class="col-md-6">
+                              <input type="text" class="form-control" name="business_name" value="{{ old('business_name') }}">
+
+                              @if ($errors->has('business_name'))
+                                  <span class="help-block">
+                                      <strong>{{ $errors->first('business_name') }}</strong>
                                   </span>
                               @endif
                           </div>
@@ -67,20 +116,6 @@
                           </div>
                       </div>
 
-                      <div class="form-group{{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
-                          <label class="col-md-4 control-label">Confirm Password</label>
-
-                          <div class="col-md-6">
-                              <input type="password" class="form-control" name="password_confirmation">
-
-                              @if ($errors->has('password_confirmation'))
-                                  <span class="help-block">
-                                      <strong>{{ $errors->first('password_confirmation') }}</strong>
-                                  </span>
-                              @endif
-                          </div>
-                      </div>
-
                       <div class="form-group">
                           <div class="col-md-3 col-md-offset-4">
                               <button id="btnSignUp" type="submit" class="btn btn-primary">
@@ -88,14 +123,14 @@
                               </button>
                           </div>
                           <div class="col-md-5">
-                              <a href='/login'>Existing User? Login</a>
+                              <a href='/login' name='linkExistingUser'>Existing User? Login</a>
                           </div>
                       </div>
                   </form>
               </div>
           </div>
-      </div>
-  </div>
-  @endif
+      </td>
+  </tr>
+</table>
 
 @stop

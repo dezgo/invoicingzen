@@ -9,6 +9,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Foundation\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use App\Exceptions\CustomException;
 
 class Handler extends ExceptionHandler
 {
@@ -34,6 +35,9 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $e)
     {
+        if (env('APP_ENV') == 'production') {
+            \Log::error($e);
+        }
         return parent::report($e);
     }
 
@@ -46,6 +50,19 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-        return parent::render($request, $e);
+        switch ($e) {
+            case ($e instanceof \Swift_TransportException):
+                $message = $e->getMessage();
+                return view('errors.535', compact('message'));
+                break;
+
+            case ($e instanceof CustomException):
+                $message = $e->getMessage();
+                return view('errors.runtime', compact('message'));
+                break;
+
+            default:
+                  return parent::render($request, $e);
+        }
     }
 }

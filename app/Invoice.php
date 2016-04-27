@@ -6,16 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 use DB;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Scopes\CompanyBoundary;
+use Illuminate\Support\Facades\Auth;
+use Ramsey\Uuid\Uuid;
+use App\User;
+use App\Factories\SettingsFactory;
 
 class Invoice extends Model
 {
 	use SoftDeletes;
-	use CompanyBoundary;
 
 	protected $table = 'invoices';
-	protected $dateFormat = 'd-m-Y';
-	protected $dates = ['invoice_date', 'due_date', 'created_at', 'updated_at', 'deleted_at'];
+	protected $dates = ['invoice_date', 'due_date', 'deleted_at'];
 
 	/**
 	 * The attributes that are mass assignable.
@@ -32,44 +33,18 @@ class Invoice extends Model
 	];
 
 	/**
-	 * Constructor - set default values for new record
-	 *
-	 * @return null
-	 */
+     * Constructor - set default values for new record
+     *
+     * @return null
+     */
 	public function __construct(array $attributes = array())
 	{
-		$this->setRawAttributes(array(
-			'invoice_date' => $this->getDefaultInvoiceDate(),
-			'due_date' => $this->getDefaultDueDate(),
-			'invoice_number' => $this->getNextInvoiceNumber(),
-		), true);
+		$defaults = [
+		       'invoice_date' => $this->getDefaultInvoiceDate(),
+		       'due_date' => $this->getDefaultDueDate(),
+		       ];
+		$this->setRawAttributes($defaults, true);
 		parent::__construct($attributes);
-	}
-
-	/**
-	 * Check if the given invoice number has already been used
-	 *
-	 * @return boolean (true if available)
-	 */
-	private function checkInvoiceNumber($invoice_number)
-	{
-		$count = DB::table('invoices')->where('invoice_number', $invoice_number)->count();
-		return $count == 0;
-	}
-
-	/**
-	 * Gets the next invoice number, being the setting, but if that's already
-	 * taken, keep incrementing until we find an available one
-	 *
-	 * @return int
-	 */
-	private function getNextInvoiceNumber()
-	{
-		$invoice_number = \Setting::get('next_invoice_number',1);
-		while (!$this->checkInvoiceNumber($invoice_number)) {
-			$invoice_number = $invoice_number + 1;
-		}
-		return $invoice_number;
 	}
 
 	private function getDefaultInvoiceDate()
@@ -84,7 +59,7 @@ class Invoice extends Model
 
 	public function getDescriptionAttribute()
 	{
-		return 'Invoice '.$this->invoice_number.': '.$this->user->full_name.' ('.$this->owing.')';
+		return $this->invoice_number.': '.$this->user->description;
 	}
 
 	/**
@@ -110,54 +85,36 @@ class Invoice extends Model
 		return $this->invoice_items->sum('total');
 	}
 
+	/*
+	 * Get amount owing on invoice (or zero if a quote)
+	 */
 	public function getOwingAttribute()
 	{
-		return $this->total - $this->paid;
+		if ($this->is_quote == '') {
+			return $this->total - $this->paid;
+		}
+		else {
+			return 0;
+		}
 	}
 
-	/*
-	 * Always return due date in set format
-	 *
-	 */
-	public function getDueDateAttribute($value)
-	{
-		return date($this->dateFormat, strtotime($value));
-	}
-
-	/*
-	 * Always return invoice date in set format
-	 *
-	 */
-	public function getInvoiceDateAttribute($value)
-	{
-		return date($this->dateFormat, strtotime($value));
-	}
-
-	/*
-	 * Always return invoice date in set format
-	 *
-	 */
 	public function getTypeAttribute($value)
 	{
 		if ($this->is_quote == 'on') {
-			return "Quote";
+			return "quote";
 		}
 		elseif (round($this->owing,2) > 0.00) {
-			return "Invoice";
+			return "invoice";
 		}
 		else {
-			return "Receipt";
+			return "receipt";
 		}
 	}
 
 	/**
-	 * Convert value returned by checkbox html control to boolean
-	 * suitable for storing in db
-	 */
-	/**
-	 * Convert due date into an instance of Carbon
-
-	 * @param $value
+	 * Holding is_quote attribute as either 'on' or blank in app, but stored
+	 * as boolean in database. This converts it from string to boolean before
+	 * storing in db
 	 */
 	public function setIsQuoteAttribute($value)
 	{
@@ -165,13 +122,9 @@ class Invoice extends Model
 	}
 
 	/**
-	 * Convert value returned by checkbox html control to boolean
-	 * suitable for storing in db
-	 */
-	/**
-	 * Convert due date into an instance of Carbon
-
-	 * @param $value
+	 * Holding is_quote attribute as either 'on' or blank in app, but stored
+	 * as boolean in database. This converts it from boolean to string on
+	 * retrieval from db
 	 */
 	public function getIsQuoteAttribute($value)
 	{
@@ -179,22 +132,53 @@ class Invoice extends Model
 	}
 
 	/**
- 	 * Convert due date into an instance of Carbon
+	* Convert due date into an instance of Carbon
 
-	 * @param $value
-	 */
+	* @param $value
+	*/
 	public function setDueDateAttribute($value)
 	{
-		$this->attributes['due_date'] = Carbon::createFromFormat($this->dateFormat, $value);
+		if(gettype($value) == 'string') {
+			$this->attributes['due_date'] = Carbon::createFromFormat('d-m-Y', $value);
+		}
 	}
 
 	/**
-	 * Convert invoice date into an instance of Carbon
-	 *
-	 * @param $value
-	 */
+	* Convert invoice date into an instance of Carbon
+	*
+	* @param $value
+	*/
 	public function setInvoiceDateAttribute($value)
 	{
-		$this->attributes['invoice_date'] = Carbon::createFromFormat($this->dateFormat, $value);
+		if(gettype($value) == 'string') {
+			$this->attributes['invoice_date'] = Carbon::createFromFormat('d-m-Y', $value);
+   		}
+	}
+
+	public function getCustomerAttribute()
+	{
+		return $this->user->description;
+	}
+
+	public static function allInCompany($company_id)
+	{
+		return Company::find($company_id)->invoices;
+	}
+
+	public static function GenerateUUID($id)
+	{
+		return Uuid::uuid5(Uuid::NAMESPACE_DNS, 'invoicingzen '.$id);
+	}
+
+	public function markPaid()
+	{
+		$this->paid = $this->total;
+		$this->save();
+	}
+
+	public function markUnpaid()
+	{
+		$this->paid = 0;
+		$this->save();
 	}
 }

@@ -39,7 +39,7 @@ return [
     |
     */
 
-    'url' => 'http://localhost',
+    'url' => 'https://localhost',
 
     /*
     |--------------------------------------------------------------------------
@@ -147,9 +147,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
-
         Collective\Html\HtmlServiceProvider::class,
-        // Illuminate\Html\HtmlServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -161,7 +159,8 @@ return [
         Barryvdh\Snappy\ServiceProvider::class,
         anlutro\LaravelSettings\ServiceProvider::class,
         Unisharp\Ckeditor\ServiceProvider::class,
-        Laravel\Cashier\CashierServiceProvider::class,
+        // Laravel\Cashier\CashierServiceProvider::class,
+        Jenssegers\Rollbar\RollbarServiceProvider::class,
     ],
 
     /*

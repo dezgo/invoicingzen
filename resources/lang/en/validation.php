@@ -72,7 +72,7 @@ return [
     ],
     'string'               => 'The :attribute must be a string.',
     'timezone'             => 'The :attribute must be a valid zone.',
-    'unique'               => 'The :attribute has already been taken.',
+    'unique'               => 'The :attribute has already been used.',
     'url'                  => 'The :attribute format is invalid.',
 
     /*
@@ -114,6 +114,19 @@ return [
         'enquiries_email' => [
             'email' => trans('settings.enquiries_web').' doesn\'t appear to be a valid email address.',
         ],
+        'business_name' => [
+            'unique' =>  'A user has already registered with that business name. '.
+                         'If you are a client of that business looking for your invoice, '.
+                         'you will already have an account. You can easily retrieve you '.
+                         'password using the forgot password link on the '.
+                         'login screen.',
+        ],
+        'invoice_number' => [
+            'invoice_number_unique' => 'That invoice number has already been used.',
+        ],
+        'template' => [
+            'noscript' => 'No script is allowed in the invoice template.',
+        ]
     ],
 
     /*

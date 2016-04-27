@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-use App\Customer;
+use Illuminate\Support\Facades\Auth;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -33,30 +33,25 @@ class AuthServiceProvider extends ServiceProvider
         $gate->define('admin', function ($user) {
             return $user->isAdmin();
         });
-        $gate->define('customer', function ($user) {
-            return $user->isCustomer();
-        });
 
         $gate->define('create-invoice', function ($user) {
             return $user->isAdmin();
         });
 
-        $gate->define('view-invoice-x', function ($user, $invoice) {
-            if ($user->isAdmin())
-            {
-                return true;
-            }
-
-            if ($user->isCustomer())
-            {
-                return $user->hasCustomer($invoice->customer);
+        $gate->define('view-invoice', function ($user, $invoice) {
+            if (Auth::check()) {
+                if ($invoice->user->company_id == Auth::user()->company_id and
+                    ($user->isAdmin() || $invoice->user->id == $user->id)) {
+                    return true;
+                }
             }
         });
 
-        $gate->define('view-invoice', function ($user) {
-            if ($user->isAdmin() || $user->isCustomer())
-            {
-                return true;
+        $gate->define('edit-invoice', function ($user, $invoice) {
+            if (Auth::check()) {
+                if ($invoice->user->company_id == Auth::user()->company_id and $user->isAdmin()) {
+                    return true;
+                }
             }
         });
 
@@ -69,6 +64,13 @@ class AuthServiceProvider extends ServiceProvider
 
         $gate->define('update-user', function($user, $userToView) {
             if ($user->isAdmin() || $user->id == $userToView->id)
+            {
+                return true;
+            }
+        });
+
+        $gate->define('premium', function($user) {
+            if ($user->isAdmin() and $user->premium)
             {
                 return true;
             }

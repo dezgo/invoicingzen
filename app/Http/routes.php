@@ -13,19 +13,16 @@
 
 // routes accessible to anyone whether authenticated or not
 Route::group(['middleware' => 'web'], function () {
-
     Route::auth();
-    // Route::match(['put', 'patch'], 'profile/update', 'Auth\AuthController@update');
-    // Route::post('profile/edit', 'Auth\AuthController@update');
-    // Route::get('profile/edit', 'Auth\AuthController@edit');
-    Route::get('/', function () {
-       return view('content.index');
-    });
+    Route::get('/', 'HomeController@index')->name('home.index');
+    Route::get('/contact', 'HomeController@contact')->name('home.contact');
+    Route::get('/pricing', 'HomeController@pricing')->name('home.pricing');
 
     Route::get('/release-notes', function () {
        return view('content.release-notes');
     });
 
+    Route::get('/view/{uuid}', 'InvoiceController@view')->name('invoice.view');
 });
 
 Route::group(['middleware' => ['web', 'superadmin']], function() {
@@ -72,10 +69,23 @@ Route::group(['middleware' => ['web', 'auth']], function() {
     Route::resource('invoice', 'InvoiceController');
     Route::get('invoice/{invoice}/print', 'InvoiceController@prnt');
     Route::post('invoice/{invoice}/pay', 'InvoiceController@pay')->name('invoice.pay');
+    Route::get('invoice/{invoice}/pdf', 'InvoiceController@generate_pdf');
 });
 
+// routes only accessible to administrators
 Route::group(['middleware' => ['web', 'admin']], function() {
     Route::get('invoice/{customer}/create', 'InvoiceController@create'); // create invoice for given customer
     Route::get('invoice/{invoice}/delete', 'InvoiceController@delete');
-    Route::get('invoice/{invoice}/email', 'InvoiceController@email')->name('invoice.email');
+    Route::get('invoice/{invoice}/email', 'EmailController@showComposeEmailView');
+    Route::get('invoice/{invoice}/merge', 'InvoiceController@selectmerge');
+    Route::get('invoice/{invoice}/pay', 'InvoiceController@markPaid');
+    Route::get('invoice/{invoice}/unpay', 'InvoiceController@markUnpaid');
+    Route::post('invoice/merge', 'InvoiceController@domerge');
+});
+
+Route::group(['middleware' => ['web', 'admin', 'premium']], function() {
+    Route::get('invoice_template/defaults', 'InvoiceTemplateController@defaults');
+    Route::post('invoice_template/defaults', 'InvoiceTemplateController@defaults_force');
+    Route::resource('invoice_template', 'InvoiceTemplateController');
+    Route::get('invoice_template/{invoice_template}/delete', 'InvoiceTemplateController@delete')->name('invoice_template.delete');
 });

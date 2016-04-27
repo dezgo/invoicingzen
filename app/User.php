@@ -11,6 +11,7 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Cashier\Billable;
+use App\Scopes\CompanyBoundaryScope1;
 
 class User extends Model implements AuthenticatableContract,
                                     AuthorizableContract,
@@ -41,13 +42,13 @@ class User extends Model implements AuthenticatableContract,
         'address2',
         'suburb',
         'state',
-        'postcode'
+        'postcode',
     ];
 
     public function getDescriptionAttribute()
     {
         if ($this->business_name != '') {
-            return $this->business_name;
+            return $this->business_name.' ('.$this->full_name.')';
         }
         else {
             return $this->full_name;
@@ -64,9 +65,9 @@ class User extends Model implements AuthenticatableContract,
 
     public function getAddressMultiAttribute()
     {
-        return (($this->business_name != '')?$this->business_name.'<br>':'').
-            $this->address1.'<br>'.
-            (($this->address2 != '')?$this->address2.'<br>':'').
+        return (($this->business_name != '')?$this->business_name.'<br />':'').
+            $this->address1.'<br />'.
+            (($this->address2 != '')?$this->address2.'<br />':'').
             $this->suburb.' '.$this->state.' '.$this->postcode;
     }
 
@@ -93,14 +94,9 @@ class User extends Model implements AuthenticatableContract,
         return $this->hasRole('admin') || $this->isSuperAdmin();
     }
 
-    public function isCustomer()
-    {
-        return $this->hasRole('customer') || $this->isAdmin();
-    }
-
     public function isUser()
     {
-        return !$this->isCustomer();
+        return !$this->isAdmin();
     }
 
     private function hasRole($roleDescription)
@@ -124,7 +120,6 @@ class User extends Model implements AuthenticatableContract,
     {
         if ($this->isSuperAdmin()) { return 'super_admin'; }
         if ($this->isAdmin()) { return 'admin'; }
-        if ($this->isCustomer()) { return 'customer'; }
         if ($this->isUser()) { return 'user'; }
     }
 
@@ -140,17 +135,35 @@ class User extends Model implements AuthenticatableContract,
             case 'admin':
                 $this->roles()->attach(2);
                 break;
-            case 'customer':
-                $this->roles()->attach(3);
-                break;
         }
     }
 
     /**
      * Return ordered list of users for use in select elements
      */
-    public static function userSelectList()
+    public function userSelectList()
     {
-        return User::all()->sortBy('description')->lists('description', 'id');
+        return User::where('company_id', '=', $this->company_id)->get()->sortBy('description')->lists('description', 'id');
+    }
+
+    /**
+	 * Setup the relationship to company
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 */
+	public function company()
+	{
+		return $this->belongsTo('App\Company', 'company_id');
+	}
+
+    public static function createWithCompany(array $attributes = [], $company_id)
+    {
+        $attributes['company_id'] = $company_id;
+        return parent::create($attributes);
+    }
+
+    public function getPremiumAttribute()
+    {
+        return true;
     }
 }

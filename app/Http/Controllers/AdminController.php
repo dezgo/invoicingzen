@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Company;
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Validator;
+use App\Factories\SettingsFactory;
 
 class AdminController extends Controller
 {
@@ -18,25 +18,13 @@ class AdminController extends Controller
 	 */
 	public function show()
 	{
+        $settings = SettingsFactory::create();
 		return view('admin.settings', compact('settings'));
 	}
 
-	/**
-	 * Ensure the logo is uploaded in the correct mimetype
-	 *
-	 * @param  int  $id
-	 * @return boolean
-	 */
-	private function checkLogoMimeType($file)
-	{
-		return $file->getClientMimeType() == 'image/jpeg';
-
-	}
-
-    public function update(Request $request)
+	public function update(Request $request)
     {
 		$validator = Validator::make($request->all(), [
-			'next_invoice_number' => 'numeric',
 			'markup' => 'numeric',
 			'bsb' => 'regex:/^\d{6}$/',
 			'bank_account_number' => 'regex:/^\d{6,10}$/',
@@ -48,13 +36,14 @@ class AdminController extends Controller
 			'enquiries_phone' => 'regex:/^[\d ()-]{6,14}$/',
 			'enquiries_email' => 'email',
 			'enquiries_web' => 'url',
+			'email_port' => 'numeric',
 			]);
 
 		if ($request->hasFile('logo')) {
 			$validator->after(function($validator) {
-			    if (!$this->checkLogoMimeType($validator->getFiles()['logo'])) {
-			        $validator->errors()->add('logo', 'Expecting logo to be in JPEG format');
-			    }
+				if (!$this->checkLogoMimeType($validator->getFiles()['logo'])) {
+					$validator->errors()->add('logo', trans('settings.logo_format_validation'));
+				}
 			});
 		}
 
@@ -64,27 +53,36 @@ class AdminController extends Controller
 					->withInput();
 		}
 
-		\Setting::set('next_invoice_number', $request->next_invoice_number);
-		\Setting::set('markup', $request->markup);
-		\Setting::set('abn', $request->abn);
-		\Setting::set('payment_terms', $request->payment_terms);
-		\Setting::set('bsb', $request->bsb);
-		\Setting::set('bank_account_number', $request->bank_account_number);
-		\Setting::set('mailing_address_line_1', $request->mailing_address_line_1);
-		\Setting::set('mailing_address_line_2', $request->mailing_address_line_2);
-		\Setting::set('mailing_address_line_3', $request->mailing_address_line_3);
-		\Setting::set('enquiries_phone', $request->enquiries_phone);
-		\Setting::set('enquiries_email', $request->enquiries_email);
-		\Setting::set('enquiries_web', $request->enquiries_web);
-		if ($request->hasFile('logo')) {
-			dd($request->file('logo'));
-			\Setting::set('logo', $request->file('logo'));
-			$destinationPath = public_path().'/images';
-			$request->file('logo')->move($destinationPath, 'logo.jpg');
-		}
-		\Setting::setExtraColumns(['company_id' => Company::my_id()]);
-        \Setting::save();
-        $request->session()->flash('status', trans('settings.update_success'));
+        $settings = SettingsFactory::create();
+		$settings->setAllUsing($request);
+		$request->session()->flash('status', trans('settings.update_success'));
         return redirect(url('/settings'));
     }
+
+	/**
+	 * Ensure the logo is uploaded in the correct mimetype
+	 *
+	 * @param  int  $id
+	 * @return boolean
+	 */
+	private function checkLogoMimeType($file)
+	{
+		if ($file->getClientMimeType() == 'image/jpeg' ||
+			$file->getClientMimeType() == 'image/png' ||
+			$file->getClientMimeType() == 'image/gif'
+			) {
+				return true;
+		}
+
+		if ($file->getClientMimeType() == "application/octet-stream") {
+			if (strtolower($file->getExtension() == 'jpg' ||
+				strtolower($file->getExtension()) == 'jpeg' ||
+				strtolower($file->getExtension()) == 'png' ||
+				strtolower($file->getExtension()) == 'gif'
+				)) {
+					return true;
+			}
+		}
+		return false;
+	}
 }

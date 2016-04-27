@@ -9,6 +9,8 @@ class InvoiceItemCategoryTest extends TestCase
 	use DatabaseTransactions;
 
 	private $user;
+	private $category;
+	private $invoice_item;
 
 	public function setUp()
 	{
@@ -17,6 +19,9 @@ class InvoiceItemCategoryTest extends TestCase
 
 		$this->user = factory(App\User::class)->create();
 		$this->user->roles()->attach(1);
+
+		$this->invoice_item = App\InvoiceItem::first();
+		$this->category = $this->invoice_item->category;
 	}
 
 	public function testShowIndex()
@@ -54,14 +59,14 @@ class InvoiceItemCategoryTest extends TestCase
 	public function testEdit()
 	{
 		$this->actingAs($this->user)
-			->visit('/invoice_item_category/1/edit')
+			->visit('/invoice_item_category/'.$this->category->id.'/edit')
 			->see('Edit Invoice Item Category');
 	}
 
 	public function testEdit_invalid()
 	{
 		$this->actingAs($this->user)
-			->visit('/invoice_item_category/1/edit')
+			->visit('/invoice_item_category/'.$this->category->id.'/edit')
 			->type('', 'description')
 			->press('Update')
 			->see('description field is required');
@@ -70,7 +75,7 @@ class InvoiceItemCategoryTest extends TestCase
 	public function testEdit_save()
 	{
 		$this->actingAs($this->user)
-			->visit('/invoice_item_category/1/edit')
+			->visit('/invoice_item_category/'.$this->category->id.'/edit')
 			->type('A new one', 'description')
 			->press('Update')
 			->seePageIs('/invoice_item_category');
@@ -79,18 +84,22 @@ class InvoiceItemCategoryTest extends TestCase
 	public function testDetails()
 	{
 		$this->actingAs($this->user)
-			->visit('/invoice_item_category/1')
+			->visit('/invoice_item_category/'.$this->category->id)
 			->see('Show Invoice Item Category')
 			->see('disabled')
 			->press('Edit')
-			->seePageIs('/invoice_item_category/1/edit');
+			->seePageIs('/invoice_item_category/'.$this->category->id.'/edit?id='.$this->category->id);
 	}
 
 	public function testDelete()
 	{
 		$this->actingAs($this->user)
-			 ->visit('/invoice_item_category/1/delete')
+			 ->visit('/invoice_item_category/'.$this->category->id.'/delete')
 			 ->press('Delete')
 			 ->seePageIs('/invoice_item_category');
+
+		$this->actingAs($this->user)
+			 ->visit('/invoice_item/'.$this->invoice_item->id.'/delete')
+			 ->see($this->category->description.' (deleted)');
 	}
 }

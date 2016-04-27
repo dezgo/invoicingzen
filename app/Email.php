@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Email extends Model
 {
@@ -17,6 +18,15 @@ class Email extends Model
         'subject',
         'body',
     ];
+
+    public function __construct(array $attributes = array())
+    {
+        $defaults = [
+			'from' => Auth::user()->email,
+			];
+		$this->setRawAttributes($defaults, true);
+		parent::__construct($attributes);
+    }
 
     /**
      * Setup the relationship to users - the sender
@@ -46,19 +56,5 @@ class Email extends Model
     public function invoice()
     {
         return $this->belongsTo('App\Invoice');
-    }
-
-    /**
-     * Standard footer text in emails
-     */
-    public function getFooterTextAttribute()
-    {
-        return
-            "<br />".
-            "<br />".
-            "P.S. You can now login! Go to <a href='".url('/login')."'>".url('/login').
-            "</a> to see your invoices.<br />".
-            "P.P.S. For first time users, go to <a href='".url('/password/reset').
-            "'>".url('/password/reset')."</a> to create a password.";
     }
 }

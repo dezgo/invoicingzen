@@ -1,7 +1,8 @@
 <?php $options['class'] = 'control-label' ?>
 <?php $options['autofocus'] = 'true' ?>
 
-<!-- description Form Input -->
+{{ Form::hidden('id') }}
+
 <div class="form-group">
     {{ Form::label('description', 'Description:', ['class' => 'control-label']) }}
     {{ Form::text('description', null, $options) }}

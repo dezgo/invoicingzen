@@ -36,7 +36,7 @@
     {{ Form::textarea('body', null, ['class' => 'form-control']) }}
 </div>
 
-{!! Form::submit('Send', ['class' => 'btn btn-success']) !!}
+{!! Form::submit('Send', ['id' => 'btnSend', 'class' => 'btn btn-success']) !!}
 
 {!! Form::close() !!}
 

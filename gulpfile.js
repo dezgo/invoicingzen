@@ -17,6 +17,7 @@ elixir(function(mix) {
     mix.styles([
         'libs/bootstrap.css',
         'libs/font-awesome.css',
+        'libs/bootstrap-switch.css',
         'app.css',
         'libs/select2.css',
         'libs/jquery-ui.css'
@@ -27,6 +28,7 @@ elixir(function(mix) {
         'libs/jquery-ui.js',
         'libs/select2.js',
         'libs/bootstrap.js',
+        'libs/bootstrap-switch.js',
         'general.js'
     ])
 });

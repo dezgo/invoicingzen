@@ -1,155 +1,81 @@
 @extends('print')
 @section('content')
-<table cellpadding="0" cellspacing="0" width="100%" border="0">
-    <tr>
-        <td width="8.33%">&nbsp;</td>
-        <td width="8.33%">&nbsp;</td>
-        <td width="8.33%">&nbsp;</td>
-        <td width="8.33%">&nbsp;</td>
-        <td width="8.33%">&nbsp;</td>
-        <td width="8.33%">&nbsp;</td>
-        <td width="8.33%">&nbsp;</td>
-        <td width="8.33%">&nbsp;</td>
-        <td width="8.33%">&nbsp;</td>
-        <td width="8.33%">&nbsp;</td>
-        <td width="8.33%">&nbsp;</td>
-        <td width="8.33%">&nbsp;</td>
-    </tr>
-    <tr>
-        <td colspan="6" align="left" valign="top">
-            <img class="left-block" src="{{ url('/images/logo.jpg') }}" />
+<style>
+body {
+    background-color: #EBEBEB;
+}
+</style>
+<style type="text/css" media="print">
+    @page
+    {
+        size: auto;   /* auto is the current printer page size */
+        margin: 0mm;  /* this affects the margin in the printer settings */
+    }
+
+    body
+    {
+        background-color:#FFFFFF;
+        /*border: solid 1px black ;*/
+        margin: 0px;  /* the margin on the content before printing */
+   }
+</style>
+<br class="hidden-print" />
+<table class="hidden-print" cellpadding="0" cellspacing="0" width="720" border="0" align="center">
+    <Tr>
+        <Td>
+            @can ('edit-invoice', $invoice)
+                &nbsp;<a class="btn btn-primary" href="{{ '/invoice/'.$invoice->id }}">Edit</a>
+            @endcan
+            <a class="btn btn-primary" href="{{ '/invoice/'.$invoice->id.'/pdf' }}" name="linkPDF">View As PDF</a>
+            @if(Gate::check('admin'))
+            <a class="btn btn-primary" href="{{ 'invoice/'.$invoice->id.'/email' }}">
+                Email
+            </a>
+            <a name='btnMerge' class="btn btn-primary" href="{{ '/invoice/'.$invoice->id.'/merge' }}">
+                Merge
+            </a>
+                @if ($invoice->owing > 0)
+                <a name='btnPay' class="btn btn-primary" href="{{ '/invoice/'.$invoice->id.'/pay' }}">
+                    Mark Paid
+                </a>
+                @else
+                <a name='btnUnpay' class="btn btn-primary" href="{{ '/invoice/'.$invoice->id.'/unpay' }}">
+                    Mark Unpaid
+                </a>
+                @endif
+            @endif
+            @if ($invoice->owing > 0)
+
+            {!! Form::open(['method' => 'POST', 'url' => url('/invoice/'.$invoice->id.'/pay')]) !!}
+              <script
+                src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                data-key="{{ env('STRIPE_KEY') }}"
+                data-amount="{{ $invoice->owing*100 }}"
+                data-name="Invoicing Zen"
+                data-description="{{ $invoice->description }}"
+                data-image="{{ url('/images/logo.jpg') }}"
+                data-locale="auto">
+              </script>
+              {!! Form::close() !!}
+
+              @endif
+        </Td>
+        <td align="right">
+            @if(Gate::check('admin'))
+            <a name='btnDelete' class="btn btn-danger" href="{{ '/invoice/'.$invoice->id.'/delete' }}">
+                Delete
+            </a>
+            @endif
         </td>
-        <td colspan="6" align="right">
-            <br><Br>
-            <h2 class="cred text-uppercase">
-                {{ strtoupper($invoice->type) }}
-            </h2>
-            <br>
-            <br>
-            {{ trans('settings.abn').': '.Setting::get('abn') }}<br />
-            <br />
-        </td>
-    </tr>
-
-    <tr>
-      <td colspan="7">
-        <div class="cred">Customer Details:</div>
-      </td>
-      <td colspan="2">
-        <div class="cred">{{ $invoice->type }}&nbsp;Number:</div>
-      </td>
-      <td colspan="3" align="right">
-          {{ $invoice->invoice_number }}
-      </td>
-    </tr>
-
-    <tr>
-      <td colspan="7">
-          {{ $invoice->user->full_name }}
-      </td>
-      <td colspan="2">
-        <div class="cred">{{ $invoice->type }}&nbsp;Date:</div>
-      </td>
-      <td colspan="3" align="right">
-          {{ $invoice->invoice_date }}
-      </td>
-    </tr>
-
-    <tr>
-      <td colspan="7">
-        {!! $invoice->user->address_multi !!}
-      </td>
-      @if ($invoice->owing > 0)
-      <td colspan="2" valign="top">
-        <div class="cred">{{ trans('settings.payment_terms') }}:</div>
-      </td>
-      <td colspan="3" valign="top" align="right">
-        {{ Setting::get('payment_terms') }}
-      </td>
-      @endif
-    </tr>
-    <tr><td colspan="12"><br /><br /></td></tr>
-
-    <tr>
-      <td colspan="1"><b>Qty</b></td>
-      <td colspan="7"><b>Description</b></td>
-      <td colspan="2" align="right"><b>Unit&nbsp;Price</b></td>
-      <td colspan="2" align="right"><b>Total</b></td>
-  </tr>
-
-  @foreach($invoice->invoice_items as $invoice_item)
-    <tr>
-      <td colspan="1">{{ (int) $invoice_item->quantity }}</td>
-      <td colspan="7">{{ $invoice_item->description }}</td>
-      <td colspan="2" align="right">{{ $invoice_item->price }}</td>
-      <td colspan="2" align="right">{{ number_format($invoice_item->total, 2) }}</td>
-    </tr>
-  @endforeach
-  <tr><td><br /></td></tr>
-<tr>
-  <td colspan="7">&nbsp;</td>
-  <td colspan="3"><b>{{ trans('invoice.grand-total') }}:</b></td>
-  <td colspan="2" align="right">{{ number_format($invoice->total, 2) }}</td>
-</tr>
-@if ($invoice->is_quote == '')
-    <tr>
-      <td colspan="7">&nbsp;</td>
-      <td colspan="3"><b>{{ trans('invoice.amount-paid') }}:</b></td>
-      <td colspan="2" align="right">{{ number_format($invoice->paid, 2) }}</td>
-    </tr>
-    <tr>
-      <td colspan="7">&nbsp;</td>
-      <td colspan="3"><b>{{ trans('invoice.balance-due') }}:</b></td>
-      <td colspan="2" align="right">{{ number_format($invoice->owing, 2) }}</td>
-    </tr>
-@endif
-<tr><td><br /></td></tr>
-<tr>
-  <td colspan="7">&nbsp;</td>
-  <td colspan="5">{{ trans('invoice.no-gst') }}</td>
-</tr>
-<tr><td><br /><hr /></td></tr>
-<tr>
-  <td colspan="4"><h4 class="cred">Enquiries</h4></td>
-  @if ($invoice->is_quote == '')
-  <td colspan="8"><h4 class="cred">How to Pay</h4></td>
-  @endif
-</tr>
-<tr>
-  <td colspan="4">{{ trans('settings.enquiries_phone') }}: {{ Setting::get('enquiries_phone') }}</td>
-  @if ($invoice->is_quote == '')
-  <td colspan="4">Payment by EFT</td>
-  <td colspan="4">Payment by Cheque</td>
-  @endif
-</tr>
-<tr>
-  <td colspan="4">{{ trans('settings.enquiries_email') }}: {{ Setting::get('enquiries_email') }}</td>
-  @if ($invoice->is_quote == '')
-  <td colspan="1">{{ trans('settings.bsb') }}:</td>
-  <td colspan="3">{{ Setting::get('bsb') }}</td>
-  <td colspan="4">Mail Cheques to</td>
-  @endif
-</tr>
-<tr>
-  <td colspan="4">{{ trans('settings.enquiries_web') }}: {{ Setting::get('enquiries_web') }}</td>
-  @if ($invoice->is_quote == '')
-  <td colspan="1">Account:</td>
-  <td colspan="3">{{ Setting::get('bank_account_number') }}</td>
-  <td colspan="4">{{ Setting::get('mailing_address_line_1') }}</td>
-  @endif
-</tr>
-@if ($invoice->is_quote == '')
-<tr>
-  <td colspan="4">&nbsp;</td>
-  <td colspan="1">Reference:</td>
-  <td colspan="3">Inv{{ $invoice->invoice_number}}</td>
-  <td colspan="4">{{ Setting::get('mailing_address_line_2') }}</td>
-</tr>
-<tr>
-  <td colspan="8">&nbsp;</td>
-  <td colspan="4">{{ Setting::get('mailing_address_line_3') }}</td>
-</tr>
-@endif
+    </Tr>
 </table>
-
+<br />
+<table cellpadding="0" cellspacing="0" width="720" border="1" align="center" style="background-color: white">
+    <tr>
+        <td>
+            {!! $invoice_content !!}
+        </td>
+    </tr>
+</table>
+<br class="hidden-print" />
 @stop

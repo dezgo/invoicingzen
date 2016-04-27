@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Http\Requests\Request;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 
 class InvoiceItemCategoryRequest extends Request
 {
@@ -24,8 +24,11 @@ class InvoiceItemCategoryRequest extends Request
 	 */
 	public function rules()
 	{
+		$id = $this->request->get('id');
+		$company_id = Auth::user()->company_id;
 		return [
-			'description' => 'required|string|min:2|unique:invoice_item_categories,description',
+			'description' => 'required|string|min:2|unique:invoice_item_categories,'.
+							 'description,'.$id.',id,company_id,'.$company_id
 		];
 	}
 }

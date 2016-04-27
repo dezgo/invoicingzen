@@ -28,7 +28,7 @@ class InvoiceRequest extends Request
 		return [
 			'customer_id' => 'required|numeric',
 			'invoice_date' => 'required|date',
-			'invoice_number' => 'required|numeric|unique:invoices,invoice_number,'.$invoice_id,
+			'invoice_number' => 'required|numeric|invoice_number_unique:'.$invoice_id,
 			'due_date' => 'required|date',
 		];
 	}

@@ -8,6 +8,10 @@ use App\InvoiceItemCategory;
 use App\User;
 use App\Company;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Auth;
+use Validator;
+use App\InvoiceNumberChecker;
+use App\Services\RestoreDefaultTemplates;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -31,31 +35,55 @@ class AppServiceProvider extends ServiceProvider
 
         view()->composer('invoice.form', function($view)
         {
-            $view->with('customer_list', User::userSelectList());
+            $view->with('customer_list', Auth::User()->userSelectList());
         });
 
         view()->composer('user.select', function($view)
         {
-            $view->with('customer_list', User::userSelectList());
-        });
-
-        Invoice::created(function ($invoice) {
-            \Setting::set('next_invoice_number',$invoice->invoice_number+1);
-            \Setting::setExtraColumns(['company_id' => Company::my_id()]);
-            \Setting::save();
+            if (Auth::check()) {
+                $view->with('customer_list', Auth::User()->userSelectList());
+            }
         });
 
         User::saving(function ($user) {
-            $user->company_id = Company::my_id();
+            if (Auth::check()) {
+                $user->company()->associate(Auth::user()->company);
+            }
         });
-        Invoice::saving(function ($invoice) {
-            $invoice->company_id = Company::my_id();
+        Company::created(function ($company) {
+            // do this check because when migrating data a company is created
+            // before the invoice template table is created
+            if (\Schema::hasTable('invoice_templates')) {
+                RestoreDefaultTemplates::restoreDefaults($company->id);
+            }
         });
-        InvoiceItem::saving(function ($invoice_item) {
-            $invoice_item->company_id = Company::my_id();
+        Invoice::deleting(function ($invoice) {
+            $invoice->invoice_items()->delete();
+        });
+        Invoice::created(function ($invoice) {
+            $invoice->uuid = Invoice::GenerateUUID($invoice->id);
+            $invoice->save();
         });
         InvoiceItemCategory::saving(function ($invoice_item_categories) {
-            $invoice_item_categories->company_id = Company::my_id();
+            if (Auth::check()) {
+                $invoice_item_categories->company_id = Auth::user()->company_id;
+            }
+        });
+
+        Validator::extend('invoice_number_unique', function($field,$value,$parameters){
+            $new_invoice_number = $value;
+            $id = $parameters[0];
+
+            if ($id != null and Invoice::find($id)->invoice_number == $new_invoice_number) {
+                return true;
+            }
+            else {
+                return InvoiceNumberChecker::number_available($new_invoice_number, Auth::user()->company_id);
+            }
+        });
+
+        Validator::extend('noscript', function($field,$value,$parameters){
+            return strpos($value, '<script') === false;
         });
     }
 
@@ -66,6 +94,5 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
     }
 }

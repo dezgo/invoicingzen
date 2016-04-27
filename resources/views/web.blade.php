@@ -1,11 +1,5 @@
 @extends('master')
 
-@section('topbar')
-@if(Gate::check('authenticated'))
-    @include('topbar')
-@endif
-@stop
-
 @section('bodytag')
 @if(Gate::check('authenticated'))
 <body id="app-layout">
@@ -24,11 +18,35 @@
     <div class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
             <li>
+                <a href="/"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a>
+            </li>
+            <li>
                 <a href="#"><span class="glyphicon glyphicon-copyright-mark" aria-hidden="true"></span><small>Invoicing Zen</small></a>
             </li>
             <li>
-                <a href="/release-notes">Release Notes</a>
+                <a href="/release-notes" name="linkReleaseNotes">Release Notes</a>
             </li>
+            <li>
+                <a href="/pricing" name="linkPricing">Pricing</a>
+            </li>
+            <li>
+                <a href="/contact" name="linkContact">Contact</a>
+            </li>
+            @if (env('APP_ENV') == 'local')
+            <li>
+                <a name="environment" style="color: red"><b>DEVELOPMENT</b></a>
+            </li>
+            @endif
+            @if (env('APP_ENV') == 'testing')
+            <li>
+                <a name="environment" style="color: red"><b>TESTING</b></a>
+            </li>
+            @endif
+            @if (env('APP_DEBUG') == 'true')
+            <li>
+                <a name="debug_mode" style="color: red"><b>DEBUG ON</b></a>
+            </li>
+            @endif
         </ul>
     </div>
 </nav>

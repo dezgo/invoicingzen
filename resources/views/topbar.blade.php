@@ -1,4 +1,4 @@
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-default hidden-print">
     <div class="container-fluid">
         <div class="navbar-header">
 
@@ -33,8 +33,11 @@
                             <li><a href="/settings" name='settingsAnchor'>Settings</a></li>
             @endif
 
-            @if(Gate::check('super-admin'))
+            @if(Gate::check('admin'))
                             <li><a href="/user" name='userAnchor'>Users</a></li>
+            @endif
+            @if(Gate::check('premium'))
+                            <li><a href="/invoice_template" name='userAnchor'>Templates</a></li>
             @endif
                 </ul>
 
@@ -46,8 +49,8 @@
                     </a>
 
                     <ul class="dropdown-menu" role="menu">
-                        <li><a href="{{ url('/user/'.Auth::user()->id.'/edit') }}">Edit Profile</a></li>
-                        <li><a href="{{ url('/logout') }}" name='logoutAnchor'><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
+                        <li><a href="{{ '/user/'.Auth::user()->id.'/edit' }}">Edit Profile</a></li>
+                        <li><a href="/logout" name='logoutAnchor'><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
                     </ul>
                 </li>
             </ul>
