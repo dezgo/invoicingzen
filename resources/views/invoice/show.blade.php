@@ -12,7 +12,7 @@
     {!! Form::close() !!}
 
     @include('/invoiceitem/index')
-<br><br>
+    <br><br>
     <a id='btnViewInvoice' class="btn btn-info" href="{{ '/invoice/'.$invoice->id.'/print' }}">
         View
     </a>

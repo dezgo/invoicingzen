@@ -25,4 +25,6 @@ return [
     // invoice template generator
     'token-mismatch' => 'Mismatching number of start and end tokens',
 
+    // stripe payments
+    'payment-success' => 'Thank you. Your payment of :amount for invoice :invoice_number was succesfully processed.',
 ];

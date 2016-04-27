@@ -147,7 +147,6 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
-
         Collective\Html\HtmlServiceProvider::class,
 
         /*
@@ -160,6 +159,7 @@ return [
         Barryvdh\Snappy\ServiceProvider::class,
         anlutro\LaravelSettings\ServiceProvider::class,
         Unisharp\Ckeditor\ServiceProvider::class,
+        Laravel\Cashier\CashierServiceProvider::class,
         Jenssegers\Rollbar\RollbarServiceProvider::class,
     ],
 
