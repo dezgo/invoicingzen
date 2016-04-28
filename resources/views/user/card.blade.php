@@ -2,5 +2,5 @@
 
 @section('content')
 @include('user.sidebar')
-card
+Coming Soon...
 @stop

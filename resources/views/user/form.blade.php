@@ -82,12 +82,6 @@
 
 {!! Form::submit($submitButtonText, ['id' => 'btnSubmit', 'class' => 'btn btn-primary']) !!}
 
-<div class="panel panel-default">
-  <div class="panel-body">
-    To change your password, logout and select the 'forgot your password' link
-  </div>
-</div>
-
 @section('footer1')
     <script type="text/javascript">
         $('#btnSuperAdmin').trigger('click');

@@ -1,10 +1,23 @@
 @extends('master')
 
 @section('bodytag')
+    @if(Gate::check('authenticated'))
+        <body id="app-layout">
+    @else
+        <body id="app-layout" class="introimage">
+    @endif
+@stop
+
+@section('header')
 @if(Gate::check('authenticated'))
-<body id="app-layout">
+    @include('topbar')
 @else
-<body id="app-layout" class="introimage">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class='freetext'>Invoicing Zen</h1>
+            <br />
+        </div>
+    </div>
 @endif
 @stop
 
@@ -13,8 +26,10 @@
 @stop
 
 @section('footer-web')
+<span class="hidden-print">
 <br /><Br /><Br /><Br />
-<nav class="navbar navbar-default navbar-fixed-bottom">
+</span>
+<nav class="navbar navbar-default navbar-fixed-bottom hidden-print">
     <div class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
             <li>

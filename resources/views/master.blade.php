@@ -13,21 +13,11 @@
 </head>
 
 @yield('bodytag')
-    @if(Gate::check('authenticated'))
-        @include('topbar')
-        <div class="container">
-    @else
-        <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <h1 class='freetext'>Invoicing Zen</h1>
-                <br />
-            </div>
-        </div>
-    @endif
-        @yield('content')
-        @yield('footer')
-        @yield('footer-web')
-    </div>
+<div class="container">
+    @yield('header')
+    @yield('content')
+    @yield('footer')
+    @yield('footer-web')
+</div>
 </body>
 </html>

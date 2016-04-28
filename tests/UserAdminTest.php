@@ -31,7 +31,7 @@ class UserAdminTest extends TestCase
         $this->actingAs($this->user)
             ->visit('/user')
             ->click('Joe Customer')
-            ->see('Edit User')
+            ->see('btnSubmit')
             ->see('joecustomer@computerwhiz.com.au');
     }
 
