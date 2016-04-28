@@ -10,6 +10,10 @@
         <li>
             Deactivate user account now has confirmation before actioning (4533121)
         </li>
+        <li>
+            Add jquery to pre-populate email host/port/encryption with common
+            settings (d846bf8)
+        </li>
     </ul>
 
     <h3>v1.3.0</h3>
