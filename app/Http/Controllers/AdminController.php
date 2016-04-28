@@ -19,7 +19,27 @@ class AdminController extends Controller
 	public function show()
 	{
         $settings = SettingsFactory::create();
-		return view('admin.settings', compact('settings'));
+        $email_providers = ['' => '-Select-',
+                        'gmail' => 'Gmail',
+                        'hotmail' => 'Hotmail',
+                        'yahoo' => 'Yahoo'];
+        $provider_settings = [[
+                                    'Provider' => 'gmail',
+                                    'Host' => 'smtp.gmail.com',
+                                    'Port' => '587',
+                                    'Encryption' => 'tls'],
+                              [
+                                    'Provider' => 'hotmail',
+                                    'Host' => 'smtp-mail.outlook.com',
+                                    'Port' => '587',
+                                    'Encryption' => 'tls'],
+                              [
+                                    'Provider' => 'yahoo',
+                                    'Host' => 'smtp.mail.yahoo.com',
+                                    'Port' => '587',
+                                    'Encryption' => 'tls'],
+                             ];
+		return view('admin.settings', compact('settings', 'email_providers', 'provider_settings'));
 	}
 
 	public function update(Request $request)

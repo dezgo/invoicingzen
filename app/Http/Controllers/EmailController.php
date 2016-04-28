@@ -133,12 +133,12 @@ class EmailController extends Controller
 				}
 				$m->subject($email->subject);
 			});
+			\Session()->flash('status-success', 'Email sent');
 		}
 		catch (\Exception $e) {
 			\Session()->flash('status-error', 'There was a problem sending the email. '.
 				'Please check the details and try again ('.$e->getMessage().')');
 		}
-		\Session()->flash('status-success', 'Email sent');
 
 		return redirect('/invoice/'.$email->invoice_id.'/print');
 	}
