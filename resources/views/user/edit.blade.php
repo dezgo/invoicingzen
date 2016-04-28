@@ -8,7 +8,7 @@
     {!! Form::close() !!}
 
     <Br />
-    <a class="btn btn-danger" href="/user/{{ $user->id }}/delete">Deactivate</a><br />
+    <a id="btnDeactivate" class="btn btn-danger" href="/user/{{ $user->id }}/delete">Deactivate</a><br />
     <Br />
     <div class="panel panel-default">
       <div class="panel-body">

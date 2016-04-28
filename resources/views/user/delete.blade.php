@@ -10,6 +10,6 @@
     Note: You will not be able to create a new account with the same email address.<br />
     <br />
     {!! Form::open(['method' => 'DELETE', 'route' => ['user.destroy', $user->id]]) !!}<br />
-    {!! Form::submit('CONFIRM DEACTIVATION', ['class' => 'btn btn-danger']) !!}
+    {!! Form::submit('CONFIRM DEACTIVATION', ['id' => 'btnConfirmDeactivation', 'class' => 'btn btn-danger']) !!}
     {!! Form::close() !!}
 @stop
