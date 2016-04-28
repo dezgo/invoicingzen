@@ -45,8 +45,19 @@ body {
                 </a>
                 @endif
             @endif
-            @if ($invoice->owing > 0)
-<br /><br />
+        </Td>
+        <td align="right">
+            @if(Gate::check('admin'))
+            <a name='btnDelete' class="btn btn-danger" href="{{ '/invoice/'.$invoice->id.'/delete' }}">
+                Delete
+            </a>
+            @endif
+        </td>
+    </Tr>
+    @if ($invoice->owing > 0)
+    <tr>
+        <td>
+            <br />
             {!! Form::open(['method' => 'POST', 'url' => url('/invoice/'.$invoice->id.'/pay')]) !!}
               <script
                 src="https://checkout.stripe.com/checkout.js" class="stripe-button"
@@ -59,17 +70,9 @@ body {
                 data-currency="aud">
               </script>
               {!! Form::close() !!}
-
-              @endif
-        </Td>
-        <td align="right">
-            @if(Gate::check('admin'))
-            <a name='btnDelete' class="btn btn-danger" href="{{ '/invoice/'.$invoice->id.'/delete' }}">
-                Delete
-            </a>
-            @endif
         </td>
-    </Tr>
+    </tr>
+    @endif
 </table>
 <br />
 <table cellpadding="0" cellspacing="0" width="720" border="1" align="center" style="background-color: white">
