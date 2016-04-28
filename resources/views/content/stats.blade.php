@@ -18,7 +18,7 @@
         <div class="panel-heading">Companies</div>
         <div class="panel-body">
             @foreach ($companies as $company)
-                {{ $company->created_at }}: {{ $company->company_name }}<br />
+                {{ $company->created_at }}: {{ $company->company_name }} ({{ $company->invoice_count }} invoices)<br />
             @endforeach
         </div>
     </div>

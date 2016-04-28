@@ -26,7 +26,14 @@ class SuperAdminController extends Controller
                   'total_users' => User::all()->count(),
                  ];
 
-        $companies = Company::all()->sortBy('created_at');
+        // $companies = Company::all()->sortBy('created_at');
+        $companies = \DB::table('companies')
+                        ->join('users', 'users.company_id', '=', 'companies.id')
+                        ->join('invoices', 'invoices.customer_id', '=', 'users.id')
+                        ->select('companies.*', \DB::raw('count(invoices.id) as invoice_count'))
+                        ->groupBy('companies.id')
+                        ->orderBy('companies.created_at')
+                        ->get();
         return view('content.stats', compact('stats', 'companies'));
     }
 }
