@@ -29,7 +29,7 @@ body {
             @endcan
             <a class="btn btn-primary" href="{{ '/invoice/'.$invoice->id.'/pdf' }}" name="linkPDF">View As PDF</a>
             @if(Gate::check('admin'))
-            <a class="btn btn-primary" href="{{ 'invoice/'.$invoice->id.'/email' }}">
+            <a class="btn btn-primary" href="{{ '/invoice/'.$invoice->id.'/email' }}">
                 Email
             </a>
             <a name='btnMerge' class="btn btn-primary" href="{{ '/invoice/'.$invoice->id.'/merge' }}">
