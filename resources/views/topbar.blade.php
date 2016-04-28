@@ -39,6 +39,18 @@
             @if(Gate::check('premium'))
                             <li><a href="/invoice_template" name='userAnchor'>Templates</a></li>
             @endif
+            @if(Gate::check('super-admin'))
+            <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                Admin<span class="caret"></span>
+            </a>
+
+            <ul class="dropdown-menu" role="menu">
+                <li><a href="/phpinfo">PHP Info</a></li>
+                <li><a href="/stats">Stats</a></li>
+            </ul>
+            </li>
+            @endif
                 </ul>
 
             <!-- Right Side Of Navbar -->
