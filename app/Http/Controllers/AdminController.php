@@ -55,7 +55,7 @@ class AdminController extends Controller
 
         $settings = SettingsFactory::create();
 		$settings->setAllUsing($request);
-		$request->session()->flash('status', trans('settings.update_success'));
+		$request->session()->flash('status-success', trans('settings.update_success'));
         return redirect(url('/settings'));
     }
 

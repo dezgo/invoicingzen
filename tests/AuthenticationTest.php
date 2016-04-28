@@ -100,7 +100,7 @@ class AuthenticationTest extends TestCase
         $user = factory(App\User::class)->create();
         $this->actingAs($user)
              ->visit('/user/'.$user->id.'/edit')
-             ->see('Edit User');
+             ->see('btnSubmit');
      }
 
      public function testValidateBadUserData()

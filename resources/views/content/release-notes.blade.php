@@ -5,6 +5,23 @@
     <h1>Invoicing Zen Release Notes</h1>
 
     <h3>v1.3.1</h3>
+    <h4>28 Apr 2016</h4>
+    <ul>
+        <li>
+            Deactivate user account now has confirmation before actioning (4533121)
+        </li>
+    </ul>
+
+    <h3>v1.3.0</h3>
+    <h4>25 Apr 2016</h4>
+    <ul>
+        <li>
+            Custom invoicing added. Quickly mark invoice paid/unpaid. Invoice
+            list now filterable (091ca17)
+        </li>
+    </ul>
+
+    <h3>v1.3.1</h3>
     <h4>26 Apr 2016</h4>
     <ul>
         <li>

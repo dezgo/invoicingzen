@@ -15,3 +15,12 @@
     {{ Session::get('status-warning') }}
 </div>
 @endif
+
+@if (Session::has('status-error'))
+<div class="alert alert-danger alert-dismissible hidden-print" role="alert" id="warning-alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    {{ Session::get('status-error') }}
+</div>
+@endif

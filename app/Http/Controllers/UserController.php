@@ -121,12 +121,11 @@ class UserController extends Controller
 		return redirect('/user');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    public function confirm_delete(User $user)
+    {
+        return view('/user/delete', compact('user'));
+    }
+
     public function destroy(User $user)
     {
         $this->authorize('update-user', $user);
@@ -161,5 +160,36 @@ class UserController extends Controller
             ]);
 
         return redirect('/invoice/'.$request->customer.'/create');
+    }
+
+    public function subscription(User $user)
+    {
+        $active_tab = 'subscription';
+        return view('user.subscription', compact('user', 'active_tab'));
+    }
+
+    public function payments(User $user)
+    {
+        $active_tab = 'payments';
+        return view('user.payments', compact('user', 'active_tab'));
+    }
+
+    public function card(User $user)
+    {
+        $active_tab = 'credit_card';
+        return view('user.card', compact('user', 'active_tab'));
+    }
+
+    public function subscribe(Request $request)
+    {
+        $user = Auth::user();
+        try {
+            $user->newSubscription('main', 'standard')->create($request->stripeToken);
+        }
+        catch (Exception $e) {
+            \Session()->flash('status-warning', 'There was a problem with your card. '.
+                'Please check the details and try again ('.$e->description.')');
+                return redirect('/user/'.Auth::user()->id.'/edit');
+        }
     }
 }

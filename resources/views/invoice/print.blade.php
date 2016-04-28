@@ -1,4 +1,4 @@
-@extends('print')
+@extends('web')
 @section('content')
 <style>
 body {
@@ -19,8 +19,8 @@ body {
         margin: 0px;  /* the margin on the content before printing */
    }
 </style>
-@include('includes.flash_message_content')
 <br class="hidden-print" />
+@include('includes.flash_message_content')
 <table class="hidden-print" cellpadding="0" cellspacing="0" width="720" border="0" align="center">
     <Tr>
         <Td>
@@ -55,7 +55,8 @@ body {
                 data-name="Invoicing Zen"
                 data-description="{{ $invoice->description }}"
                 data-image="{{ url('/images/'.Auth::user()->company->logofilename) }}"
-                data-locale="auto">
+                data-locale="auto"
+                data-currency="aud">
               </script>
               {!! Form::close() !!}
 
