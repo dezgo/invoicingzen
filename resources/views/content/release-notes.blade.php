@@ -8,7 +8,7 @@
     <h4>28 Apr 2016</h4>
     <ul>
         <li>
-            Deactivate user account now has confirmation before actioning ()
+            Deactivate user account now has confirmation before actioning (4533121)
         </li>
     </ul>
 
