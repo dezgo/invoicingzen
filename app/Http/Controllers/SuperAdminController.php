@@ -29,7 +29,7 @@ class SuperAdminController extends Controller
         // $companies = Company::all()->sortBy('created_at');
         $companies = \DB::table('companies')
                         ->join('users', 'users.company_id', '=', 'companies.id')
-                        ->join('invoices', 'invoices.customer_id', '=', 'users.id')
+                        ->leftjoin('invoices', 'invoices.customer_id', '=', 'users.id')
                         ->select('companies.*', \DB::raw('count(invoices.id) as invoice_count'))
                         ->groupBy('companies.id')
                         ->orderBy('companies.created_at')
