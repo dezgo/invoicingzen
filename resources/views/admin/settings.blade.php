@@ -79,6 +79,11 @@
     </div>
 
     <div class="form-group">
+        {!! Form::label('email_prepopulate', trans('settings.email_prepopulate'), ['class' => 'control-label']) !!}
+        {{ Form::select('email_prepopulate', $email_providers, ['class' => 'form-control']) }}
+    </div>
+
+    <div class="form-group">
         {!! Form::label('email_host', trans('settings.email_host'), ['class' => 'control-label']) !!}
         {{ Form::text('email_host', $settings->get('email_host'), ['class' => 'form-control']) }}
     </div>
@@ -114,6 +119,18 @@
 <script language="Javascript">
 $(document).ready (function(){
     $("[name='taxable']").bootstrapSwitch();
+
+    $("[name='email_prepopulate']").on('change', function() {
+        switch(this.value) {
+            @foreach ($provider_settings as $provider_setting)
+            case '{!! $provider_setting['Provider'] !!}':
+                $('#email_host').val('{!! $provider_setting['Host'] !!}');
+                $('#email_port').val('{!! $provider_setting['Port'] !!}');
+                $('#email_encryption').val('{!! $provider_setting['Encryption'] !!}');
+                break;
+            @endforeach
+        }
+    });
 });
 </script>
 

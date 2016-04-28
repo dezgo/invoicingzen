@@ -24,5 +24,10 @@ class SettingsTableSeeder extends Seeder
         $setting->set('enquiries_phone', '02 6123 4567');
         $setting->set('enquiries_email', 'mail@widgetscorp.com');
         $setting->set('enquiries_web', 'http://www.widgetscorp.com');
+        $setting->set('email_host', 'smtp.gmail.com');
+        $setting->set('email_port', '587');
+        $setting->set('email_username', 'derek@computerwhiz.com.au');
+        $setting->set('email_password', 'tczrfzqrluhirzgd');
+        $setting->set('email_encryption', 'tls');
     }
 }
