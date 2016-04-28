@@ -1,11 +1,13 @@
 @extends('web')
 
 @section('content')
-    <h1 align="left">Create User</h1>
+@include('user.sidebar')
+<br />
+            <h1 align="left">Create User</h1>
 
-    {!! Form::open(['route' => 'user.store']) !!}
-        @include('user.form', ['submitButtonText' => 'Save'])
-    {!! Form::close() !!}
+            {!! Form::open(['route' => 'user.store']) !!}
+                @include('user.form', ['submitButtonText' => 'Save'])
+            {!! Form::close() !!}
 
-    @include('errors.list')
+            @include('errors.list')
 @stop

@@ -35,6 +35,9 @@ Route::group(['middleware' => ['web', 'admin']], function() {
     // select customer as first step when creating invoice
     Route::get('user/select', 'UserController@select')->name('user.select');
     Route::post('user/select', 'UserController@selected')->name('user.selected');
+    Route::get('user/{user}/subscription', 'UserController@subscription')->name('user.subscription');
+    Route::get('user/{user}/payments', 'UserController@payments')->name('user.payments');
+    Route::get('user/{user}/card', 'UserController@card')->name('user.card');
 
     // Settings
     Route::get('settings', 'AdminController@show')->name('settings.show');
@@ -63,6 +66,7 @@ Route::group(['middleware' => ['web', 'admin']], function() {
 
 // routes accessible to all authenticated users
 Route::group(['middleware' => ['web', 'auth']], function() {
+    Route::post('user/subscribe', 'UserController@subscribe')->name('user.subscribe');
     Route::resource('user', 'UserController');
 
     // Invoice

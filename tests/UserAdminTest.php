@@ -12,7 +12,6 @@ class UserAdminTest extends TestCase
 
 	public function setUp()
 	{
-		// This method will automatically be called prior to any of your test cases
 		parent::setUp();
 
 		$this->user = factory(App\User::class)->create();
@@ -60,35 +59,5 @@ class UserAdminTest extends TestCase
             ->type('','email')
             ->press('Update')
             ->see('The email field is required');
-    }
-
-    public function testSetRoleSuperAdmin()
-    {
-        $user = factory(App\User::class)->create();
-        $this->actingAs($this->user)
-             ->visit('/user/'.$user->id.'/edit')
-             ->select('super_admin', 'role')
-             ->press('Update')
-             ->seeInDatabase('role_user', ['role_id' => 1, 'user_id' => $user->id]);
-    }
-
-    public function testSetRoleAdmin()
-    {
-        $user = factory(App\User::class)->create();
-        $this->actingAs($this->user)
-             ->visit('/user/'.$user->id.'/edit')
-             ->select('admin', 'role')
-             ->press('Update')
-             ->seeInDatabase('role_user', ['role_id' => 2, 'user_id' => $user->id]);
-    }
-
-    public function testSetRoleUser()
-    {
-        $user = factory(App\User::class)->create();
-        $this->actingAs($this->user)
-             ->visit('/user/'.$user->id.'/edit')
-             ->select('user', 'role')
-             ->press('Update')
-             ->dontSeeInDatabase('role_user', ['user_id' => $user->id]);
     }
 }

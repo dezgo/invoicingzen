@@ -52,15 +52,9 @@ class UserController extends Controller
         if (!Gate::check('admin')) {
             abort('403');
         }
-        else {
-            if (is_null($request)) {
-                session()->forget('inv_wizard');
-            } else {
-                session(['inv_wizard' => $request->flag]);
-            }
 
-            return view('user.create');
-        }
+        $active_tab = 'account';
+        return view('user.create', compact('active_tab'));
     }
 
     /**
@@ -74,16 +68,9 @@ class UserController extends Controller
         if (!Gate::check('admin')) {
             abort('403');
         }
-        else {
-            $user = User::createWithCompany($request->all(), Auth::user()->company_id);
-            if (session('inv_wizard') != '') {
-                session()->forget('inv_wizard');
 
-                return redirect('/invoice/'.$user->id.'/create');
-            } else {
-                return redirect('/user');
-            }
-        }
+        $user = User::createWithCompany($request->all(), Auth::user()->company_id);
+        return redirect('/user');
     }
 
     /**
@@ -99,7 +86,8 @@ class UserController extends Controller
             abort(403);
         }
 
-        return view('user.edit', compact('user'));
+        $active_tab = 'account';
+        return view('user.edit', compact('user', 'active_tab'));
     }
 
     /**
@@ -161,5 +149,36 @@ class UserController extends Controller
             ]);
 
         return redirect('/invoice/'.$request->customer.'/create');
+    }
+
+    public function subscription(User $user)
+    {
+        $active_tab = 'subscription';
+        return view('user.subscription', compact('user', 'active_tab'));
+    }
+
+    public function payments(User $user)
+    {
+        $active_tab = 'payments';
+        return view('user.payments', compact('user', 'active_tab'));
+    }
+
+    public function card(User $user)
+    {
+        $active_tab = 'card';
+        return view('user.card', compact('user', 'active_tab'));
+    }
+
+    public function subscribe(Request $request)
+    {
+        $user = Auth::user();
+        try {
+            $user->newSubscription('main', 'standard')->create($request->stripeToken);
+        }
+        catch (Exception $e) {
+            \Session()->flash('status-warning', 'There was a problem with your card. '.
+                'Please check the details and try again ('.$e->description.')');
+                return redirect('/user/'.Auth::user()->id.'/edit');
+        }
     }
 }

@@ -1,7 +1,7 @@
 @extends('web')
 
 @section('content')
-    <h1 align="left">Edit User</h1>
+@include('user.sidebar')
 
     {!! Form::model($user, ['method' => 'PUT', 'route' => ['user.update', $user->id]]) !!}
         @include('user.form', ['submitButtonText' => 'Update'])
