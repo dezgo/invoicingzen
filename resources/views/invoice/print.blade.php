@@ -19,7 +19,6 @@ body {
         margin: 0px;  /* the margin on the content before printing */
    }
 </style>
-@include('includes.flash_message_content')
 <br class="hidden-print" />
 @include('includes.flash_message_content')
 <table class="hidden-print" cellpadding="0" cellspacing="0" width="720" border="0" align="center">
