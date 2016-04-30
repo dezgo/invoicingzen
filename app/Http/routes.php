@@ -39,6 +39,7 @@ Route::group(['middleware' => ['web', 'admin']], function() {
     Route::get('user/{user}/subscription', 'UserController@subscription')->name('user.subscription');
     Route::get('user/{user}/payments', 'UserController@payments')->name('user.payments');
     Route::get('user/{user}/card', 'UserController@card')->name('user.card');
+    Route::post('user/updatecc', 'UserController@updatecc')->name('user.updatecc');
 
     // Settings
     Route::get('settings', 'AdminController@show')->name('settings.show');
@@ -67,7 +68,6 @@ Route::group(['middleware' => ['web', 'admin']], function() {
 
 // routes accessible to all authenticated users
 Route::group(['middleware' => ['web', 'auth']], function() {
-    Route::post('user/subscribe', 'UserController@subscribe')->name('user.subscribe');
     Route::get('user/{user}/delete', 'UserController@confirm_delete')->name('user.delete');
     Route::resource('user', 'UserController');
 

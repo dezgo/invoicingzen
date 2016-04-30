@@ -165,19 +165,26 @@ class UserController extends Controller
     public function card(User $user)
     {
         $active_tab = 'credit_card';
-        return view('user.card', compact('user', 'active_tab'));
+        $start_year = date("Y");
+        for ($year=$start_year; $year<$start_year+15; $year++) {
+            $expiration_years[] = $year;
+        }
+        return view('user.card', compact('user', 'active_tab', 'expiration_years'));
     }
 
-    public function subscribe(Request $request)
+    public function updatecc(Request $request)
     {
         $user = Auth::user();
         try {
-            $user->newSubscription('main', 'standard')->create($request->stripeToken);
+            $user->newSubscription('standard', 'standard')->create($request->stripeToken);
         }
         catch (Exception $e) {
             \Session()->flash('status-warning', 'There was a problem with your card. '.
                 'Please check the details and try again ('.$e->description.')');
-                return redirect('/user/'.Auth::user()->id.'/edit');
+            return redirect('/user/'.Auth::user()->id.'/card');
         }
+
+        \Session()->flash('status-success', 'Card details updated');
+        return redirect('/user/'.Auth::user()->id.'/card');
     }
 }
