@@ -7,9 +7,14 @@
         @include('user.form', ['submitButtonText' => 'Update'])
     {!! Form::close() !!}
 
-    {!! Form::open(['method' => 'DELETE', 'route' => ['user.destroy', $user->id]]) !!}
-    {!! Form::submit('Deactivate', ['class' => 'btn btn-danger']) !!}
-    {!! Form::close() !!}
+    <Br />
+    <a id="btnDeactivate" class="btn btn-danger" href="/user/{{ $user->id }}/delete">Deactivate</a><br />
+    <Br />
+    <div class="panel panel-default">
+      <div class="panel-body">
+        To change your password, logout and select the 'forgot your password' link
+      </div>
+    </div>
 
     @include('errors.list')
 @stop

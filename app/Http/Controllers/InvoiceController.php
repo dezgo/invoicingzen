@@ -242,7 +242,7 @@ class InvoiceController extends Controller
 		} catch (Exception $e) {
 			\Session()->flash('status-warning', 'There was a problem with your payment. '.
 				'Please check the details and try again ('.$e->description.')');
-				return redirect('/invoice/'.$invoice->id);
+				return redirect('/invoice/'.$invoice->id.'/print');
 		}
 
 		// update the invoice to show amount now paid
@@ -252,6 +252,6 @@ class InvoiceController extends Controller
 		\Session()->flash('status-success', trans('invoice.payment-success', [
 			'amount' => money_format('%i', $amount),
 			'invoice_number' => $invoice->invoice_number]));
-		return redirect('/invoice/'.$invoice->id);
+		return redirect('/invoice/'.$invoice->id.'/print');
 	}
 }

@@ -34,5 +34,6 @@ return [
     'email_username'         => 'Email Username',
     'email_password'         => 'Email Password',
     'email_encryption'       => 'Email Encryption',
+    'email_prepopulate'      => 'Pre-populate with common email settings',
 
 ];

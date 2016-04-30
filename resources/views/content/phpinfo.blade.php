@@ -1,5 +1,6 @@
 @extends('web')
 
 @section('content')
-<h1>Email sent</h1>
+    {!! phpinfo() !!}
+
 @stop

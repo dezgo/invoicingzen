@@ -1,6 +1,7 @@
 @extends('web')
 
 @section('content')
+    @include('/includes/flash_message_content')
     <h1>Show Invoices</h1>
 
     <div class="input-group"> <span class="input-group-addon">Filter</span>
@@ -49,7 +50,6 @@
 @stop
 
 @section('footer')
-@include('/includes/flash_message_footer')
 
 <script language="javascript">
 

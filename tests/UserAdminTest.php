@@ -30,7 +30,7 @@ class UserAdminTest extends TestCase
         $this->actingAs($this->user)
             ->visit('/user')
             ->click('Joe Customer')
-            ->see('Edit User')
+            ->see('btnSubmit')
             ->see('joecustomer@computerwhiz.com.au');
     }
 
@@ -59,5 +59,21 @@ class UserAdminTest extends TestCase
             ->type('','email')
             ->press('Update')
             ->see('The email field is required');
+    }
+
+    public function testDeactivate()
+    {
+        $this->actingAs($this->user)
+            ->visit('/user/'.$this->user->id.'/edit')
+            ->click('btnDeactivate')
+            ->seePageIs('/user/'.$this->user->id.'/delete');
+    }
+
+    public function testConfirmDeactivate()
+    {
+        $this->actingAs($this->user)
+            ->visit('/user/'.$this->user->id.'/delete')
+            ->press('btnConfirmDeactivation')
+            ->seePageIs('/user');
     }
 }

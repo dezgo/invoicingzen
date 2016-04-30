@@ -27,6 +27,7 @@ Route::group(['middleware' => 'web'], function () {
 
 Route::group(['middleware' => ['web', 'superadmin']], function() {
     Route::get('/phpinfo', 'SuperAdminController@phpinfo');
+    Route::get('/stats', 'SuperAdminController@stats');
 });
 
 // admin-only routes
@@ -67,6 +68,7 @@ Route::group(['middleware' => ['web', 'admin']], function() {
 // routes accessible to all authenticated users
 Route::group(['middleware' => ['web', 'auth']], function() {
     Route::post('user/subscribe', 'UserController@subscribe')->name('user.subscribe');
+    Route::get('user/{user}/delete', 'UserController@confirm_delete')->name('user.delete');
     Route::resource('user', 'UserController');
 
     // Invoice

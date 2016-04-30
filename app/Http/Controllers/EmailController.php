@@ -84,9 +84,7 @@ class EmailController extends Controller
 
 		$this->setMailParameters();
 
-		$this->sendEmail($email);
-
-		return view('/content/email_sent');
+		return $this->sendEmail($email);
 	}
 
 	private function setupEmailObjectPostEmailView(Request $request)
@@ -123,16 +121,25 @@ class EmailController extends Controller
 		// could use job queues here, but leaving as a direct send for now
 		// so I don't have to worry about that listen job always running on the
 		// server. Also I'll immediately know if an email didn't work
-		Mail::send('emails.invoice', ['email' => $email], function ($m) use ($email) {
-			$m->from($email->from, $email->sender->business_name);
-			$m->to($email->to, $email->receiver->full_name);
-			if ($email->cc != '') {
-				$m->cc($email->cc);
-			}
-			if ($email->bcc != '') {
-				$m->bcc($email->bcc);
-			}
-			$m->subject($email->subject);
-		});
+		try {
+			Mail::send('emails.invoice', ['email' => $email], function ($m) use ($email) {
+				$m->from($email->from, $email->sender->business_name);
+				$m->to($email->to, $email->receiver->full_name);
+				if ($email->cc != '') {
+					$m->cc($email->cc);
+				}
+				if ($email->bcc != '') {
+					$m->bcc($email->bcc);
+				}
+				$m->subject($email->subject);
+			});
+			\Session()->flash('status-success', 'Email sent');
+		}
+		catch (\Exception $e) {
+			\Session()->flash('status-error', 'There was a problem sending the email. '.
+				'Please check the details and try again ('.$e->getMessage().')');
+		}
+
+		return redirect('/invoice/'.$email->invoice_id.'/print');
 	}
 }

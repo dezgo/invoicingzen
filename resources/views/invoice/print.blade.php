@@ -1,4 +1,4 @@
-@extends('print')
+@extends('web')
 @section('content')
 <style>
 body {
@@ -20,6 +20,7 @@ body {
    }
 </style>
 <br class="hidden-print" />
+@include('includes.flash_message_content')
 <table class="hidden-print" cellpadding="0" cellspacing="0" width="720" border="0" align="center">
     <Tr>
         <Td>
@@ -28,7 +29,7 @@ body {
             @endcan
             <a class="btn btn-primary" href="{{ '/invoice/'.$invoice->id.'/pdf' }}" name="linkPDF">View As PDF</a>
             @if(Gate::check('admin'))
-            <a class="btn btn-primary" href="{{ 'invoice/'.$invoice->id.'/email' }}">
+            <a class="btn btn-primary" href="{{ '/invoice/'.$invoice->id.'/email' }}">
                 Email
             </a>
             <a name='btnMerge' class="btn btn-primary" href="{{ '/invoice/'.$invoice->id.'/merge' }}">
@@ -44,21 +45,6 @@ body {
                 </a>
                 @endif
             @endif
-            @if ($invoice->owing > 0)
-<br /><br />
-            {!! Form::open(['method' => 'POST', 'url' => url('/invoice/'.$invoice->id.'/pay')]) !!}
-              <script
-                src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                data-key="{{ env('STRIPE_KEY') }}"
-                data-amount="{{ $invoice->owing*100 }}"
-                data-name="Invoicing Zen"
-                data-description="{{ $invoice->description }}"
-                data-image="{{ url('/images/'.Auth::user()->company->logofilename) }}"
-                data-locale="auto">
-              </script>
-              {!! Form::close() !!}
-
-              @endif
         </Td>
         <td align="right">
             @if(Gate::check('admin'))
@@ -68,6 +54,25 @@ body {
             @endif
         </td>
     </Tr>
+    @if ($invoice->owing > 0)
+    <tr>
+        <td>
+            <br />
+            {!! Form::open(['method' => 'POST', 'url' => url('/invoice/'.$invoice->id.'/pay')]) !!}
+              <script
+                src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                data-key="{{ env('STRIPE_KEY') }}"
+                data-amount="{{ $invoice->owing*100 }}"
+                data-name="Invoicing Zen"
+                data-description="{{ $invoice->description }}"
+                data-image="{{ url('/images/'.Auth::user()->company->logofilename) }}"
+                data-locale="auto"
+                data-currency="aud">
+              </script>
+              {!! Form::close() !!}
+        </td>
+    </tr>
+    @endif
 </table>
 <br />
 <table cellpadding="0" cellspacing="0" width="720" border="1" align="center" style="background-color: white">
