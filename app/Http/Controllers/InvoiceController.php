@@ -53,9 +53,7 @@ class InvoiceController extends Controller
 	 */
 	public function create(User $customer = null, Invoice $invoice)
 	{
-		if (Gate::denies('admin')) {
-			abort(403);
-		}
+		$this->authorize('create-invoice');
 
 		if (!is_null($customer)) {
 			$invoice->customer_id = $customer->id;
@@ -76,6 +74,7 @@ class InvoiceController extends Controller
 	 */
 	public function store(InvoiceRequest $request)
 	{
+		$this->authorize('create-invoice');
 		$invoice = Invoice::create($request->all());
 		return redirect('/invoice/'.$invoice->id);
 	}
@@ -88,9 +87,7 @@ class InvoiceController extends Controller
 	 */
 	public function show(Invoice $invoice)
 	{
-		if (Gate::denies('view-invoice', $invoice)) {
-			abort(403);
-		}
+		$this->authorize('view-invoice', $invoice);
 
 		\Carbon\Carbon::setToStringFormat('d-m-Y');
 		return view('invoice.show', compact('invoice'));
@@ -104,9 +101,7 @@ class InvoiceController extends Controller
 	 */
 	public function edit(Invoice $invoice)
 	{
-		if (Gate::denies('edit-invoice', $invoice)) {
-			abort(403);
-		}
+		$this->authorize('edit-invoice', $invoice);
 
 		\Carbon\Carbon::setToStringFormat('d-m-Y');
 		$invoice_items = InvoiceItem::all()->where('invoice_id', $invoice->id);
@@ -122,6 +117,7 @@ class InvoiceController extends Controller
 	 */
 	public function update(InvoiceRequest $request, Invoice $invoice)
 	{
+		$this->authorize('edit-invoice', $invoice);
 		$invoice->update($request->all());
 		return redirect('/invoice/'.$invoice->id);
 	}
@@ -134,6 +130,7 @@ class InvoiceController extends Controller
 	 */
 	public function destroy(Invoice $invoice)
 	{
+		$this->authorize('delete-invoice', $invoice);
 		$invoice->delete();
 		return redirect('/invoice');
 	}
@@ -146,10 +143,7 @@ class InvoiceController extends Controller
 	 */
 	public function delete(Invoice $invoice)
 	{
-		if (Gate::denies('edit-invoice', $invoice)) {
-			abort(403);
-		}
-
+		$this->authorize('delete-invoice', $invoice);
 		return view('invoice.delete', compact('invoice'));
 	}
 
@@ -159,19 +153,13 @@ class InvoiceController extends Controller
 	 */
 	public function prnt(Invoice $invoice)
 	{
-		if (Gate::denies('view-invoice', $invoice)) {
-			abort(403);
-		}
-
+		$this->authorize('view-invoice', $invoice);
 		return $this->viewPrint($invoice);
 	}
 
 	public function selectmerge(Invoice $invoice)
 	{
-		if (Gate::denies('edit-invoice', $invoice)) {
-			abort(403);
-		}
-
+		$this->authorize('edit-invoice', $invoice);
 		return view('invoice.selectmerge', compact('invoice'));
 	}
 
@@ -179,12 +167,17 @@ class InvoiceController extends Controller
 	{
 		$invoice1 = Invoice::find($request->merge_invoice_1);
 		$invoice2 = Invoice::find($request->merge_invoice_2);
+		$this->authorize('edit-invoice', $invoice1);
+		$this->authorize('edit-invoice', $invoice2);
 
 		$invoice_merger = new InvoiceMerger($invoice1, $invoice2);
 		$invoice_merger->merge();
 		return redirect('/invoice');
 	}
 
+	// no auth check on this one, anyone with the link can see the invoice
+	// and also gets automatically logged in as the invoice owner
+	// not sure if this is the best idea
 	public function view($uuid)
 	{
 		$invoice = Invoice::where('uuid','=',$uuid)->first();
@@ -207,6 +200,7 @@ class InvoiceController extends Controller
 
 	public function generate_pdf(Invoice $invoice)
 	{
+		$this->authorize('view-invoice', $invoice);
 		$pdf = new PDFStreamInvoiceGenerator();
         $pdf->create($invoice);
 
@@ -215,12 +209,14 @@ class InvoiceController extends Controller
 
 	public function markPaid(Invoice $invoice)
 	{
+		$this->authorize('edit-invoice', $invoice);
 		$invoice->markPaid();
 		return $this->viewPrint($invoice);
 	}
 
 	public function markUnpaid(Invoice $invoice)
 	{
+		$this->authorize('edit-invoice', $invoice);
 		$invoice->markUnpaid();
 		return $this->viewPrint($invoice);
 	}
@@ -230,6 +226,7 @@ class InvoiceController extends Controller
 	 */
 	public function pay(Invoice $invoice, Request $request)
 	{
+		$this->authorize('edit-invoice', $invoice);
 		$token = $request->stripeToken;
 		$amount = $invoice->owing;
 

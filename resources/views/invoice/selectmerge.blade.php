@@ -3,7 +3,7 @@
 @section('content')
 <h1>Merge Invoice</h1>
 
-@if ($invoice->user->invoices->count() == 0)
+@if ($invoice->user->customer_invoices->count() == 0)
     {{ trans('invoice.no-invoices-to-merge') }}
 @else
     <p>
@@ -46,7 +46,7 @@
                 </td>
             </tr>
 
-    @foreach ($invoice->user->invoices as $customer_invoice)
+    @foreach ($invoice->user->customer_invoices as $customer_invoice)
         @if ($invoice->id != $customer_invoice->id)
         <tr>
             <td>

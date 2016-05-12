@@ -2,23 +2,19 @@
 
 @section('content')
 @include('user.sidebar')
-
+@include('includes.flash_message_content')
 <h1>Your Subscription</h1>
-<form>
+<a class='btn btn-primary' id='link1' href='/subscribe/{{ $next_action[0] }}'>{{ trans('subscription.'.$next_action[0]) }}</a>
+@if (array_key_exists(1, $next_action))
+&nbsp;&nbsp;&nbsp;
+<a class='btn btn-success' id='link2' href='/subscribe/{{ $next_action[1] }}'>{{ trans('subscription.'.$next_action[1]) }}</a>
+@endif
+<Br /><Br />
 <div class="form-group">
-    <label for="subscription" class="control-label">Subscription:</label>
-    <select class="form-control" name="subscription">
-        <option value="free" value="free">Free</option>
-        <option value="standard" value="free">Standard (A$9)</option>
-        <option value="premium" value="free">Premium (A$19)</option>
-    </select>
+    <label for="status" class="control-label">Plan: </label>
+    {{ $plan }}
+    <br />
+    <label for="status" class="control-label">Status: </label>
+    {{ trans('subscription.'.$current_status) }}
 </div>
-
-<div class="form-group">
-    <label for="voucher" class="control-label">Voucher:</label>
-    <input type="text" class="form-control" name="voucher" />
-</div>
-
-<input type="submit" id="btnUpdate" value="Update" class="btn btn-success" />
-</form>
 @stop

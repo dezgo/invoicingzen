@@ -4,6 +4,14 @@
 <div class="panel">
     <h1>Invoicing Zen Release Notes</h1>
 
+    <h3>v1.3.2</h3>
+    <h4>12 May 2016</h4>
+    <ul>
+        <li>
+            Add help buttons to settings page (29603c6)
+        </li>
+    </ul>
+
     <h3>v1.3.1</h3>
     <h4>28 Apr 2016</h4>
     <ul>
