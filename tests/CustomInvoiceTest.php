@@ -14,35 +14,15 @@ class CustomInvoiceTest extends TestCase
     private $settings;
     private $template;
 
-    private function createToken($cardNum)
-    {
-        \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
-        $data = \Stripe\Token::create([
-            'card' => [
-                "number" => $cardNum,
-                "exp_month" => 11,
-                "exp_year" => 2036,
-                "cvc" => "314"
-            ]
-        ]);
-
-        return $data['id'];
-    }
-
-    private function makePremium($user)
-    {
-        $token = $this->createToken('4242424242424242');
-        $user->createAsStripeCustomer($token);
-        $user->newSubscription('default', 'premium')->create();
-    }
-
     public function setUp()
     {
         parent::setUp();
 
         $this->userAdmin = factory(App\User::class)->create();
         $this->userAdmin->roles()->attach(2);
-        $this->makePremium($this->userAdmin);
+        $this->userAdmin = \Mockery::mock($this->userAdmin)->makePartial();
+        $this->userAdmin->shouldReceive('isPremium')
+            ->andReturn(true);
 
         $this->settings = \App\Factories\SettingsFactory::create($this->userAdmin->company_id);
         $this->settings->set('taxable', false);
@@ -117,7 +97,9 @@ class CustomInvoiceTest extends TestCase
         $user2->roles()->attach(2);
         $user2->company()->associate($company2);
         $user2->save();
-        $this->makePremium($user2);
+        $user2 = \Mockery::mock($user2)->makePartial();
+        $user2->shouldReceive('isPremium')
+            ->andReturn(true);
 
         $this->be($user2);
         $this->actingAs($user2)

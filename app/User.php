@@ -162,17 +162,17 @@ class User extends Model implements AuthenticatableContract,
         return parent::create($attributes);
     }
 
-    public function getPremiumAttribute()
+    public function isPremium()
     {
         return $this->subscribedToPlan('premium');
     }
 
-    public function getStandardAttribute()
+    public function isStandard()
     {
         return $this->subscribedToPlan('standard');
     }
 
-    public function getFreeAttribute()
+    public function isFree()
     {
         return !$this->standard and !$this->premium;
     }

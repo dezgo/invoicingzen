@@ -88,14 +88,14 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         $gate->define('premium', function($user) {
-            if ($user->isAdmin() and $user->premium)
+            if ($user->isAdmin() and $user->isPremium())
             {
                 return true;
             }
         });
 
         $gate->define('standard', function($user) {
-            if ($user->isAdmin() and $user->standard)
+            if ($user->isAdmin() and $user->isStandard())
             {
                 return true;
             }
