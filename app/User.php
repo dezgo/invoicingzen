@@ -179,15 +179,15 @@ class User extends Model implements AuthenticatableContract,
 
     public function getPlanNameAttribute()
     {
-        if ($this->free) {
+        if ($this->isFree()) {
             return 'Free';
         }
 
-        if ($this->standard) {
+        if ($this->isStandard()) {
             return 'Standard';
         }
 
-        if ($this->premium) {
+        if ($this->isPremium()) {
             return 'Premium';
         }
     }

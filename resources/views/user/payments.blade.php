@@ -2,6 +2,9 @@
 
 @section('content')
 @include('user.sidebar')
+@if ($invoices === [])
+<h4>{{ trans('subscription.no_payments') }}</h4>
+@else
 <table class="table">
     <Tr>
         <Td>Date</Td>
@@ -28,4 +31,5 @@
     @endforeach
 @endforeach
 </table>
+@endif
 @stop

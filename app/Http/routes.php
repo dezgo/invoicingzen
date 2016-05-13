@@ -99,5 +99,10 @@ Route::group(['middleware' => ['web', 'admin', 'premium']], function() {
 
 Route::post(
     'stripe/webhook',
-    '\Laravel\Cashier\Http\Controllers\WebhookController@handleWebhook'
+    'WebhookController@handleWebhook'
 );
+
+// Route::post(
+//     'stripe/webhook',
+//     'WebhookController@testLog'
+// );

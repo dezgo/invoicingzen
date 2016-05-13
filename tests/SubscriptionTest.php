@@ -40,7 +40,7 @@ class SubscriptionTest extends TestCase
      */
     public function testSubscriptionTabFree()
     {
-        $this->assertTrue($this->userAdmin->free);
+        $this->assertTrue($this->userAdmin->isFree());
 
         $this->actingAs($this->userAdmin)
             ->visit('/subscription')
@@ -65,7 +65,7 @@ class SubscriptionTest extends TestCase
             ->see(trans('subscription.act_cancel'))
             ->see(trans('subscription.sub_subscribed'));
 
-        $this->assertTrue($this->userAdmin->standard);
+        $this->assertTrue($this->userAdmin->isStandard());
     }
 
     /**
@@ -77,7 +77,7 @@ class SubscriptionTest extends TestCase
         $this->userAdmin->createAsStripeCustomer($token);
         $this->userAdmin->newSubscription('default', 'premium')->create();
 
-        $this->assertTrue($this->userAdmin->premium);
+        $this->assertTrue($this->userAdmin->isPremium());
 
         $this->actingAs($this->userAdmin)
             ->visit('/subscription')
@@ -85,5 +85,12 @@ class SubscriptionTest extends TestCase
             ->see(trans('subscription.act_swap'))
             ->see(trans('subscription.act_cancel'))
             ->see(trans('subscription.sub_subscribed'));
+    }
+
+    public function testPaymentsTabNoCustomer()
+    {
+        $this->actingAs($this->userAdmin)
+            ->visit('/payments')
+            ->see(trans('subscription.no_payments'));
     }
 }

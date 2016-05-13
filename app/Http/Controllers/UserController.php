@@ -148,9 +148,14 @@ class UserController extends Controller
     {
         $user = Auth::user();
         $active_tab = 'payments';
-        $invoices = $user->invoicesIncludingPending();
-        if ($user->upcomingInvoice() !== null) {
-            $invoices[] = $user->upcomingInvoice();
+        if ($user->hasStripeId()) {
+            $invoices = $user->invoicesIncludingPending();
+            if ($user->upcomingInvoice() !== null) {
+                $invoices[] = $user->upcomingInvoice();
+            }
+        }
+        else {
+            $invoices = [];
         }
         return view('user.payments', compact('user', 'active_tab', 'invoices'));
     }

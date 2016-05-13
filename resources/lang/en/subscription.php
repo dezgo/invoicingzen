@@ -24,4 +24,6 @@ return [
     'act_cancel'              => 'Cancel subscription',
     'act_swap'                => 'Swap plans',
 
+    // other messages
+    'no_payments'             => 'No payments found.',
 ];
