@@ -111,7 +111,7 @@ class User extends Model implements AuthenticatableContract,
 
     // user has many invoices, but note foreign key in invoice table is
     // customer_id so specify that explicity in hasMany relationship
-    public function invoices()
+    public function customer_invoices()
     {
         return $this->hasMany('App\Invoice', 'customer_id');
     }
@@ -162,8 +162,33 @@ class User extends Model implements AuthenticatableContract,
         return parent::create($attributes);
     }
 
-    public function getPremiumAttribute()
+    public function isPremium()
     {
-        return true;
+        return $this->subscribedToPlan('premium');
+    }
+
+    public function isStandard()
+    {
+        return $this->subscribedToPlan('standard');
+    }
+
+    public function isFree()
+    {
+        return !$this->standard and !$this->premium;
+    }
+
+    public function getPlanNameAttribute()
+    {
+        if ($this->isFree()) {
+            return 'Free';
+        }
+
+        if ($this->isStandard()) {
+            return 'Standard';
+        }
+
+        if ($this->isPremium()) {
+            return 'Premium';
+        }
     }
 }

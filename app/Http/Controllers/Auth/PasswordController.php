@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ResetsPasswords;
+use TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
+use Illuminate\Http\Request;
 
 class PasswordController extends Controller
 {
@@ -30,4 +32,20 @@ class PasswordController extends Controller
     {
         $this->middleware('guest');
     }
+
+    // public function sendResetLinkEmail(Request $request)
+    // {
+    //     dd($request);
+    //     $cssToInlineStyles = new CssToInlineStyles();
+    //
+    //     $html = parent::sendResetLinkEmail($request);
+    //     $css = file_get_contents(__DIR__ . '/css/all.css');
+    //
+    //     // output
+    //     return $cssToInlineStyles->convert(
+    //         $html,
+    //         $css
+    //     );
+    //
+    // }
 }

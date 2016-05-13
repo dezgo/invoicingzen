@@ -29,7 +29,7 @@ class InvoiceMergeTest extends TestCase
     public function testMergeButtonExists()
     {
         $userAdmin = App\User::find(2);
-        $invoice = $userAdmin->invoices->first();
+        $invoice = $userAdmin->customer_invoices->first();
         $this->actingAs($userAdmin)
             ->visit('/invoice/'.$invoice->id.'/print')
             ->see('btnMerge');
@@ -38,7 +38,7 @@ class InvoiceMergeTest extends TestCase
     public function testMergeButtonHiddenForNonAdmins()
     {
         $user = App\User::find(3);
-        $invoice = $user->invoices->first();
+        $invoice = $user->customer_invoices->first();
         $this->actingAs($user)
             ->visit('/invoice/'.$invoice->id.'/print')
             ->dontSee('btnMerge');
@@ -47,7 +47,7 @@ class InvoiceMergeTest extends TestCase
     public function testMergeButtonGoesToMergePage()
     {
         $userAdmin = App\User::find(2);
-        $invoice = $userAdmin->invoices->first();
+        $invoice = $userAdmin->customer_invoices->first();
         $this->actingAs($userAdmin)
             ->visit('/invoice/'.$invoice->id.'/print')
             ->click('btnMerge')
@@ -76,7 +76,7 @@ class InvoiceMergeTest extends TestCase
         for ($i = 0; $i <=1; $i++) {
             $invoice[$i] = factory(App\Invoice::class)->create();
             factory(App\InvoiceItem::class, 5)->create(['invoice_id' => $invoice[$i]->id]);
-            $invoice[$i]->customer_id = $userAdmin->id;
+            $invoice[$i]->user()->associate($userAdmin);
             $invoice[$i]->save();
         }
 

@@ -15,7 +15,8 @@
         "unisharp/laravel-ckeditor": "^4.5",
         "laravel/cashier": "~6.0",
         "jenssegers/rollbar": "^1.5",
-        "ramsey/uuid": "^3.3"
+        "ramsey/uuid": "^3.3",
+        "fedeisas/laravel-mail-css-inliner": "~1.4"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
