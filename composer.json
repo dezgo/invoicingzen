@@ -24,7 +24,8 @@
         "phpunit/phpunit": "~4.0",
         "symfony/dom-crawler": "~3.0",
         "symfony/css-selector": "~3.0",
-        "guzzlehttp/guzzle": "~5.3|~6.0"
+        "guzzlehttp/guzzle": "~5.3|~6.0",
+        "TeamTNT/php-stripe-webhook-tester": "1.1"
     },
     "autoload": {
         "classmap": [

@@ -13,7 +13,7 @@ class StripeWebhooksTest extends TestCase
      */
     public function testExample()
     {
-        $url = 'http://localhost/stripe/webhook';
+        $url = 'http://invoicingzen.app/stripe/webhook';
         $tester = new TeamTNT\Stripe\WebhookTester();
         $tester->setVersion('2014-09-08');
         $tester->setEndpoint($url);

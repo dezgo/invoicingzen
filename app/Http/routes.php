@@ -101,8 +101,3 @@ Route::post(
     'stripe/webhook',
     'WebhookController@handleWebhook'
 );
-
-// Route::post(
-//     'stripe/webhook',
-//     'WebhookController@testLog'
-// );
