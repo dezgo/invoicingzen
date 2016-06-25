@@ -81,34 +81,143 @@
     <div class="form-group">
         {!! Form::label('email_prepopulate', trans('settings.email_prepopulate'), ['class' => 'control-label']) !!}
         {{ Form::select('email_prepopulate', $email_providers, ['class' => 'form-control']) }}
+        <i class="fa fa-question-circle" data-toggle="modal" data-target="#helpEmailPrepopulate"></i>
+
+        <div class="modal fade" id="helpEmailPrepopulate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="{{ trans('settings.close_button') }}"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{{ trans('settings.help_email_prepopulate_title') }}</h4>
+              </div>
+              <div class="modal-body">
+                  {!! trans('settings.help_email_prepopulate_body') !!}
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{ trans('settings.close_button') }}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        {{ Form::text('email_host', $settings->get('email_host'), ['class' => 'form-control']) }}
     </div>
 
     <div class="form-group">
         {!! Form::label('email_host', trans('settings.email_host'), ['class' => 'control-label']) !!}
+        <i class="fa fa-question-circle" data-toggle="modal" data-target="#helpEmailHost"></i>
+
+        <div class="modal fade" id="helpEmailHost" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="{{ trans('settings.close_button') }}"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{{ trans('settings.help_email_host_title') }}</h4>
+              </div>
+              <div class="modal-body">
+                {!! trans('settings.help_email_host_body') !!}
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{ trans('settings.close_button') }}</button>
+              </div>
+            </div>
+          </div>
+        </div>
         {{ Form::text('email_host', $settings->get('email_host'), ['class' => 'form-control']) }}
     </div>
 
     <div class="form-group">
         {!! Form::label('email_port', trans('settings.email_port'), ['class' => 'control-label']) !!}
+        <i class="fa fa-question-circle" data-toggle="modal" data-target="#helpEmailPort"></i>
+
+        <div class="modal fade" id="helpEmailPort" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="{{ trans('settings.close_button') }}"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{{ trans('settings.help_email_port_title') }}</h4>
+              </div>
+              <div class="modal-body">
+                {!! trans('settings.help_email_port_body') !!}
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{ trans('settings.close_button') }}</button>
+              </div>
+            </div>
+          </div>
+        </div>
         {{ Form::text('email_port', $settings->get('email_port'), ['class' => 'form-control']) }}
     </div>
 
     <div class="form-group">
         {!! Form::label('email_username', trans('settings.email_username'), ['class' => 'control-label']) !!}
+        <i class="fa fa-question-circle" data-toggle="modal" data-target="#helpEmailUsername"></i>
+
+        <div class="modal fade" id="helpEmailUsername" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="{{ trans('settings.close_button') }}"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{{ trans('settings.help_email_username_title') }}</h4>
+              </div>
+              <div class="modal-body">
+                {!! trans('settings.help_email_username_body') !!}
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{ trans('settings.close_button') }}</button>
+              </div>
+            </div>
+          </div>
+        </div>
         {{ Form::text('email_username', $settings->get('email_username'), ['class' => 'form-control']) }}
     </div>
 
     <div class="form-group">
         {!! Form::label('email_password', trans('settings.email_password'), ['class' => 'control-label']) !!}
+        <i class="fa fa-question-circle" data-toggle="modal" data-target="#helpEmailPassword"></i>
+
+        <div class="modal fade" id="helpEmailPassword" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="{{ trans('settings.close_button') }}"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{{ trans('settings.help_email_password_title') }}</h4>
+              </div>
+              <div class="modal-body">
+                {!! trans('settings.help_email_password_body') !!}
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{ trans('settings.close_button') }}</button>
+              </div>
+            </div>
+          </div>
+        </div>
         <input type='password' id='email_password' name='email_password' value='{{ $settings->get('email_password') }}' class='form-control' />
     </div>
 
     <div class="form-group">
         {!! Form::label('email_encryption', trans('settings.email_encryption'), ['class' => 'control-label']) !!}
+        <i class="fa fa-question-circle" data-toggle="modal" data-target="#helpEmailEncryption"></i>
+
+        <div class="modal fade" id="helpEmailEncryption" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="{{ trans('settings.close_button') }}"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{{ trans('settings.help_email_encryption_title') }}</h4>
+              </div>
+              <div class="modal-body">
+                {!! trans('settings.help_email_encryption_body') !!}
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{ trans('settings.close_button') }}</button>
+              </div>
+            </div>
+          </div>
+        </div>
         {{ Form::text('email_encryption', $settings->get('email_encryption'), ['class' => 'form-control']) }}
     </div>
 
-    {!! Form::submit('Update', ['class' => 'btn btn-primary', 'id' => 'btnSubmit']) !!}
+    {!! Form::submit(trans('settings.update_button'), ['class' => 'btn btn-primary', 'id' => 'btnSubmit']) !!}
 
     {!! Form::close() !!}
 
@@ -130,6 +239,11 @@ $(document).ready (function(){
                 break;
             @endforeach
         }
+    });
+
+    $(document).ready(function() {
+        $("i.fa-question-circle").popover({'trigger':'click'});
+        $("i.fa-question-circle").css('cursor', 'pointer');
     });
 });
 </script>

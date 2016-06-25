@@ -23,7 +23,7 @@ class IsPremium
                 return redirect()->guest('login');
             }
         }
-        elseif (Auth::user()->premium) {
+        elseif (Auth::user()->isPremium()) {
             return $next($request);
         }
         else {

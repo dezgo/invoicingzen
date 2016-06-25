@@ -12,7 +12,6 @@ class UserAdminTest extends TestCase
 
 	public function setUp()
 	{
-		// This method will automatically be called prior to any of your test cases
 		parent::setUp();
 
 		$this->user = factory(App\User::class)->create();
@@ -62,19 +61,19 @@ class UserAdminTest extends TestCase
             ->see('The email field is required');
     }
 
-    public function testDeactivate()
-    {
-        $this->actingAs($this->user)
-            ->visit('/user/'.$this->user->id.'/edit')
-            ->click('btnDeactivate')
-            ->seePageIs('/user/'.$this->user->id.'/delete');
-    }
-
-    public function testConfirmDeactivate()
-    {
-        $this->actingAs($this->user)
-            ->visit('/user/'.$this->user->id.'/delete')
-            ->press('btnConfirmDeactivation')
-            ->seePageIs('/user');
-    }
+    // public function testDeactivate()
+    // {
+    //     $this->actingAs($this->user)
+    //         ->visit('/user/'.$this->user->id.'/edit')
+    //         ->click('btnDeactivate')
+    //         ->seePageIs('/user/'.$this->user->id.'/delete');
+    // }
+    //
+    // public function testConfirmDeactivate()
+    // {
+    //     $this->actingAs($this->user)
+    //         ->visit('/user/'.$this->user->id.'/delete')
+    //         ->press('btnConfirmDeactivation')
+    //         ->seePageIs('/user');
+    // }
 }

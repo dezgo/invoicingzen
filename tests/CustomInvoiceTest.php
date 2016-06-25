@@ -20,6 +20,9 @@ class CustomInvoiceTest extends TestCase
 
         $this->userAdmin = factory(App\User::class)->create();
         $this->userAdmin->roles()->attach(2);
+        $this->userAdmin = \Mockery::mock($this->userAdmin)->makePartial();
+        $this->userAdmin->shouldReceive('isPremium')
+            ->andReturn(true);
 
         $this->settings = \App\Factories\SettingsFactory::create($this->userAdmin->company_id);
         $this->settings->set('taxable', false);
@@ -94,6 +97,9 @@ class CustomInvoiceTest extends TestCase
         $user2->roles()->attach(2);
         $user2->company()->associate($company2);
         $user2->save();
+        $user2 = \Mockery::mock($user2)->makePartial();
+        $user2->shouldReceive('isPremium')
+            ->andReturn(true);
 
         $this->be($user2);
         $this->actingAs($user2)

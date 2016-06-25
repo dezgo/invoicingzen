@@ -1,14 +1,17 @@
 @extends('web')
 
 @section('content')
-    <h1 align="left">Edit User</h1>
+
+@can('admin')
+@if ($user->id == Auth::user()->id)
+@include('user.sidebar')
+@endif
+@endcan
 
     {!! Form::model($user, ['method' => 'PUT', 'route' => ['user.update', $user->id]]) !!}
         @include('user.form', ['submitButtonText' => 'Update'])
     {!! Form::close() !!}
 
-    <Br />
-    <a id="btnDeactivate" class="btn btn-danger" href="/user/{{ $user->id }}/delete">Deactivate</a><br />
     <Br />
     <div class="panel panel-default">
       <div class="panel-body">

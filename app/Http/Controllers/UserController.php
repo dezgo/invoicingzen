@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\User;
+use App\StripeBiller;
 
 use App\Http\Requests\UserRequest;
 
@@ -15,17 +16,6 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    // check if user is allowed to use this controller
-    private function checkAccess($user_id)
-    {
-        return Gate::check('admin') || Auth::user()->id == $user_id;
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         if (Gate::check('admin')) {
@@ -38,52 +28,20 @@ class UserController extends Controller
         }
     }
 
-    /**
-     * Show the form for creating a new user. $request->flag not
-     * null means the request came from the 'new invoice' wiz
-     * so ensure we go back there after customer creation.
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create(Request $request = null)
     {
-        if (!Gate::check('admin')) {
-            abort('403');
-        }
-        else {
-            if (is_null($request)) {
-                session()->forget('inv_wizard');
-            } else {
-                session(['inv_wizard' => $request->flag]);
-            }
+        $this->authorize('create-user');
 
-            return view('user.create');
-        }
+        $active_tab = 'account';
+        return view('user.create', compact('active_tab'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(UserRequest $request)
     {
-        if (!Gate::check('admin')) {
-            abort('403');
-        }
-        else {
-            $user = User::createWithCompany($request->all(), Auth::user()->company_id);
-            if (session('inv_wizard') != '') {
-                session()->forget('inv_wizard');
+        $this->authorize('create-user');
 
-                return redirect('/invoice/'.$user->id.'/create');
-            } else {
-                return redirect('/user');
-            }
-        }
+        $user = User::createWithCompany($request->all(), Auth::user()->company_id);
+        return redirect('/user');
     }
 
     /**
@@ -94,12 +52,10 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        if (Gate::denies('update-user', $user))
-        {
-            abort(403);
-        }
+        $this->authorize('edit-user', $user);
 
-        return view('user.edit', compact('user'));
+        $active_tab = 'account';
+        return view('user.edit', compact('user', 'active_tab'));
     }
 
     /**
@@ -111,10 +67,7 @@ class UserController extends Controller
      */
     public function update(UserRequest $request, User $user)
     {
-        if (Gate::denies('update-user', $user))
-        {
-            abort(403);
-        }
+        $this->authorize('edit-user', $user);
 
         $user->update($request->all());
         $request->session()->flash('status-success', 'User updated');
@@ -123,12 +76,13 @@ class UserController extends Controller
 
     public function confirm_delete(User $user)
     {
+        $this->authorize('delete-user', $user);
         return view('/user/delete', compact('user'));
     }
 
     public function destroy(User $user)
     {
-        $this->authorize('update-user', $user);
+        $this->authorize('delete-user', $user);
         $user->delete();
         return redirect('/user');
     }
@@ -137,6 +91,7 @@ class UserController extends Controller
     // I don't have one so am just redirecting to the edit view
     public function show(User $user)
     {
+        $this->authorize('view-user', $user);
         return $this->edit($user);
     }
 
@@ -162,34 +117,68 @@ class UserController extends Controller
         return redirect('/invoice/'.$request->customer.'/create');
     }
 
-    public function subscription(User $user)
+    public function subscription_show()
     {
+        $user = Auth::user();
         $active_tab = 'subscription';
-        return view('user.subscription', compact('user', 'active_tab'));
+
+        $current_status = StripeBiller::getCurrentStatus();
+        $next_action = StripeBiller::getNextAction($current_status);
+        $plan = $user->plan_name;
+
+        return view('user.subscription', compact('user', 'active_tab', 'current_status', 'next_action', 'plan'));
     }
 
-    public function payments(User $user)
+    public function subscription_update($action)
     {
+        $user = Auth::user();
+
+        if (!$user->hasStripeId() and $action !== 'act_cancel') {
+            \Session()->flash('status-warning', trans('subscription.no_card_on_file'));
+            return redirect('/subscription');
+        }
+
+        StripeBiller::subscription_update($action);
+
+        \Session()->flash('status-success', 'Subscription Updated');
+        return redirect('/subscription');
+    }
+
+    public function payments()
+    {
+        $user = Auth::user();
         $active_tab = 'payments';
-        return view('user.payments', compact('user', 'active_tab'));
+        if ($user->hasStripeId()) {
+            $invoices = $user->invoicesIncludingPending();
+            if ($user->upcomingInvoice() !== null) {
+                $invoices[] = $user->upcomingInvoice();
+            }
+        }
+        else {
+            $invoices = [];
+        }
+        return view('user.payments', compact('user', 'active_tab', 'invoices'));
     }
 
-    public function card(User $user)
+    public function card_show()
     {
+        $user = Auth::user();
         $active_tab = 'credit_card';
         return view('user.card', compact('user', 'active_tab'));
     }
 
-    public function subscribe(Request $request)
+    public function card_update(Request $request)
     {
-        $user = Auth::user();
         try {
-            $user->newSubscription('main', 'standard')->create($request->stripeToken);
+            StripeBiller::card_update($request->stripeToken);
         }
-        catch (Exception $e) {
+        catch (\Exception $e) {
             \Session()->flash('status-warning', 'There was a problem with your card. '.
-                'Please check the details and try again ('.$e->description.')');
-                return redirect('/user/'.Auth::user()->id.'/edit');
+                'Please check the details and try again ('.$e->getMessage().')');
+            return redirect('/card');
         }
+
+        \Session()->flash('status-success', 'Card details updated');
+        return redirect('/card');
     }
 }

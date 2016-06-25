@@ -39,38 +39,63 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         $gate->define('view-invoice', function ($user, $invoice) {
-            if (Auth::check()) {
-                if ($invoice->user->company_id == Auth::user()->company_id and
-                    ($user->isAdmin() || $invoice->user->id == $user->id)) {
-                    return true;
-                }
+            if ($invoice->user->company_id == $user->company_id and
+                ($user->isAdmin() || $invoice->user->id == $user->id)) {
+                return true;
             }
         });
 
         $gate->define('edit-invoice', function ($user, $invoice) {
-            if (Auth::check()) {
-                if ($invoice->user->company_id == Auth::user()->company_id and $user->isAdmin()) {
-                    return true;
-                }
+            if ($invoice->user->company_id == $user->company_id and
+                $user->isAdmin()) {
+                return true;
             }
         });
 
+        $gate->define('delete-invoice', function ($user, $invoice) {
+            if ($invoice->user->company_id == $user->company_id and
+                $user->isAdmin()) {
+                return true;
+            }
+        });
+
+        $gate->define('create-user', function($user) {
+            return $user->isAdmin();
+        });
+
         $gate->define('view-user', function($user, $userToView) {
-            if ($user->isAdmin() || $user->id == $userToView->id)
+            if ($userToView->company_id == $user->company_id and
+                ($user->isAdmin() || $user->id == $userToView->id))
             {
                 return true;
             }
         });
 
-        $gate->define('update-user', function($user, $userToView) {
-            if ($user->isAdmin() || $user->id == $userToView->id)
+        $gate->define('edit-user', function($user, $userToEdit) {
+            if ($userToEdit->company_id == $user->company_id and
+                ($user->isAdmin() || $user->id == $userToEdit->id))
+            {
+                return true;
+            }
+        });
+
+        $gate->define('delete-user', function($user, $userToDelete) {
+            if ($userToDelete->company_id == $user->company_id and
+                ($user->isAdmin() || $user->id == $userToDelete->id))
             {
                 return true;
             }
         });
 
         $gate->define('premium', function($user) {
-            if ($user->isAdmin() and $user->premium)
+            if ($user->isAdmin() and $user->isPremium())
+            {
+                return true;
+            }
+        });
+
+        $gate->define('standard', function($user) {
+            if ($user->isAdmin() and $user->isStandard())
             {
                 return true;
             }

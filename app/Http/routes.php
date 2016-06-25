@@ -33,9 +33,14 @@ Route::group(['middleware' => ['web', 'superadmin']], function() {
 // admin-only routes
 Route::group(['middleware' => ['web', 'admin']], function() {
 
-    // select customer as first step when creating invoice
+    // User
     Route::get('user/select', 'UserController@select')->name('user.select');
     Route::post('user/select', 'UserController@selected')->name('user.selected');
+    Route::get('subscription', 'UserController@subscription_show')->name('user.subscription.show');
+    Route::get('subscribe/{action}', 'UserController@subscription_update')->name('user.subscription.update');
+    Route::get('payments', 'UserController@payments')->name('user.payments');
+    Route::get('card', 'UserController@card_show')->name('user.card.show');
+    Route::patch('card', 'UserController@card_update')->name('user.card.update');
 
     // Settings
     Route::get('settings', 'AdminController@show')->name('settings.show');
@@ -64,7 +69,6 @@ Route::group(['middleware' => ['web', 'admin']], function() {
 
 // routes accessible to all authenticated users
 Route::group(['middleware' => ['web', 'auth']], function() {
-    Route::post('user/subscribe', 'UserController@subscribe')->name('user.subscribe');
     Route::get('user/{user}/delete', 'UserController@confirm_delete')->name('user.delete');
     Route::resource('user', 'UserController');
 
@@ -92,3 +96,8 @@ Route::group(['middleware' => ['web', 'admin', 'premium']], function() {
     Route::resource('invoice_template', 'InvoiceTemplateController');
     Route::get('invoice_template/{invoice_template}/delete', 'InvoiceTemplateController@delete')->name('invoice_template.delete');
 });
+
+Route::post(
+    'stripe/webhook',
+    'WebhookController@handleWebhook'
+);
