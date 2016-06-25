@@ -160,9 +160,87 @@ class Invoice extends Model
 		return $this->user->description;
 	}
 
-	public static function allInCompany($company_id)
+	// return all invoices that the currently logged in user can view
+	public static function allInvoices()
 	{
-		return Company::find($company_id)->invoices;
+		if (Auth::user()->isAdmin()) {
+			$company = Auth::user()->company;
+			$invoices = Company::find($company->id)->invoices;
+		}
+		else {
+			$invoices = Invoice::where('customer_id', Auth::user()->id)->get();
+		}
+		return $invoices;
+	}
+
+	public static function allReceipts()
+	{
+		$company = Auth::user()->company;
+		$sql =
+			'select '.
+			'    i.id, '.
+			'	 i.paid '.
+			'from invoices as i '.
+			'    inner join invoice_items as ii on i.id = ii.invoice_id '.
+			'    inner join users as u on u.id = i.customer_id '.
+			'where '.
+			'    u.company_id = ? and '.
+			'	 not i.is_quote ';
+
+		if (Auth::user()->isUser()) {
+			$sql .= 'and i.customer_id = '.Auth::user()->id.' ';
+		}
+
+		$sql .=
+			'group by '.
+			'    i.id '.
+			'having '.
+			'    sum(ii.quantity * ii.price) = i.paid';
+
+		$invoice_ids = DB::select($sql, [Auth::user()->company->id]);
+		$invoices = [];
+		foreach ($invoice_ids as $invoice_id) {
+			$invoices[] = Invoice::find($invoice_id->id);
+		}
+		return $invoices;
+	}
+
+	public static function allQuotes()
+	{
+		$quotes = Invoice::allInvoices()->where('is_quote', 'on')->all();
+		return $quotes;
+	}
+
+	public static function allUnpaid()
+	{
+		$company = Auth::user()->company;
+		$sql =
+			'select '.
+			'    i.id, '.
+			'	 i.paid '.
+			'from invoices as i '.
+			'    inner join invoice_items as ii on i.id = ii.invoice_id '.
+			'    inner join users as u on u.id = i.customer_id '.
+			'where '.
+			'    u.company_id = ? and '.
+			'	 not i.is_quote ';
+
+		if (Auth::user()->isUser()) {
+			$sql .= 'and i.customer_id = '.Auth::user()->id.' ';
+		}
+
+		$sql .=
+			'group by '.
+			'    i.id '.
+			'having '.
+			'    sum(ii.quantity * ii.price) > i.paid';
+
+		$invoice_ids = DB::select($sql, [Auth::user()->company->id]);
+		$invoices = [];
+		foreach ($invoice_ids as $invoice_id) {
+			$invoices[] = Invoice::find($invoice_id->id);
+		}
+		return $invoices;
 	}
 
 	public static function GenerateUUID($id)

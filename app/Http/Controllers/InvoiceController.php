@@ -24,13 +24,10 @@ class InvoiceController extends Controller
 {
 	public function index()
 	{
-		if (Auth::user()->isAdmin()) {
-			$invoices = Invoice::allInCompany(Auth::user()->company_id);
-		}
-		else {
-			$invoices = Invoice::where('customer_id', Auth::user()->id)->get();
-		}
-		return view('invoice.index', compact('invoices'));
+		$receipts = Invoice::allReceipts();
+		$unpaid = Invoice::allUnpaid();
+		$quotes = Invoice::allQuotes();
+		return view('invoice.index', compact('receipts','unpaid','quotes'));
 	}
 
 	/**
