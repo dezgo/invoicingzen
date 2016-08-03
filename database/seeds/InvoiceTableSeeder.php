@@ -14,9 +14,11 @@ class InvoiceTableSeeder extends Seeder
      */
     public function run()
     {
+        define('NUMBER_OF_INVOICES', 1);
+
         $users = User::all();
         foreach ($users as $user) {
-            for ($i = 0; $i <= 1; $i++) {
+            for ($i = 0; $i < NUMBER_OF_INVOICES; $i++) {
                 $invoice[$i] = factory(Invoice::class)->create([
                     'customer_id' => $user->id,
                 ]);
