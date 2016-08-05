@@ -33,6 +33,17 @@
                             <li><a href="/settings" name='settingsAnchor'>Settings</a></li>
             @endif
 
+            <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                Tools<span class="caret"></span>
+            </a>
+
+            <ul class="dropdown-menu" role="menu">
+                <li><a href="/tools/accruals">Accrual Generator</a></li>
+                <li><a href="/tools/allocate_prepayment">Allocate Prepayment</a></li>
+            </ul>
+            </li>
+
             @if(Gate::check('admin'))
                             <li><a href="/user" name='userAnchor'>Users</a></li>
             @endif

@@ -23,6 +23,11 @@ Route::group(['middleware' => 'web'], function () {
     });
 
     Route::get('/view/{uuid}', 'InvoiceController@view')->name('invoice.view');
+
+    Route::get('/tools/accruals', 'ToolsController@accruals')->name('tools.accruals');
+    Route::put('/tools/accruals', 'ToolsController@accruals_calc')->name('tools.accruals_calc');
+    Route::get('/tools/allocate_prepayment', 'ToolsController@allocate_prepayment')->name('tools.allocate_prepayment');
+    Route::put('/tools/allocate_prepayment', 'ToolsController@allocate_prepayment_calc')->name('tools.allocate_prepayment_calc');
 });
 
 Route::group(['middleware' => ['web', 'superadmin']], function() {
