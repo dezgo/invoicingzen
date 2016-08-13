@@ -69,16 +69,14 @@
 
 @if (isset($data))
 
-<table class="table">
+<table class="table table-striped">
     <tr>
-        <th><b>Start</b></th>
-        <th><b>End</b></th>
+        <th><b>Month</b></th>
         <th><b>Amount</b></th>
     </tr>
 @foreach ($data as $data_row)
     <tr>
-        <td>{{ $data_row['start_date']->toDateString() }}</td>
-        <td>{{ $data_row['end_date']->toDateString() }}</td>
+        <td>{{ $data_row['start_date']->format('M Y') }}</td>
         <td>{{ $data_row['amount'] }}</td>
     </tr>
 @endforeach
